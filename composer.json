@@ -1,0 +1,31 @@
+{
+  "name": "sourcebroker/deployer-extended",
+  "description": "Deployment tool for PHP - additional commands.",
+  "license": "MIT",
+  "keywords": [
+    "TYPO3",
+    "extension",
+    "deployer"
+  ],
+  "authors": [
+    {
+      "name": "Krystian Szymukowicz",
+      "email": "k.szymukowicz@gmail.com"
+    },
+    {
+      "name": "Krystian Liński",
+      "email": "krystian.linski@gmail.com"
+    }
+  ],
+  "require": {
+    "php": ">=5.6"
+  },
+  "autoload": {
+    "psr-4": {
+      "SourceBroker\\DeployerExtended\\": "src/"
+    },
+    "files": [
+      "src/Autoload.php"
+    ]
+  }
+}
