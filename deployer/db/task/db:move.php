@@ -49,7 +49,7 @@ task('db:move', function () {
         runLocally("{{deployer_exec}} db:download " . $sourceInstance . " --dumpcode=" . $databaseDumpResponse['dumpCode'], 0);
 
         // processing downloaded dump files
-        runLocally("{{deployer_exec}} db:process_dump_files " . $sourceInstance . " --dumpcode=" . $databaseDumpResponse['dumpCode'], 0);
+        runLocally("{{deployer_exec}} db:process_dump " . $sourceInstance . " --dumpcode=" . $databaseDumpResponse['dumpCode'], 0);
 
         if (get('instance') == $targetInstanceName) {
             // import the latest database dumps from local database dump storage
