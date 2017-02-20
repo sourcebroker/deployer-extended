@@ -71,8 +71,17 @@ task('db:import', function () {
             $dataSqlFile[0]
         ), 0);
 
+        $post_sql_in_driver = '';
+        if(isset($databasesEnvConfig['post_sql_in_driver'])) {
+            $publicUrlCollected = [];
+            foreach (get('public_urls') as $publicUrl) {
+                $publicUrlCollected[] = ' domainName="' . $publicUrl . '"';
+            }
+            $post_sql_in_driver = str_replace('{{domains}}', implode(' OR ', $publicUrlCollected), $databasesEnvConfig['post_sql_in_driver']);
+        }
+
         $importSql = $localStorage . DIRECTORY_SEPARATOR . $dumpCode . '.sql';
-        file_put_contents($importSql, str_replace("\n", ' ', $databasesEnvConfig['post_sql_in']));
+        file_put_contents($importSql, str_replace("\n", ' ', $databasesEnvConfig['post_sql_in'] . ' ' . $post_sql_in_driver));
         runLocally(sprintf(
             'export MYSQL_PWD="%s" && %s --default-character-set=utf8 -h%s -P%s -u%s -D%s -e "SOURCE %s" ',
             $databasesEnvConfig['password'],
