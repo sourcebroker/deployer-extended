@@ -1,7 +1,7 @@
 <?php
 
 // run only if called from deployer.phar context
-if (function_exists('\Deployer\set')) {
+if (PHP_SAPI === 'cli' && function_exists('\Deployer\set')) {
 
     require_once 'recipe/common.php';
 
@@ -11,10 +11,10 @@ if (function_exists('\Deployer\set')) {
         \Deployer\set('deployer_exec', $_SERVER['_'] . $_SERVER['PHP_SELF']);
     }
 
-// TODO - find more reliable way to set root of project
-    $data = debug_backtrace();
-    if (isset($data[3]) && isset($data[3]['file'])) {
-        \Deployer\set('current_dir', dirname($data[3]['file']));
+    if (is_dir(getcwd()) && file_exists(getcwd() . '/deploy.php')) {
+        \Deployer\set('current_dir', getcwd());
+    } else {
+        throw new \RuntimeException('Can not set "current_dir" var.');
     }
 
     \SourceBroker\DeployerExtended\Utility\FileUtility::requireFilesFromDirectoryReqursively(__DIR__ . '/../deployer/');
