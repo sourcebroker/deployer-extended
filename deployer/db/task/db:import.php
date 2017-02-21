@@ -71,17 +71,25 @@ task('db:import', function () {
             $dataSqlFile[0]
         ), 0);
 
-        $post_sql_in_driver = '';
-        if(isset($databasesEnvConfig['post_sql_in_driver'])) {
-            $publicUrlCollected = [];
-            foreach (get('public_urls') as $publicUrl) {
-                $publicUrlCollected[] = ' domainName="' . $publicUrl . '"';
+        $post_sql_in_with_markers = '';
+        if (isset($databasesEnvConfig['post_sql_in_with_markers'])) {
+
+            // Prepare some markers to use in post_sql_in_markers:
+            $markersArray = [];
+            // 1. "public_urls" var separated by comma. To use in SQL IN
+            if (is_array(get('public_urls'))) {
+                $publicUrlCollected = [];
+                foreach (get('public_urls') as $publicUrl) {
+                    $publicUrlCollected[] =  "'" . parse_url($publicUrl)['host'] . "'";
+                }
+                $markersArray['{{domainsSeparatedByComma}}'] = implode(',', $publicUrlCollected);
             }
-            $post_sql_in_driver = str_replace('{{domains}}', implode(' OR ', $publicUrlCollected), $databasesEnvConfig['post_sql_in_driver']);
+
+            $post_sql_in_with_markers = str_replace(array_keys($markersArray), $markersArray, $databasesEnvConfig['post_sql_in_with_markers']);
         }
 
         $importSql = $localStorage . DIRECTORY_SEPARATOR . $dumpCode . '.sql';
-        file_put_contents($importSql, str_replace("\n", ' ', $databasesEnvConfig['post_sql_in'] . ' ' . $post_sql_in_driver));
+        file_put_contents($importSql, str_replace("\n", ' ', $databasesEnvConfig['post_sql_in'] . ' ' . $post_sql_in_with_markers));
         runLocally(sprintf(
             'export MYSQL_PWD="%s" && %s --default-character-set=utf8 -h%s -P%s -u%s -D%s -e "SOURCE %s" ',
             $databasesEnvConfig['password'],
