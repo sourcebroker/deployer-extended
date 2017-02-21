@@ -4,10 +4,21 @@ namespace Deployer;
 
 task('lock:stop_if_http_status_200', function(){
     $statusCode = '';
-    if ('wget' == get('fetch_method')) {
-        $statusCode = runLocally("wget --no-check-certificate  --header='X-DEPLOYMENT:{{random}}' -SO- -T15 -t1 '{{stage_url}}' 2>&1 | grep 'HTTP/' | awk '{print $2}' | tail -1",15)->toString();
-    } elseif ('file_get_contents' == get('fetch_method')) {
-        $statusCode = runLocally('php -r \'file_get_contents("{{stage_url}}", false, stream_context_create(array("http"=>array("header"=>"X-DEPLOYMENT:{{random}}","timeout"=>15))));foreach($http_response_header as $header){preg_match("#HTTP/[0-9\.]+\s+([0-9]+)#",$header,$out);if(intval($out[1]) > 0) {echo intval($out[1]) ; exit;}};\'',15)->toString();
+
+    $publicUrls = get('public_urls');
+    if (!count($publicUrls)) {
+        throw new \Deployer\Exception\ConfigurationException('You need at least one "public_url" to call task cache:frontendreset');
+    }
+    $defaultPublicUrl = rtrim(get('public_urls')[0], '/') . '/';
+
+    switch (get('fetch_method')) {
+        case 'wget':
+            $statusCode = runLocally("wget --no-check-certificate  --header='X-DEPLOYMENT:{{random}}' -SO- -T15 -t1 '" . $defaultPublicUrl . "' 2>&1 | grep 'HTTP/' | awk '{print $2}' | tail -1",15)->toString();
+            break;
+
+        case 'file_get_contents':
+            $statusCode = runLocally('php -r \'file_get_contents("' . $defaultPublicUrl . '", false, stream_context_create(array("http"=>array("header"=>"X-DEPLOYMENT:{{random}}","timeout"=>15))));foreach($http_response_header as $header){preg_match("#HTTP/[0-9\.]+\s+([0-9]+)#",$header,$out);if(intval($out[1]) > 0) {echo intval($out[1]) ; exit;}};\'',15)->toString();
+            break;
     }
 
     if (200 == intval($statusCode)) {

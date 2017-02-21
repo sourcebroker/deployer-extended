@@ -20,13 +20,24 @@ EOT;
         @unlink($path);
     }
 
+    $publicUrls = get('public_urls');
+    if (!count($publicUrls)) {
+        throw new \Deployer\Exception\ConfigurationException('You need at least one "public_url" to call task cache:frontendreset');
+    }
+    $defaultPublicUrl = rtrim(get('public_urls')[0], '/') . '/';
+
     $loop = 0;
     while ($loop < get('opcache_loop')) {
         try {
-            if ('wget' == get('fetch_method')) {
-                runLocally("wget --no-check-certificate --quiet --delete-after  '{{stage_url}}" . $fileName . "'", 15);
-            } elseif ('file_get_contents' == get('fetch_method')) {
-                runLocally('php -r \'file_get_contents("{{stage_url}}' . $fileName . '");\'', 15);
+            switch (get('fetch_method')) {
+                case 'wget':
+                    runLocally("wget --no-check-certificate --quiet --delete-after  '" . $defaultPublicUrl . $fileName . "'",
+                        15);
+                    break;
+
+                case 'file_get_contents':
+                    runLocally('php -r \'file_get_contents("' . $defaultPublicUrl . $fileName . '");\'', 15);
+                    break;
             }
             writeln('Loop: ' . $loop);
             $loop = get('opcache_loop');
@@ -34,7 +45,6 @@ EOT;
             $loop++;
         }
     }
-
     run('cd {{deploy_path}} && rm -f current/' . $fileName);
 
 })->desc('Clear Apache/Nginx php caches for current.');
