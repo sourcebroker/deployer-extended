@@ -2,8 +2,7 @@
 
 namespace Deployer;
 
-task('lock:create_lock_files', function(){
-
+task('lock:create_lock_files', function () {
     $random = get('random');
     $phpCode = <<<EOT
 <?php 
@@ -17,7 +16,7 @@ while (file_exists(__DIR__ . '/deployment.lock') && \$enableLock) {
 EOT;
 
     $path = get('temp_dir').md5(get('deploy_lock_filename').get('random'));
-    file_put_contents($path,$phpCode);
+    file_put_contents($path, $phpCode);
 
     # add lock files to new release
     upload($path, "{{release_path}}/{{web_path}}{{deploy_lock_filename}}");
@@ -30,5 +29,4 @@ EOT;
     }
 
     @unlink($path);
-
 })->desc('Create lock files on DocumentRoot');

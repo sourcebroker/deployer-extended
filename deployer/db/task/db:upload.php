@@ -3,7 +3,6 @@
 namespace Deployer;
 
 task('db:upload', function () {
-
     $dumpCode = null;
     if (input()->hasOption('dumpcode')) {
         $dumpCode = input()->getOption('dumpcode');
@@ -24,5 +23,4 @@ task('db:upload', function () {
     $user = !$targetServer->getUser() ? '' : $targetServer->getUser() . '@';
     run("[ -d " . $remoteDatsbaseStoragePath . " ] || mkdir -p " . $remoteDatsbaseStoragePath);
     runLocally("rsync -rz --remove-source-files -e 'ssh$port$identityFile' --include=*dumpcode:$dumpCode*.sql --exclude=* '$locaDatabaselStoragePath/' '$user$host:$remoteDatsbaseStoragePath/'", 0);
-
 })->desc('Upload the latest database dump from remote database dumps storage.');

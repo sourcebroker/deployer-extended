@@ -40,7 +40,6 @@ set('database_env_config', function () {
     $databaseConfigsServerEnv = get('db_databases');
     $databaseConfigsMerged = [];
     foreach ($databaseConfigsServerEnv as $databaseConfigServerEnv) {
-
         if (is_array($databaseConfigServerEnv)) {
             $databaseConfigsMerged = ArrayUtility::arrayMergeRecursiveDistinct($databaseConfigsMerged, $databaseConfigServerEnv);
             continue;
@@ -54,5 +53,4 @@ set('database_env_config', function () {
         }
     }
     return $databaseConfigsMerged;
-
 });

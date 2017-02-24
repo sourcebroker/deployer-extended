@@ -2,7 +2,7 @@
 
 namespace Deployer;
 
-task('lock:delete_lock_files', function (){
+task('lock:delete_lock_files', function () {
     # remove files from new release
     run('cd {{release_path}} && rm -f {{web_path}}deployment.lock');
     run('cd {{release_path}} && rm -f {{web_path}}{{deploy_lock_filename}}');

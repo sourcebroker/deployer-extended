@@ -6,7 +6,6 @@ use SourceBroker\DeployerExtended\Utility\ArrayUtility;
 use SourceBroker\DeployerExtended\Utility\DatabaseUtility;
 
 task('db:truncate_table', function () {
-
     $databasesEnvConfigs = get('database_env_config');
     foreach ($databasesEnvConfigs as $databaseCode => $databasesEnvConfig) {
         $cachingTablesWithPatterns = $databasesEnvConfig['caching_tables'];
@@ -24,5 +23,4 @@ task('db:truncate_table', function () {
         }
         writeln('<info>Truncated tables: ' . implode(',', $cachingTables) . '</info>');
     };
-
 })->desc('Truncate tables defined as caching tables on local instance.');

@@ -6,7 +6,6 @@ use SourceBroker\DeployerExtended\Utility\DatabaseUtility;
 use SourceBroker\DeployerExtended\Utility\FileUtility;
 
 task('db:import', function () {
-
     $dumpCode = null;
     if (input()->hasOption('dumpcode')) {
         $dumpCode = input()->getOption('dumpcode');
@@ -16,7 +15,6 @@ task('db:import', function () {
 
     $localStorage = get('db_settings_storage_path');
     foreach (get('database_env_config') as $databaseCode => $databasesEnvConfig) {
-
         $link = mysqli_connect($databasesEnvConfig['host'], $databasesEnvConfig['user'], $databasesEnvConfig['password'], $databasesEnvConfig['dbname']);
 
         $glob = $localStorage . DIRECTORY_SEPARATOR
@@ -102,5 +100,4 @@ task('db:import', function () {
         ), 0);
         unlink($importSql);
     }
-
 })->desc('Import the database with "dumpcode" from local database dumps storage to local database.');

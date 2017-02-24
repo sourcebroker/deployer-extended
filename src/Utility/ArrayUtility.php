@@ -2,7 +2,6 @@
 
 namespace SourceBroker\DeployerExtended\Utility;
 
-
 /**
  * Class ArrayUtility
  * @package SourceBroker\DeployerExtended\Utility
@@ -62,7 +61,8 @@ class ArrayUtility
         foreach ((array)$patterns as $pattern) {
             $regexp = false;
 
-            set_error_handler(function () {}, E_WARNING);
+            set_error_handler(function () {
+            }, E_WARNING);
             $isValidPattern = preg_match($pattern, "") !== false;
             $isValidPatternDelimiters = preg_match('/^' . $pattern . '$/', "") !== false;
             restore_error_handler();
@@ -80,5 +80,4 @@ class ArrayUtility
         }
         return $foundItems;
     }
-
 }

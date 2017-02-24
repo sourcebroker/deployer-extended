@@ -3,7 +3,6 @@
 namespace Deployer;
 
 task('db:pull', function () {
-
     $targetServer = get('db_get_local_server')->get('server')['name'];
 
     // export fresh database dump to remote database dump storage
@@ -18,5 +17,4 @@ task('db:pull', function () {
 
     // import the latest database dumps from local database dump storage
     runLocally("{{deployer_exec}} db:import " . $targetServer . " --dumpcode=" . $databaseDumpResponse['dumpCode'], 0);
-
 })->desc('Synchronize database from remote instance to local instance.');

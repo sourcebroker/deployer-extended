@@ -3,7 +3,6 @@
 namespace Deployer;
 
 task('db:download', function () {
-
     $localStoragePath = get('db_get_local_server')->get('db_settings_storage_path');
     if (!file_exists($localStoragePath)) {
         mkdir($localStoragePath, 0755, true);
@@ -22,5 +21,4 @@ task('db:download', function () {
     $user = !$server->getUser() ? '' : $server->getUser() . '@';
 
     runLocally("rsync -rz --remove-source-files -e 'ssh$port$identityFile' --include=*dumpcode:$dumpCode*.sql --exclude=* '$user$host:$remoteStoragePath/' '$localStoragePath/'", 0);
-
 })->desc('Download the database dumps with dumpcode from remote database dumps storage.');

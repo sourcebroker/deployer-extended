@@ -2,14 +2,12 @@
 
 namespace SourceBroker\DeployerExtended\Utility;
 
-
 /**
  * Class FileUtility
  * @package SourceBroker\DeployerExtended\Utility
  */
 class FileUtility
 {
-
     public static function normalizeFilename($filename)
     {
         return preg_replace("/[^a-zA-Z0-9_]+/", "", $filename);

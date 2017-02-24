@@ -2,7 +2,6 @@
 
 // run only if called from deployer.phar context
 if (PHP_SAPI === 'cli' && function_exists('\Deployer\set')) {
-
     require_once 'recipe/common.php';
 
     if ($_SERVER['_'] == $_SERVER['PHP_SELF']) {
@@ -18,5 +17,4 @@ if (PHP_SAPI === 'cli' && function_exists('\Deployer\set')) {
     }
 
     \SourceBroker\DeployerExtended\Utility\FileUtility::requireFilesFromDirectoryReqursively(__DIR__ . '/../deployer/');
-
 }

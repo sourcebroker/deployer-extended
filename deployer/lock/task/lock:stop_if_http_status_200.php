@@ -2,7 +2,7 @@
 
 namespace Deployer;
 
-task('lock:stop_if_http_status_200', function(){
+task('lock:stop_if_http_status_200', function () {
     $statusCode = '';
 
     $publicUrls = get('public_urls');
@@ -13,11 +13,11 @@ task('lock:stop_if_http_status_200', function(){
 
     switch (get('fetch_method')) {
         case 'wget':
-            $statusCode = runLocally("wget --no-check-certificate  --header='X-DEPLOYMENT:{{random}}' -SO- -T15 -t1 '" . $defaultPublicUrl . "' 2>&1 | grep 'HTTP/' | awk '{print $2}' | tail -1",15)->toString();
+            $statusCode = runLocally("wget --no-check-certificate  --header='X-DEPLOYMENT:{{random}}' -SO- -T15 -t1 '" . $defaultPublicUrl . "' 2>&1 | grep 'HTTP/' | awk '{print $2}' | tail -1", 15)->toString();
             break;
 
         case 'file_get_contents':
-            $statusCode = runLocally('php -r \'file_get_contents("' . $defaultPublicUrl . '", false, stream_context_create(array("http"=>array("header"=>"X-DEPLOYMENT:{{random}}","timeout"=>15))));foreach($http_response_header as $header){preg_match("#HTTP/[0-9\.]+\s+([0-9]+)#",$header,$out);if(intval($out[1]) > 0) {echo intval($out[1]) ; exit;}};\'',15)->toString();
+            $statusCode = runLocally('php -r \'file_get_contents("' . $defaultPublicUrl . '", false, stream_context_create(array("http"=>array("header"=>"X-DEPLOYMENT:{{random}}","timeout"=>15))));foreach($http_response_header as $header){preg_match("#HTTP/[0-9\.]+\s+([0-9]+)#",$header,$out);if(intval($out[1]) > 0) {echo intval($out[1]) ; exit;}};\'', 15)->toString();
             break;
     }
 
@@ -39,7 +39,4 @@ task('lock:stop_if_http_status_200', function(){
         ];
         writeln($formatter->formatBlock($errorMessage, 'error', true));
     }
-
 })->desc('Lock stop if http status is 200');
-
-

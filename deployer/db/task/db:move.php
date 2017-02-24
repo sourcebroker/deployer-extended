@@ -3,7 +3,6 @@
 namespace Deployer;
 
 task('db:move', function () {
-
     try {
         if (input()->hasArgument('targetStage')) {
             $targetInstanceName = input()->getArgument('targetStage');
@@ -54,7 +53,6 @@ task('db:move', function () {
         if (get('instance') == $targetInstanceName) {
             // import the latest database dumps from local database dump storage
             runLocally("{{deployer_exec}} db:import " . $sourceInstance . " --dumpcode=" . $databaseDumpResponse['dumpCode'], 0);
-
         } else {
             // import the latest database dumps from local database dump storage
             runLocally("{{deployer_exec}} db:upload " . $targetInstanceName . " --dumpcode=" . $databaseDumpResponse['dumpCode'], 0);
@@ -66,5 +64,4 @@ task('db:move', function () {
     } catch (\RuntimeException $e) {
         throw $e;
     }
-
 })->desc('Synchronize database between instances.');

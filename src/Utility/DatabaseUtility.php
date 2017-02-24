@@ -2,7 +2,6 @@
 
 namespace SourceBroker\DeployerExtended\Utility;
 
-
 /**
  * Class DatabaseUtility
  * @package SourceBroker\DeployerExtended\Utility

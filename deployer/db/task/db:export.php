@@ -7,7 +7,6 @@ use SourceBroker\DeployerExtended\Utility\FileUtility;
 use SourceBroker\DeployerExtended\Utility\DatabaseUtility;
 
 task('db:export', function () {
-
     $dumpCode = md5(microtime(true) . rand(0, 10000));
     $dateTime = date('Y-m-d_H:i:s');
 
@@ -64,5 +63,4 @@ task('db:export', function () {
     }
     $json['dumpCode'] = $dumpCode;
     echo json_encode($json);
-
 })->desc('Export database dump to local database dumps storage. Returns dumpcode as json.');
