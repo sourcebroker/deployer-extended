@@ -6,7 +6,6 @@ namespace Deployer;
  * Copy files from shared directory into
  */
 task('file:copy_from_shared', function () {
-
     if (!get('shared_files_to_copy', false)) {
         return;
     }
@@ -32,5 +31,4 @@ task('file:copy_from_shared', function () {
         // Symlink shared dir to release dir
         run("cp -r $sharedPath/$file {{release_path}}/$file");
     }
-
 })->desc('Copying shared files')->addAfter('deploy:shared');

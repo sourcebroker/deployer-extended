@@ -2,9 +2,6 @@
 
 namespace Deployer;
 
-/**
- * Check git status on remote server
- */
 task('git:check_status', function () {
     // check if directory exists and is under GIT control
     $result = run('if [ -d {{current}} ] && [ -d {{current}}/.git ]; then echo true; fi');

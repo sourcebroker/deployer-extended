@@ -5,7 +5,6 @@ namespace Deployer;
 /*
  * Based on https://github.com/deployphp/recipes/blob/master/recipes/rsync.php
  */
-
 set('media-default',
     [
         'exclude' => [],

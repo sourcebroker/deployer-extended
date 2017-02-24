@@ -7,7 +7,6 @@ namespace Deployer;
  * Have to be called before "deploy:symlink"
  */
 task('file:copy_from_previous', function () {
-
     if (!get('previous_release_dirs_to_copy', false)) {
         return;
     }
@@ -36,7 +35,7 @@ task('file:copy_from_previous', function () {
     }
 
     // make sure that all paths are without slash at the end
-    $pathsToCopy = array_map('rtrim', $pathsToCopy, array('/'));
+    $pathsToCopy = array_map('rtrim', $pathsToCopy, ['/']);
 
     foreach ($pathsToCopy as $path) {
         // check if copy source path exist and if it is directory
@@ -62,5 +61,4 @@ task('file:copy_from_previous', function () {
             run("if [ ! -e $(echo {{release_path}}/$path/$copySource) ]; then cp -r $(echo {{deploy_path}}/current/$path/$copySource) $(echo {{release_path}}/$path/$copySource); fi");
         }
     }
-
 })->desc('Copying directories from previous release')->addAfter('deploy:shared');

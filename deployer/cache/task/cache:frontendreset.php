@@ -3,7 +3,6 @@
 namespace Deployer;
 
 task('cache:frontendreset', function () {
-
     $fileName = "cache_clear_" . get('random') . '.php';
     $phpCode = <<<EOT
 <?php
@@ -46,5 +45,4 @@ EOT;
         }
     }
     run('cd {{deploy_path}} && rm -f current/' . $fileName);
-
 })->desc('Clear Apache/Nginx php caches for current.');
