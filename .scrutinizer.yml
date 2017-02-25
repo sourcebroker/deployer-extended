@@ -1,6 +1,5 @@
 checks:
   php: true
-    duplication: false
 filter: {  }
 tools:
   php_sim: false
