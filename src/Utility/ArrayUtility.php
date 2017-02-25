@@ -15,7 +15,7 @@ class ArrayUtility
      */
     public static function arrayMergeRecursiveDistinct(array &$array1, array &$array2)
     {
-        $arrays = func_get_args();
+        $arrays = [$array1, $array2];
         $base = array_shift($arrays);
         if (!is_array($base)) {
             $base = empty($base) ? [] : [$base];
