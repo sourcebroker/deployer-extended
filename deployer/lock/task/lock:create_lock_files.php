@@ -28,5 +28,7 @@ EOT;
         run('cd {{deploy_path}} && touch current/deployment.lock');
     }
 
-    @unlink($path);
+    if (file_exists($path)) {
+        unlink($path);
+    }
 })->desc('Create lock files on DocumentRoot');

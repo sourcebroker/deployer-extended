@@ -20,7 +20,9 @@ EOT;
             file_put_contents($path, $content);
             run('cd {{release_path}} && rm {{web_path}}{{deploy_lock_inject_filename}}');
             upload($path, "{{release_path}}/{{web_path}}{{deploy_lock_inject_filename}}");
-            @unlink($path);
+            if (file_exists($path)) {
+                unlink($path);
+            }
         }
     }
 })->desc('Make symlink for file which do index_buffer inclusion');

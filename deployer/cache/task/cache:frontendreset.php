@@ -16,7 +16,9 @@ EOT;
 
     if (run('if [ -L {{deploy_path}}/current ] ; then echo true; fi')->toBool()) {
         upload($path, "{{deploy_path}}/current/" . $fileName);
-        @unlink($path);
+        if (file_exists($path)) {
+            unlink($path);
+        }
     }
 
     $publicUrls = get('public_urls');
