@@ -1,5 +1,4 @@
 checks:
   php:
     code_rating: true
-    duplication: false
-filter: {  }
+    duplication: true
