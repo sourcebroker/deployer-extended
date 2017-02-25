@@ -1,4 +1,4 @@
 checks:
-    php: true
-      duplication: false
+  php: true
+    duplication: false
 filter: {  }
