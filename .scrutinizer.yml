@@ -3,6 +3,3 @@ checks:
     code_rating: true
     duplication: false
 filter: {  }
-tools:
-  php_sim: false
-  php_cpd: false
