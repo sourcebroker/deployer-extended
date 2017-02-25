@@ -25,11 +25,11 @@ class ArrayUtility
                 $append = [$append];
             }
             foreach ($append as $key => $value) {
-                if (!array_key_exists($key, $base) and !is_numeric($key)) {
+                if (!array_key_exists($key, $base) && !is_numeric($key)) {
                     $base[$key] = $append[$key];
                     continue;
                 }
-                if (is_array($value) or is_array($base[$key])) {
+                if (is_array($value) || is_array($base[$key])) {
                     $base[$key] = self::arrayMergeRecursiveDistinct($base[$key], $append[$key]);
                 } else {
                     if (is_numeric($key)) {

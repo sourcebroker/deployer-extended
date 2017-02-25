@@ -49,7 +49,7 @@ task('git:check_status', function () {
 
         do {
             $answer = ask("Do you want continue (y/n)?", 'n');
-        } while ($answer != 'y' and $answer != 'n');
+        } while ($answer != 'y' && $answer != 'n');
 
         if ($answer == 'n') {
             writeln('<comment>> Stopped deployment.</comment>');
