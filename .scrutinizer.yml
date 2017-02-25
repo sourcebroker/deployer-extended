@@ -1,20 +1,3 @@
-inherit: true
-
-tools:
-    php_code_sniffer:
-      config:
-        standard: PSR2
-    php_cs_fixer:
-      extensions:
-        - php
-      fixers: []
-      enabled: false
-
-coding_style:
-  php:
-    indentation:
-      general:
-        use_tabs: false
-
-filter:
-    paths: [tests/*,code/*]
+checks:
+    php: true
+filter: {  }
