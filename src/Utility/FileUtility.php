@@ -22,10 +22,10 @@ class FileUtility
                 /** @var $file \SplFileInfo */
                 if ($file->isFile()) {
                     $excludeMatch = null;
-                    if ($excludePattern != null) {
+                    if ($excludePattern !== null) {
                         $excludeMatch = preg_match($excludePattern, $file->getFilename());
                     }
-                    if ($file->getExtension() == 'php' && !$excludeMatch) {
+                    if ($file->getExtension() == 'php' && $excludeMatch !== 1) {
                         require_once $file->getRealPath();
                     }
                 }

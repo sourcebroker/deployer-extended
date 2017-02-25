@@ -6,7 +6,6 @@ use SourceBroker\DeployerExtended\Utility\DatabaseUtility;
 use SourceBroker\DeployerExtended\Utility\FileUtility;
 
 task('db:import', function () {
-    $dumpCode = null;
     if (input()->hasOption('dumpcode')) {
         $dumpCode = input()->getOption('dumpcode');
     } else {

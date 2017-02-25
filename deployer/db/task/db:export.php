@@ -46,7 +46,6 @@ task('db:export', function () {
         $ignoreTables = ArrayUtility::filterWithRegexp($ignoreTablesWithPatterns, $allTables);
 
         $ignoreTablesCmd = ($ignoreTables) ? '--ignore-table=' . $databasesEnvConfig['dbname'] . '.%s' : '%s';
-        //print_r(implode(' --ignore-table=' . $databasesEnvConfig['dbname'] . '.', $ignoreTables)); die('$ignoreTablesCmd at 20.03.2016 19:54');
         $filenameParts[3] = 'type:data';
         $outputFileDatabaseData = get('db_settings_storage_path') . DIRECTORY_SEPARATOR . implode('#', $filenameParts) . '.sql';
         runLocally(sprintf(
@@ -61,6 +60,5 @@ task('db:export', function () {
             implode(' --ignore-table=' . $databasesEnvConfig['dbname'] . '.', $ignoreTables)
         ), 0);
     }
-    $json['dumpCode'] = $dumpCode;
-    echo json_encode($json);
+    echo json_encode(['dumpCode' => $dumpCode]);
 })->desc('Export database dump to local database dumps storage. Returns dumpcode as json.');

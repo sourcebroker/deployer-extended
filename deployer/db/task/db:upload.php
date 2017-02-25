@@ -3,7 +3,6 @@
 namespace Deployer;
 
 task('db:upload', function () {
-    $dumpCode = null;
     if (input()->hasOption('dumpcode')) {
         $dumpCode = input()->getOption('dumpcode');
     } else {
