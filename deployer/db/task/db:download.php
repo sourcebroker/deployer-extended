@@ -9,7 +9,7 @@ task('db:download', function () {
         throw new \InvalidArgumentException('No --dumpcode option set. [Error code: 1458937128561]');
     }
 
-    if (null === input()->getOption('dumpcode')) {
+    if (null === input()->getArgument('stage')) {
         throw new \RuntimeException("The target instance is required for db:download command.");
     }
 
