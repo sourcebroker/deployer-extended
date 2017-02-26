@@ -23,28 +23,33 @@ Additionally it clears opcache and eaccelaeator cache for CLI context.
 
 This task clear the clears opcache and eaccelaeator cache for WEB context. 
 
-
 ### Database Tasks
+
+This tasks allows you to make database operation on current instance and between instances.
+The most useful is ability to pull database from remote instance to current instance: `dep db:pull live` 
+or to move database between remote instances, eg: `dep db:move live dev` 
 
 #### db:download
 
-Download database from target instance do current instance. 
+Download database from target instance to current instance. 
 There is required option --dumpcode to be passed.
 
 Example call:
       
       dep db:download live --dumpcode=0772a8d396911951022db5ea385535f6
 
-
 __Notice!:__ Usually you do not need to run this command as its part of db:pull and db:move command.
 
 #### db:export
 
-Export database to database storage on current instance. The database will be stored on current instance database storage
-as two separate files. One with tables structure. The second with data only.
+Export database to database storage on current instance. 
 
-2017-02-26_14:56:08#server:live#dbcode:database_default#type:data#dumpcode:362d7ca0ff065f489c9b79d0a73720f5.sql
-2017-02-26_14:56:08#server:live#dbcode:database_default#type:structure#dumpcode:362d7ca0ff065f489c9b79d0a73720f5.sql
+The database will be stored in two separate files. 
+One with tables structure. The second with data only.
+Example files: 
+
+* <sup>2017-02-26_14:56:08#server:live#dbcode:database_default#type:data#dumpcode:362d7ca0ff065f489c9b79d0a73720f5.sql</sup>
+* <sup>2017-02-26_14:56:08#server:live#dbcode:database_default#type:structure#dumpcode:362d7ca0ff065f489c9b79d0a73720f5.sql</sup>
 
 Example call:
 
@@ -68,22 +73,24 @@ In the background it runs several commands to accomplish this task.
 
 Example call when you are on your local instance can be:
 
-    dep db:pull live
+    dep db:move live dev
+        
+This will move database from live instance to dev instance.
         
 It will do following:        
 1) First it runs db:export task on target instance and get the "dumpcode" as return to use it in next commands.
 2) Then it runs db:download (with "dumpcode" value from first task).
-3) Then it runs db:process_dump (with "dumpcode" value from first task).
+3) Then it runs db:process (with "dumpcode" value from first task).
 4) Then it runs db:import (with "dumpcode" value from first task).
 
-#### db:process_dump
+#### db:process
 
-This command will run replace on the sql dump file. Its sometimes needed to remove or replace some strings directly on sql file 
-before importing.
+This command will run some defined commands on pure sql file as its sometimes needed to remove
+or replace some strings directly on sql file before importing.
  
 There is required option --dumpcode to be passed.
     
-      dep db:process_dump --dumpcode=0772a8d396911951022db5ea385535f66
+      dep db:process --dumpcode=0772a8d396911951022db5ea385535f66
       
 __Notice!:__ Usually you do not need to run this command as its part of db:pull and db:move command.
 
@@ -99,25 +106,29 @@ Example call when you are on your local instance can be:
 It will do following:        
 1) First it runs db:export task on target instance and get the "dumpcode" as return to use it in next commands.
 2) Then it runs db:download (with "dumpcode" value from first task).
-3) Then it runs db:process_dump (with "dumpcode" value from first task).
+3) Then it runs db:process (with "dumpcode" value from first task).
 4) Then it runs db:import (with "dumpcode" value from first task).
 
 #### db:truncate
 
-This command allows you to truncate database tables.
+This command allows you to truncate database tables defined in database config var "caching_tables"
 
-Example call can be:
+Example call for current instance:
 
     dep db:truncate
+    
+Example call for target instance:
+    
+    dep db:truncate live
 
 #### db:upload
 
 This command will upload the sql dump file to target instance. 
 There is required option --dumpcode to be passed.
     
-      dep db:pull --dumpcode=0772a8d396911951022db5ea385535f66
+      dep db:upload --dumpcode=0772a8d396911951022db5ea385535f66
       
-__Notice!:__ Usually you do not need to run this command as its part of db:pull and db:move command.
+__Notice!:__ Usually you do not need to run this command as its part of db:move command.
 
 ### Deploy Tasks
 

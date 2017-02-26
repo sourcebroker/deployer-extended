@@ -24,7 +24,7 @@ task('db:pull', function () {
 
     if ($dbExportOnTargetInstanceResponse !== null && isset($dbExportOnTargetInstanceResponse['dumpCode'])) {
         $dumpCode = $dbExportOnTargetInstanceResponse['dumpCode'];
-        runLocally("{{deployer_exec}} db:download --dumpcode=$dumpCode", 0);
+        runLocally("{{deployer_exec}} db:download $sourceInstance --dumpcode=$dumpCode", 0);
         runLocally("{{deployer_exec}} db:process --dumpcode=$dumpCode", 0);
         runLocally("{{deployer_exec}} db:import --dumpcode=$dumpCode", 0);
     } else {
