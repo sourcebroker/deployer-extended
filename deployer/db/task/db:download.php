@@ -5,13 +5,13 @@ namespace Deployer;
 use SourceBroker\DeployerExtended\Utility\FileUtility;
 
 task('db:download', function () {
+    if (null === input()->getArgument('stage')) {
+        throw new \RuntimeException("The target instance is required for db:download command. [Error code: 1488143750580]");
+    }
     if (input()->getOption('dumpcode')) {
         $dumpCode = input()->getOption('dumpcode');
     } else {
         throw new \InvalidArgumentException('No --dumpcode option set. [Error code: 1458937128561]');
-    }
-    if (null === input()->getArgument('stage')) {
-        throw new \RuntimeException("The target instance is required for db:download command.");
     }
 
     $currentInstanceDatabaseStoragePath = FileUtility::normalizeFolder(get('current_server')->get('db_settings_storage_path'));

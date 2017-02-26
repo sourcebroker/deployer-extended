@@ -3,6 +3,9 @@
 namespace Deployer;
 
 task('db:process', function () {
+    if (null !== input()->getArgument('stage')) {
+        throw new \RuntimeException("You can not set target instance for db:process command. It can only run on current instance.");
+    }
     if (input()->getOption('dumpcode')) {
         $dumpCode = input()->getOption('dumpcode');
     } else {

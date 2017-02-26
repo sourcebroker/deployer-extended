@@ -12,7 +12,7 @@ task('db:import', function () {
         throw new \RuntimeException('No dumpCode set. [Error code: 1458937128560]');
     }
     if (null !== input()->getArgument('stage')) {
-        throw new \RuntimeException("You can not set targt instance for db:import command.");
+        throw new \RuntimeException("You can not set target instance for db:import command. It can only run on current instance. [Error code: 1488143716512]");
     }
     $currentInstanceDatabaseStoragePath = get('db_settings_storage_path');
     foreach (get('databases_config') as $databaseCode => $databaseConfig) {

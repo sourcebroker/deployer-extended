@@ -14,7 +14,7 @@ task('db:pull', function () {
     $dbExportOnTargetInstanceResponse = json_decode(trim($databaseDumpResult->toString()), true);
     if ($dbExportOnTargetInstanceResponse == null) {
         throw new \RuntimeException(
-            "db:export failed on " . $sourceInstance . ". The database dumpCode is null. Try to call: \n" .
+            "db:export failed on " . $sourceInstance . ". The database dumpcode is null. Try to call: \n" .
             $command . "\n" .
             "on " . $sourceInstance . " instance. \n" .
             "Export task returned: " . $databaseDumpResult->toString() . "\n" .
