@@ -9,6 +9,10 @@ task('db:upload', function () {
         throw new \InvalidArgumentException('No --dumpcode option set. [Error code: 1458937128560]');
     }
 
+    if (null === input()->getArgument('stage')) {
+        throw new \RuntimeException("The target instance is required for db:upload command.");
+    }
+
     $targetInstance = Task\Context::get()->getServer()->getConfiguration();
 
     $targetInstnceDatabaseStoragePath = get('db_settings_storage_path');
