@@ -3,7 +3,7 @@
 namespace Deployer;
 
 task('db:process', function () {
-    if (input()->hasOption('dumpcode')) {
+    if (input()->getOption('dumpcode')) {
         $dumpCode = input()->getOption('dumpcode');
     } else {
         throw new \InvalidArgumentException('No --dumpcode option set. [Error code: 1458937128562]');

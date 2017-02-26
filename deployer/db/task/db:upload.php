@@ -3,7 +3,7 @@
 namespace Deployer;
 
 task('db:upload', function () {
-    if (input()->hasOption('dumpcode')) {
+    if (input()->getOption('dumpcode')) {
         $dumpCode = input()->getOption('dumpcode');
     } else {
         throw new \InvalidArgumentException('No --dumpcode option set. [Error code: 1458937128560]');
@@ -15,9 +15,10 @@ task('db:upload', function () {
 
     $port = $targetInstance->getPort() ? ' -p' . $targetInstance->getPort() : '';
     $identityFile = $targetInstance->getPrivateKey() ? ' -i ' . $targetInstance->getPrivateKey() : '';
-    $sshOptions = '';
-    if ($port != '' || $identityFile != '') {
-        $sshOptions = '-e ssh ' . escapeshellarg($port . $identityFile);
+    if ($port !== '' || $identityFile !== '') {
+        $sshOptions = '-e ' . escapeshellarg('ssh ' . $port . $identityFile);
+    } else {
+        $sshOptions = '';
     }
 
     run("[ -d " . $targetInstnceDatabaseStoragePath . " ] || mkdir -p " . $targetInstnceDatabaseStoragePath);

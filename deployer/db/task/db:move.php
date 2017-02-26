@@ -3,10 +3,10 @@
 namespace Deployer;
 
 task('db:move', function () {
-    if (!input()->hasArgument('stage')) {
+    if (null === input()->getArgument('stage')) {
         throw new \RuntimeException("The source instance is required for db:move command.");
     }
-    if (input()->hasArgument('targetStage')) {
+    if (input()->getArgument('targetStage')) {
         $targetInstanceName = input()->getArgument('targetStage');
         $targetInstanceEnv = Deployer::get()->environments[$targetInstanceName];
         if ($targetInstanceName == null) {
@@ -26,7 +26,7 @@ task('db:move', function () {
         }
     } else {
         throw new \RuntimeException(
-            "The target stage is not set as second parameter. Move should be run as: dep db:move source target"
+            "The target instance is not set as second parameter. Move should be run as: dep db:move source target"
         );
     }
 

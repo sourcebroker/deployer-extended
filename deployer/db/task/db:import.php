@@ -6,7 +6,7 @@ use SourceBroker\DeployerExtended\Utility\DatabaseUtility;
 use SourceBroker\DeployerExtended\Utility\FileUtility;
 
 task('db:import', function () {
-    if (input()->hasOption('dumpcode')) {
+    if (input()->getOption('dumpcode')) {
         $dumpCode = input()->getOption('dumpcode');
     } else {
         throw new \RuntimeException('No dumpCode set. [Error code: 1458937128560]');

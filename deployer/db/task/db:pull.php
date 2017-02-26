@@ -3,7 +3,7 @@
 namespace Deployer;
 
 task('db:pull', function () {
-    if (!input()->hasArgument('stage')) {
+    if (null === input()->getArgument('stage')) {
         throw new \RuntimeException("The target instance is required for db:pull command.");
     }
 

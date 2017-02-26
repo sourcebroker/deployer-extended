@@ -3,13 +3,13 @@
 namespace Deployer;
 
 task('db:download', function () {
-    if (input()->hasOption('dumpcode')) {
+    if (input()->getOption('dumpcode')) {
         $dumpCode = input()->getOption('dumpcode');
     } else {
         throw new \InvalidArgumentException('No --dumpcode option set. [Error code: 1458937128561]');
     }
 
-    if (!input()->hasArgument('stage')) {
+    if (null === input()->getOption('dumpcode')) {
         throw new \RuntimeException("The target instance is required for db:download command.");
     }
 
@@ -17,14 +17,14 @@ task('db:download', function () {
     if (!file_exists($currentInstanceStoragePath)) {
         mkdir($currentInstanceStoragePath, 0755, true);
     }
-
     $targetInstance = Task\Context::get()->getServer()->getConfiguration();
 
     $port = $targetInstance->getPort() ? ' -p' . $targetInstance->getPort() : '';
     $identityFile = $targetInstance->getPrivateKey() ? ' -i ' . $targetInstance->getPrivateKey() : '';
-    $sshOptions = '';
-    if ($port != '' || $identityFile != '') {
-        $sshOptions = "-e 'ssh . $port . $identityFile '";
+    if ($port !== '' || $identityFile !== '') {
+        $sshOptions = '-e ' . escapeshellarg('ssh ' . $port . $identityFile);
+    } else {
+        $sshOptions = '';
     }
 
     runLocally(sprintf(
