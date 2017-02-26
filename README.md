@@ -35,8 +35,8 @@ Download database from target instance to current instance.
 There is required option --dumpcode to be passed.
 
 Example call:
-      
-      dep db:download live --dumpcode=0772a8d396911951022db5ea385535f6
+
+    dep db:download live --dumpcode=0772a8d396911951022db5ea385535f6
 
 __Notice!:__ Usually you do not need to run this command as its part of db:pull and db:move command.
 
@@ -53,7 +53,7 @@ Example files:
 
 Example call:
 
-      dep db:export
+    dep db:export
 
 __Notice!:__ Usually you do not need to run this command as its part of db:pull and db:move command.
 
@@ -61,9 +61,9 @@ __Notice!:__ Usually you do not need to run this command as its part of db:pull 
 
 Import database from current instance database storage. 
 There is required option --dumpcode to be passed.
-    
-      dep db:import --dumpcode=0772a8d396911951022db5ea385535f66
-      
+
+    dep db:import --dumpcode=0772a8d396911951022db5ea385535f66
+
 __Notice!:__ Usually you do not need to run this command as its part of db:pull and db:move command.
       
 #### db:move
@@ -74,7 +74,7 @@ In the background it runs several commands to accomplish this task.
 Example call when you are on your local instance can be:
 
     dep db:move live dev
-        
+
 This will move database from live instance to dev instance.
         
 It will do following:        
@@ -89,9 +89,9 @@ This command will run some defined commands on pure sql file as its sometimes ne
 or replace some strings directly on sql file before importing.
  
 There is required option --dumpcode to be passed.
-    
-      dep db:process --dumpcode=0772a8d396911951022db5ea385535f66
-      
+
+    dep db:process --dumpcode=0772a8d396911951022db5ea385535f66
+
 __Notice!:__ Usually you do not need to run this command as its part of db:pull and db:move command.
 
 #### db:pull
@@ -102,7 +102,7 @@ In the background it runs several commands to accomplish this task.
 Example call when you are on your local instance can be:
 
     dep db:pull live
-        
+
 It will do following:        
 1) First it runs db:export task on target instance and get the "dumpcode" as return to use it in next commands.
 2) Then it runs db:download (with "dumpcode" value from first task).
@@ -116,18 +116,18 @@ This command allows you to truncate database tables defined in database config v
 Example call for current instance:
 
     dep db:truncate
-    
+
 Example call for target instance:
-    
+
     dep db:truncate live
 
 #### db:upload
 
 This command will upload the sql dump file to target instance. 
 There is required option --dumpcode to be passed.
-    
-      dep db:upload --dumpcode=0772a8d396911951022db5ea385535f66
-      
+
+    dep db:upload --dumpcode=0772a8d396911951022db5ea385535f66
+
 __Notice!:__ Usually you do not need to run this command as its part of db:move command.
 
 ### Deploy Tasks
