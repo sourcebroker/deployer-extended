@@ -9,7 +9,7 @@ task('db:import', function () {
     if (input()->getOption('dumpcode')) {
         $dumpCode = input()->getOption('dumpcode');
     } else {
-        throw new \RuntimeException('No dumpCode set. [Error code: 1458937128560]');
+        throw new \RuntimeException('No dumpcode set. [Error code: 1458937128560]');
     }
     if (null !== input()->getArgument('stage')) {
         throw new \RuntimeException("You can not set target instance for db:import command. It can only run on current instance. [Error code: 1488143716512]");
@@ -26,7 +26,7 @@ task('db:import', function () {
         $structureSqlFile = glob($glob);
 
         if (empty($structureSqlFile)) {
-            throw new \RuntimeException('No structure file for $dumpCode: ' . $dumpCode . '. Glob build: ' . $glob . '.  [Error code: 1458494633]');
+            throw new \RuntimeException('No structure file for $dumpcode: ' . $dumpCode . '. Glob build: ' . $glob . '.  [Error code: 1458494633]');
         }
 
         $dataSqlFile = glob($currentInstanceDatabaseStoragePath . DIRECTORY_SEPARATOR
@@ -36,7 +36,7 @@ task('db:import', function () {
             . '.sql');
 
         if (empty($dataSqlFile)) {
-            throw new \RuntimeException('No structure file for $dumpCode: ' . $dumpCode . '  [Error code: 1458494633]');
+            throw new \RuntimeException('No structure file for $dumpcode: ' . $dumpCode . '  [Error code: 1458494633]');
         }
 
         // drop all tables before import of database
