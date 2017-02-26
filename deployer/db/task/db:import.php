@@ -11,10 +11,12 @@ task('db:import', function () {
     } else {
         throw new \RuntimeException('No dumpCode set. [Error code: 1458937128560]');
     }
-
+    if (null !== input()->getArgument('stage')) {
+        throw new \RuntimeException("You can not set targt instance for db:import command.");
+    }
     $currentInstanceDatabaseStoragePath = get('db_settings_storage_path');
-    foreach (get('database_env_config') as $databaseCode => $databasesEnvConfig) {
-        $link = mysqli_connect($databasesEnvConfig['host'], $databasesEnvConfig['user'], $databasesEnvConfig['password'], $databasesEnvConfig['dbname']);
+    foreach (get('databases_config') as $databaseCode => $databaseConfig) {
+        $link = mysqli_connect($databaseConfig['host'], $databaseConfig['user'], $databaseConfig['password'], $databaseConfig['dbname']);
 
         $glob = $currentInstanceDatabaseStoragePath . DIRECTORY_SEPARATOR
             . '*dbcode:' . FileUtility::normalizeFilename($databaseCode)
@@ -38,7 +40,7 @@ task('db:import', function () {
         }
 
         // drop all tables before import of database
-        $allTables = DatabaseUtility::getTables($databasesEnvConfig);
+        $allTables = DatabaseUtility::getTables($databaseConfig);
         $link->query('SET FOREIGN_KEY_CHECKS = 0');
         foreach ($allTables as $table) {
             $link->query(/** @lang MySQL */
@@ -48,28 +50,28 @@ task('db:import', function () {
 
         runLocally(sprintf(
             'export MYSQL_PWD=%s && %s --default-character-set=utf8 -h%s -P%s -u%s -D%s -e "SOURCE %s" ',
-            escapeshellarg($databasesEnvConfig['password']),
+            escapeshellarg($databaseConfig['password']),
             get('db_settings_mysql_path'),
-            $databasesEnvConfig['host'],
-            (isset($databasesEnvConfig['port']) && $databasesEnvConfig['port']) ? $databasesEnvConfig['port'] : 3306,
-            $databasesEnvConfig['user'],
-            $databasesEnvConfig['dbname'],
+            $databaseConfig['host'],
+            (isset($databaseConfig['port']) && $databaseConfig['port']) ? $databaseConfig['port'] : 3306,
+            $databaseConfig['user'],
+            $databaseConfig['dbname'],
             $structureSqlFile[0]
         ), 0);
 
         runLocally(sprintf(
             'export MYSQL_PWD=%s && %s --default-character-set=utf8 -h%s -P%s -u%s -D%s -e "SOURCE %s" ',
-            escapeshellarg($databasesEnvConfig['password']),
+            escapeshellarg($databaseConfig['password']),
             get('db_settings_mysql_path'),
-            $databasesEnvConfig['host'],
-            (isset($databasesEnvConfig['port']) && $databasesEnvConfig['port']) ? $databasesEnvConfig['port'] : 3306,
-            $databasesEnvConfig['user'],
-            $databasesEnvConfig['dbname'],
+            $databaseConfig['host'],
+            (isset($databaseConfig['port']) && $databaseConfig['port']) ? $databaseConfig['port'] : 3306,
+            $databaseConfig['user'],
+            $databaseConfig['dbname'],
             $dataSqlFile[0]
         ), 0);
 
         $post_sql_in_with_markers = '';
-        if (isset($databasesEnvConfig['post_sql_in_with_markers'])) {
+        if (isset($databaseConfig['post_sql_in_with_markers'])) {
 
             // Prepare some markers to use in post_sql_in_markers:
             $markersArray = [];
@@ -81,19 +83,19 @@ task('db:import', function () {
                 }
                 $markersArray['{{domainsSeparatedByComma}}'] = implode(',', $publicUrlCollected);
             }
-            $post_sql_in_with_markers = str_replace(array_keys($markersArray), $markersArray, $databasesEnvConfig['post_sql_in_with_markers']);
+            $post_sql_in_with_markers = str_replace(array_keys($markersArray), $markersArray, $databaseConfig['post_sql_in_with_markers']);
         }
 
         $importSql = $currentInstanceDatabaseStoragePath . DIRECTORY_SEPARATOR . $dumpCode . '.sql';
-        file_put_contents($importSql, str_replace("\n", ' ', $databasesEnvConfig['post_sql_in'] . ' ' . $post_sql_in_with_markers));
+        file_put_contents($importSql, str_replace("\n", ' ', $databaseConfig['post_sql_in'] . ' ' . $post_sql_in_with_markers));
         runLocally(sprintf(
             'export MYSQL_PWD=%s && %s --default-character-set=utf8 -h%s -P%s -u%s -D%s -e "SOURCE %s" ',
-            escapeshellarg($databasesEnvConfig['password']),
+            escapeshellarg($databaseConfig['password']),
             get('db_settings_mysql_path'),
-            $databasesEnvConfig['host'],
-            (isset($databasesEnvConfig['port']) && $databasesEnvConfig['port']) ? $databasesEnvConfig['port'] : 3306,
-            $databasesEnvConfig['user'],
-            $databasesEnvConfig['dbname'],
+            $databaseConfig['host'],
+            (isset($databaseConfig['port']) && $databaseConfig['port']) ? $databaseConfig['port'] : 3306,
+            $databaseConfig['user'],
+            $databaseConfig['dbname'],
             $importSql
         ), 0);
         unlink($importSql);

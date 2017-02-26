@@ -20,20 +20,19 @@ set('db_settings_mysql_path', function () {
     }
 });
 
-set('database_env_config', function () {
-    $databaseConfigsServerEnv = get('db_databases');
+set('databases_config', function () {
     $databaseConfigsMerged = [];
-    foreach ($databaseConfigsServerEnv as $databaseConfigServerEnv) {
-        if (is_array($databaseConfigServerEnv)) {
-            $databaseConfigsMerged = ArrayUtility::arrayMergeRecursiveDistinct($databaseConfigsMerged, $databaseConfigServerEnv);
+    foreach (get('db_databases') as $databaseConfigServer) {
+        if (is_array($databaseConfigServer)) {
+            $databaseConfigsMerged = ArrayUtility::arrayMergeRecursiveDistinct($databaseConfigsMerged, $databaseConfigServer);
             continue;
         }
 
-        if (file_exists(get('current_dir') . DIRECTORY_SEPARATOR . $databaseConfigServerEnv)) {
-            $mergeArray = include(get('current_dir') . DIRECTORY_SEPARATOR . $databaseConfigServerEnv);
+        if (file_exists(get('current_dir') . DIRECTORY_SEPARATOR . $databaseConfigServer)) {
+            $mergeArray = include(get('current_dir') . DIRECTORY_SEPARATOR . $databaseConfigServer);
             $databaseConfigsMerged = ArrayUtility::arrayMergeRecursiveDistinct($databaseConfigsMerged, $mergeArray);
         } else {
-            throw new \RuntimeException('The config file does not exists: ' . $databaseConfigServerEnv);
+            throw new \RuntimeException('The config file does not exists: ' . $databaseConfigServer);
         }
     }
     return $databaseConfigsMerged;

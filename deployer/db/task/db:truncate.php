@@ -7,19 +7,18 @@ use SourceBroker\DeployerExtended\Utility\DatabaseUtility;
 
 task('db:truncate', function () {
     if (get('instance') == get('server')['name']) {
-        $databasesEnvConfigs = get('database_env_config');
-        foreach ($databasesEnvConfigs as $databaseCode => $databasesEnvConfig) {
-            $cachingTablesWithPatterns = $databasesEnvConfig['caching_tables'];
-            $cachingTables = ArrayUtility::filterWithRegexp($cachingTablesWithPatterns, DatabaseUtility::getTables($databasesEnvConfig));
+        foreach (get('databases_config') as $databaseCode => $databaseConfig) {
+            $cachingTablesWithPatterns = $databaseConfig['caching_tables'];
+            $cachingTables = ArrayUtility::filterWithRegexp($cachingTablesWithPatterns, DatabaseUtility::getTables($databaseConfig));
             foreach ($cachingTables as $cachingTable) {
                 runLocally(sprintf(
                     'export MYSQL_PWD=%s && %s --default-character-set=utf8 -h%s -P%s -u%s -D%s -e \'%s\' ',
-                    escapeshellarg($databasesEnvConfig['password']),
+                    escapeshellarg($databaseConfig['password']),
                     get('db_settings_mysql_path'),
-                    $databasesEnvConfig['host'],
-                    (isset($databasesEnvConfig['port']) && $databasesEnvConfig['port']) ? $databasesEnvConfig['port'] : 3306,
-                    $databasesEnvConfig['user'],
-                    $databasesEnvConfig['dbname'],
+                    $databaseConfig['host'],
+                    (isset($databaseConfig['port']) && $databaseConfig['port']) ? $databaseConfig['port'] : 3306,
+                    $databaseConfig['user'],
+                    $databaseConfig['dbname'],
                     'TRUNCATE ' . $cachingTable), 0);
             }
             writeln('<info>Truncated tables: ' . implode(',', $cachingTables) . '</info>');
