@@ -3,13 +3,12 @@
 namespace Deployer;
 
 task('media:push', function () {
+    if (null === input()->getArgument('stage')) {
+        throw new \RuntimeException("The target instance is required for media:push command. [Error code: 1488150029848]");
+    }
     $config = array_merge_recursive(get('media-default'), get('media'));
 
     $src = get('deploy_path') . '/current';
-    while (is_callable($src)) {
-        $src = $src();
-    }
-
     if (!trim($src)) {
         throw new \RuntimeException('You need to specify a source path.');
     }

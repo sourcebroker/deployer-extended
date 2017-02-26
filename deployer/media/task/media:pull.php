@@ -3,13 +3,12 @@
 namespace Deployer;
 
 task('media:pull', function () {
+    if (null === input()->getArgument('stage')) {
+        throw new \RuntimeException("The target instance is required for media:pull command. [Error code: 1488149981776]");
+    }
     $config = array_merge_recursive(get('media-default'), get('media'));
 
-    // TODO - $src can not be callable like this - this is bug
     $src = get('deploy_path') . '/current';
-    while (is_callable($src)) {
-        $src = $src();
-    }
     if (!trim($src)) {
         throw new \RuntimeException('You need to specify a source path.');
     }
