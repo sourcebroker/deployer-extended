@@ -3,18 +3,33 @@
 namespace Deployer;
 
 task('db:pull', function () {
-    $targetServer = get('db_get_local_server')->get('server')['name'];
+    if (!input()->hasArgument('stage')) {
+        throw new \RuntimeException("The target instance is required for db:pull command.");
+    }
 
-    // export fresh database dump to remote database dump storage
-    $databaseDumpResult = run("cd {{deploy_path}}/current && {{bin/php}} deployer.phar -q db:export " . get('server')['name']);
-    $databaseDumpResponse = json_decode(trim($databaseDumpResult->toString()), true);
+    $sourceInstance = get('server')['name'];
 
-    // download the latest database dumps from remote database dump storage
-    runLocally("{{deployer_exec}} db:download " . get('server')['name'] . " --dumpcode=" . $databaseDumpResponse['dumpCode'], 0);
+    $command = Task\Context::get()->getEnvironment()->parse("cd {{deploy_path}}/current && {{bin/php}} deployer.phar -q db:export");
+    $databaseDumpResult = run($command);
+    $dbExportOnTargetInstanceResponse = json_decode(trim($databaseDumpResult->toString()), true);
+    if ($dbExportOnTargetInstanceResponse == null) {
+        throw new \RuntimeException(
+            "db:export failed on " . $sourceInstance . ". The database dumpCode is null. Try to call: \n" .
+            $command . "\n" .
+            "on " . $sourceInstance . " instance. \n" .
+            "Export task returned: " . $databaseDumpResult->toString() . "\n" .
+            "One of the reason can be PHP notices or warnings added to output."
+        );
+    }
 
-    // processing downloaded dump files
-    runLocally("{{deployer_exec}} db:process_dump " . $targetServer . " --dumpcode=" . $databaseDumpResponse['dumpCode'], 0);
-
-    // import the latest database dumps from local database dump storage
-    runLocally("{{deployer_exec}} db:import " . $targetServer . " --dumpcode=" . $databaseDumpResponse['dumpCode'], 0);
+    if ($dbExportOnTargetInstanceResponse !== null && isset($dbExportOnTargetInstanceResponse['dumpCode'])) {
+        $dumpCode = $dbExportOnTargetInstanceResponse['dumpCode'];
+        runLocally("{{deployer_exec}} db:download --dumpcode=$dumpCode", 0);
+        runLocally("{{deployer_exec}} db:process_dump --dumpcode=$dumpCode", 0);
+        runLocally("{{deployer_exec}} db:import --dumpcode=$dumpCode", 0);
+    } else {
+        throw new \RuntimeException('db:export did not returned dumpcode in json! 
+        Check if json response is clean. Sometimes there are PHP Warnings before 
+        json response which are breaking jsone_decode.');
+    }
 })->desc('Synchronize database from remote instance to local instance.');

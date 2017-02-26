@@ -4,22 +4,6 @@ namespace Deployer;
 
 use SourceBroker\DeployerExtended\Utility\ArrayUtility;
 
-// local means here the server where the command is run on (and not local development instance)
-set('db_get_local_server', function () {
-    try {
-        $localServer = Deployer::get()->environments[get('instance')];
-    } catch (\RuntimeException $e) {
-        $servers = '';
-        $i = 1;
-        foreach (Deployer::get()->environments as $key => $server) {
-            $servers .= "\n" . $i++ . '. ' . $key;
-        }
-        throw new \RuntimeException("Name of instance \"" . get('instance') . "\" is not on the server list:" . $servers . "\nPlease check case sensitive. [Error code: 1458412947]");
-    }
-
-    return $localServer;
-});
-
 set('db_settings_mysqldump_path', function () {
     if (runLocally('if hash mysqldump 2>/dev/null; then echo \'true\'; fi')->toBool()) {
         return 'mysqldump';

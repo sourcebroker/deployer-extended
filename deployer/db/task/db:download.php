@@ -3,22 +3,37 @@
 namespace Deployer;
 
 task('db:download', function () {
-    $localStoragePath = get('db_get_local_server')->get('db_settings_storage_path');
-    if (!file_exists($localStoragePath)) {
-        mkdir($localStoragePath, 0755, true);
-    }
-    $remoteStoragePath = get('db_settings_storage_path');
-
-    $dumpCode = null;
     if (input()->hasOption('dumpcode')) {
         $dumpCode = input()->getOption('dumpcode');
+    } else {
+        throw new \InvalidArgumentException('No --dumpcode option set. [Error code: 1458937128561]');
     }
 
-    $server = Task\Context::get()->getServer()->getConfiguration();
-    $host = $server->getHost();
-    $port = $server->getPort() ? ' -p' . $server->getPort() : '';
-    $identityFile = $server->getPrivateKey() ? ' -i ' . $server->getPrivateKey() : '';
-    $user = !$server->getUser() ? '' : $server->getUser() . '@';
+    if (!input()->hasArgument('stage')) {
+        throw new \RuntimeException("The target instance is required for db:download command.");
+    }
 
-    runLocally("rsync -rz --remove-source-files -e 'ssh$port$identityFile' --include=*dumpcode:$dumpCode*.sql --exclude=* '$user$host:$remoteStoragePath/' '$localStoragePath/'", 0);
-})->desc('Download the database dumps with dumpcode from remote database dumps storage.');
+    $currentInstanceStoragePath = get('current_server')->get('db_settings_storage_path');
+    if (!file_exists($currentInstanceStoragePath)) {
+        mkdir($currentInstanceStoragePath, 0755, true);
+    }
+
+    $targetInstance = Task\Context::get()->getServer()->getConfiguration();
+
+    $port = $targetInstance->getPort() ? ' -p' . $targetInstance->getPort() : '';
+    $identityFile = $targetInstance->getPrivateKey() ? ' -i ' . $targetInstance->getPrivateKey() : '';
+    $sshOptions = '';
+    if ($port != '' || $identityFile != '') {
+        $sshOptions = "-e 'ssh . $port . $identityFile '";
+    }
+
+    runLocally(sprintf(
+        "rsync -rz --remove-source-files %s --include=*dumpcode:%s*.sql --exclude=* '%s%s:%s/' '%s/'",
+        $sshOptions,
+        $dumpCode,
+        $targetInstance->getUser() ? $targetInstance->getUser() . '@' : '',
+        $targetInstance->getHost(),
+        get('db_settings_storage_path'),
+        $currentInstanceStoragePath
+    ), 0);
+})->desc('Download the database dumps with dumpcode from target database dumps storage.');

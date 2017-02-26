@@ -12,11 +12,11 @@ task('db:import', function () {
         throw new \RuntimeException('No dumpCode set. [Error code: 1458937128560]');
     }
 
-    $localStorage = get('db_settings_storage_path');
+    $currentInstanceDatabaseStoragePath = get('db_settings_storage_path');
     foreach (get('database_env_config') as $databaseCode => $databasesEnvConfig) {
         $link = mysqli_connect($databasesEnvConfig['host'], $databasesEnvConfig['user'], $databasesEnvConfig['password'], $databasesEnvConfig['dbname']);
 
-        $glob = $localStorage . DIRECTORY_SEPARATOR
+        $glob = $currentInstanceDatabaseStoragePath . DIRECTORY_SEPARATOR
             . '*dbcode:' . FileUtility::normalizeFilename($databaseCode)
             . '*type:structure'
             . '*dumpcode:' . $dumpCode
@@ -24,10 +24,10 @@ task('db:import', function () {
         $structureSqlFile = glob($glob);
 
         if (empty($structureSqlFile)) {
-            throw new \RuntimeException('No structure file for $dumpCode: ' . $dumpCode . '. GLob build: ' . $glob . '.  [Error code: 1458494633]');
+            throw new \RuntimeException('No structure file for $dumpCode: ' . $dumpCode . '. Glob build: ' . $glob . '.  [Error code: 1458494633]');
         }
 
-        $dataSqlFile = glob($localStorage . DIRECTORY_SEPARATOR
+        $dataSqlFile = glob($currentInstanceDatabaseStoragePath . DIRECTORY_SEPARATOR
             . '*dbcode:' . FileUtility::normalizeFilename($databaseCode)
             . '*type:data'
             . '*dumpcode:' . $dumpCode
@@ -47,8 +47,8 @@ task('db:import', function () {
         $link->query('SET FOREIGN_KEY_CHECKS = 1');
 
         runLocally(sprintf(
-            'export MYSQL_PWD="%s" && %s --default-character-set=utf8 -h%s -P%s -u%s -D%s -e "SOURCE %s" ',
-            $databasesEnvConfig['password'],
+            'export MYSQL_PWD=%s && %s --default-character-set=utf8 -h%s -P%s -u%s -D%s -e "SOURCE %s" ',
+            escapeshellarg($databasesEnvConfig['password']),
             get('db_settings_mysql_path'),
             $databasesEnvConfig['host'],
             (isset($databasesEnvConfig['port']) && $databasesEnvConfig['port']) ? $databasesEnvConfig['port'] : 3306,
@@ -58,8 +58,8 @@ task('db:import', function () {
         ), 0);
 
         runLocally(sprintf(
-            'export MYSQL_PWD="%s" && %s --default-character-set=utf8 -h%s -P%s -u%s -D%s -e "SOURCE %s" ',
-            $databasesEnvConfig['password'],
+            'export MYSQL_PWD=%s && %s --default-character-set=utf8 -h%s -P%s -u%s -D%s -e "SOURCE %s" ',
+            escapeshellarg($databasesEnvConfig['password']),
             get('db_settings_mysql_path'),
             $databasesEnvConfig['host'],
             (isset($databasesEnvConfig['port']) && $databasesEnvConfig['port']) ? $databasesEnvConfig['port'] : 3306,
@@ -77,19 +77,18 @@ task('db:import', function () {
             if (is_array(get('public_urls'))) {
                 $publicUrlCollected = [];
                 foreach (get('public_urls') as $publicUrl) {
-                    $publicUrlCollected[] =  "'" . parse_url($publicUrl)['host'] . "'";
+                    $publicUrlCollected[] = "'" . parse_url($publicUrl)['host'] . "'";
                 }
                 $markersArray['{{domainsSeparatedByComma}}'] = implode(',', $publicUrlCollected);
             }
-
             $post_sql_in_with_markers = str_replace(array_keys($markersArray), $markersArray, $databasesEnvConfig['post_sql_in_with_markers']);
         }
 
-        $importSql = $localStorage . DIRECTORY_SEPARATOR . $dumpCode . '.sql';
+        $importSql = $currentInstanceDatabaseStoragePath . DIRECTORY_SEPARATOR . $dumpCode . '.sql';
         file_put_contents($importSql, str_replace("\n", ' ', $databasesEnvConfig['post_sql_in'] . ' ' . $post_sql_in_with_markers));
         runLocally(sprintf(
-            'export MYSQL_PWD="%s" && %s --default-character-set=utf8 -h%s -P%s -u%s -D%s -e "SOURCE %s" ',
-            $databasesEnvConfig['password'],
+            'export MYSQL_PWD=%s && %s --default-character-set=utf8 -h%s -P%s -u%s -D%s -e "SOURCE %s" ',
+            escapeshellarg($databasesEnvConfig['password']),
             get('db_settings_mysql_path'),
             $databasesEnvConfig['host'],
             (isset($databasesEnvConfig['port']) && $databasesEnvConfig['port']) ? $databasesEnvConfig['port'] : 3306,
@@ -99,4 +98,4 @@ task('db:import', function () {
         ), 0);
         unlink($importSql);
     }
-})->desc('Import the database with "dumpcode" from local database dumps storage to local database.');
+})->desc('Import the database with "dumpcode" from current database dumps storage to database.');

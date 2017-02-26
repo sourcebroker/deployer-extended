@@ -18,7 +18,6 @@ task('db:export', function () {
             'dbcode:' . FileUtility::normalizeFilename($databaseCode),
             'type',
             'dumpcode:' . $dumpCode,
-
         ];
 
         if (!file_exists(get('db_settings_storage_path'))) {
@@ -38,7 +37,6 @@ task('db:export', function () {
             escapeshellarg($databasesEnvConfig['dbname']),
             $outputFileDatabaseStructure
         ), 0);
-
 
         // dump database data
         $ignoreTablesWithPatterns = $databasesEnvConfig['ignore_tables_out'];
