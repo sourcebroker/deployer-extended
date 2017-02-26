@@ -2,7 +2,7 @@
 
 namespace Deployer;
 
-task('db:process_dump', function () {
+task('db:process', function () {
     if (input()->hasOption('dumpcode')) {
         $dumpCode = input()->getOption('dumpcode');
     } else {

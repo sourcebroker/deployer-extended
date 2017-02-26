@@ -48,7 +48,7 @@ task('db:move', function () {
     $dumpCode = $dbExportOnTargetInstanceResponse['dumpCode'];
 
     runLocally("{{deployer_exec}} db:download --dumpcode=$dumpCode", 0);
-    runLocally("{{deployer_exec}} db:process_dump --dumpcode=$dumpCode", 0);
+    runLocally("{{deployer_exec}} db:process --dumpcode=$dumpCode", 0);
 
     if (get('instance') == $targetInstanceName) {
         runLocally("{{deployer_exec}} db:import --dumpcode=$dumpCode", 0);

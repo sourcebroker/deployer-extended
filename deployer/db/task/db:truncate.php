@@ -5,7 +5,7 @@ namespace Deployer;
 use SourceBroker\DeployerExtended\Utility\ArrayUtility;
 use SourceBroker\DeployerExtended\Utility\DatabaseUtility;
 
-task('db:truncate_table', function () {
+task('db:truncate', function () {
     if (get('instance') == input()->getArgument('targetStage')) {
         $databasesEnvConfigs = get('database_env_config');
         foreach ($databasesEnvConfigs as $databaseCode => $databasesEnvConfig) {
@@ -25,6 +25,6 @@ task('db:truncate_table', function () {
             writeln('<info>Truncated tables: ' . implode(',', $cachingTables) . '</info>');
         };
     } else {
-        run("cd {{deploy_path}}/current && {{bin/php}} deployer.phar -q db:truncate_table");
+        run("cd {{deploy_path}}/current && {{bin/php}} deployer.phar -q db:truncate");
     }
 })->desc('Truncate tables defined as caching tables.');

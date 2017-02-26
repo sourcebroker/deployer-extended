@@ -25,7 +25,7 @@ task('db:pull', function () {
     if ($dbExportOnTargetInstanceResponse !== null && isset($dbExportOnTargetInstanceResponse['dumpCode'])) {
         $dumpCode = $dbExportOnTargetInstanceResponse['dumpCode'];
         runLocally("{{deployer_exec}} db:download --dumpcode=$dumpCode", 0);
-        runLocally("{{deployer_exec}} db:process_dump --dumpcode=$dumpCode", 0);
+        runLocally("{{deployer_exec}} db:process --dumpcode=$dumpCode", 0);
         runLocally("{{deployer_exec}} db:import --dumpcode=$dumpCode", 0);
     } else {
         throw new \RuntimeException('db:export did not returned dumpcode in json! 
