@@ -6,7 +6,7 @@ use SourceBroker\DeployerExtended\Utility\ArrayUtility;
 use SourceBroker\DeployerExtended\Utility\DatabaseUtility;
 
 task('db:truncate', function () {
-    if (get('instance') == input()->getArgument('targetStage')) {
+    if (get('instance') == get('server')['name']) {
         $databasesEnvConfigs = get('database_env_config');
         foreach ($databasesEnvConfigs as $databaseCode => $databasesEnvConfig) {
             $cachingTablesWithPatterns = $databasesEnvConfig['caching_tables'];
