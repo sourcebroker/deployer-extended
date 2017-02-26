@@ -6,13 +6,13 @@ use SourceBroker\DeployerExtended\Utility\DatabaseUtility;
 use SourceBroker\DeployerExtended\Utility\FileUtility;
 
 task('db:import', function () {
+    if (null !== input()->getArgument('stage')) {
+        throw new \RuntimeException("You can not set target instance for db:import command. It can only run on current instance. [Error code: 1488143716512]");
+    }
     if (input()->getOption('dumpcode')) {
         $dumpCode = input()->getOption('dumpcode');
     } else {
         throw new \RuntimeException('No dumpcode set. [Error code: 1458937128560]');
-    }
-    if (null !== input()->getArgument('stage')) {
-        throw new \RuntimeException("You can not set target instance for db:import command. It can only run on current instance. [Error code: 1488143716512]");
     }
     $currentInstanceDatabaseStoragePath = get('db_settings_storage_path');
     foreach (get('databases_config') as $databaseCode => $databaseConfig) {
