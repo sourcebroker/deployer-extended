@@ -32,7 +32,7 @@ task('db:move', function () {
 
     $sourceInstance = get('server')['name'];
 
-    $command = Task\Context::get()->getEnvironment()->parse("cd {{deploy_path}}/current && {{bin/php}} deployer.phar -q db:export");
+    $command = parse("cd {{deploy_path}}/current && {{bin/php}} deployer.phar -q db:export");
     $databaseDumpResult = run($command);
     $dbExportOnTargetInstanceResponse = json_decode(trim($databaseDumpResult->toString()), true);
     if ($dbExportOnTargetInstanceResponse == null) {
