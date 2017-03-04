@@ -5,8 +5,6 @@ namespace Deployer;
 require_once 'recipe/common.php';
 
 // deployer default settings overrides
-set('writable_mode', 'chgrp');
-set('keep_releases', 3);
 set('ssh_type', 'native');
 set('ssh_multiplexing', true);
 
