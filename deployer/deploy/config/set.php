@@ -6,9 +6,9 @@ set('vhost_template', '<VirtualHost *:80>
 
     ServerAdmin webmaster@localhost
 
-    DocumentRoot "{{deploy_path}}/current"
+    DocumentRoot "{{document_root}}"
 
-    <Directory "{{deploy_path}}/current">
+    <Directory "{{document_root}}">
         Options -Indexes 
         Options FollowSymLinks MultiViews
         AllowOverride all
@@ -24,9 +24,9 @@ set('vhost_template', '<VirtualHost *:80>
     
     ServerAdmin webmaster@localhost
 
-    DocumentRoot "{{deploy_path}}/current"
+    DocumentRoot "{{document_root}}"
 
-    <Directory "{{deploy_path}}/current">
+    <Directory "{{document_root}}">
         Options -Indexes 
         Options FollowSymLinks MultiViews
         AllowOverride all

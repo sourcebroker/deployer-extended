@@ -20,6 +20,11 @@ task('deploy:vhost_apache', function () {
             }, $serverNames);
             set('vhost_server_names', implode("\n", $serverNames));
         }
+        if (get('vhost_nocurrent', false) == true) {
+            set('document_root', get('deploy_path'));
+        } else {
+            set('document_root', get('deploy_path') . '/current');
+        }
         set('reponame', runLocally('basename `git rev-parse --show-toplevel`'));
         file_put_contents(parse('{{current_dir}}/{{reponame}}.conf'), parse(get('vhost_template')));
         if (get('vhost_path', false) !== false) {
