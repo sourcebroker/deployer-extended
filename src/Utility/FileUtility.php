@@ -27,6 +27,21 @@ class FileUtility
     }
 
     /**
+     * @param $absolutePath string Absolute path to file
+     * @return string
+     */
+    public static function getUniqueFileName($absolutePath)
+    {
+        $pathParts = pathinfo($absolutePath);
+        $i = 0;
+        while (file_exists($absolutePath) && $i < 100) {
+            $absolutePath = $pathParts['dirname'] . '/' . $pathParts['filename'] . '_' . $i . '.' . $pathParts['extension'];
+            $i++;
+        }
+        return $absolutePath;
+    }
+
+    /**
      * @param $absolutePath
      * @param null $excludePattern
      */

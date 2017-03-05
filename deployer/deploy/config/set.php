@@ -19,9 +19,8 @@ set('vhost_template', '<VirtualHost *:80>
 {{vhost_server_names}}
     
 </VirtualHost>
-');
 
-set('vhost_ssl_template', '<VirtualHost *:443>
+<VirtualHost *:443>
     
     ServerAdmin webmaster@localhost
 
@@ -42,7 +41,8 @@ set('vhost_ssl_template', '<VirtualHost *:443>
     SSLCertificateKeyFile "{{vhost_ssl_path}}/domain.key"
     SSLCACertificateFile "{{vhost_ssl_path}}/domain.intermediate"
     
-</VirtualHost>');
+</VirtualHost>
+');
 
 set('vhost_path', getenv('VHOSTS_PATH'));
 set('vhost_ssl_path', getenv('VHOSTS_SSLCERT_PATH'));
