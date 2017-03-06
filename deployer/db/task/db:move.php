@@ -47,13 +47,13 @@ task('db:move', function () {
 
     $dumpCode = $dbExportOnTargetInstanceResponse['dumpCode'];
 
-    runLocally("{{deployer_exec}} db:download --dumpcode=$dumpCode", 0);
+    runLocally("{{deployer_exec}} db:download $sourceInstance --dumpcode=$dumpCode", 0);
     runLocally("{{deployer_exec}} db:process --dumpcode=$dumpCode", 0);
 
     if (get('instance') == $targetInstanceName) {
         runLocally("{{deployer_exec}} db:import --dumpcode=$dumpCode", 0);
     } else {
-        runLocally("{{deployer_exec}} db:upload --dumpcode=$dumpCode", 0);
+        runLocally("{{deployer_exec}} db:upload $targetInstanceName --dumpcode=$dumpCode", 0);
         run("cd " . $targetInstanceEnv->get('deploy_path') . "/current && " . $targetInstanceEnv->get('bin/php') .
             " deployer.phar -q db:import --dumpcode=$dumpCode");
     }
