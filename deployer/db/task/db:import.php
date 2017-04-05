@@ -72,14 +72,17 @@ task('db:import', function () {
 
         $post_sql_in_with_markers = '';
         if (isset($databaseConfig['post_sql_in_with_markers'])) {
-
             // Prepare some markers to use in post_sql_in_markers:
             $markersArray = [];
             // 1. "public_urls" var separated by comma. To use in SQL IN
             if (is_array(get('public_urls'))) {
                 $publicUrlCollected = [];
                 foreach (get('public_urls') as $publicUrl) {
-                    $publicUrlCollected[] = "'" . parse_url($publicUrl)['host'] . "'";
+                    if (parse_url($publicUrl, PHP_URL_SCHEME) && parse_url($publicUrl, PHP_URL_HOST)) {
+                        $publicUrlCollected[] = "'" . parse_url($publicUrl, PHP_URL_HOST) . "'";
+                    } else {
+                        throw new \RuntimeException('The configuration setting "public_urls" should have full url like "https://www.example.com" but the value is only "' . $publicUrl . '" . [Error code: 1491384103020]');
+                    }
                 }
                 $markersArray['{{domainsSeparatedByComma}}'] = implode(',', $publicUrlCollected);
             }
