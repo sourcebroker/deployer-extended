@@ -37,12 +37,12 @@ set('vhost_template', '<VirtualHost *:80>
 {{vhost_server_names}}
     
     SSLEngine on
-    SSLCertificateFile "{{vhost_ssl_path}}/domain.pem"
-    SSLCertificateKeyFile "{{vhost_ssl_path}}/domain.key"
-    SSLCACertificateFile "{{vhost_ssl_path}}/domain.intermediate"
+    SSLCertificateFile "{{vhost_sslcert_path}}/domain.pem"
+    SSLCertificateKeyFile "{{vhost_sslcert_path}}/domain.key"
+    SSLCACertificateFile "{{vhost_sslcert_path}}/domain.intermediate"
     
 </VirtualHost>
 ');
 
-set('vhost_path', getenv('VHOSTS_PATH'));
-set('vhost_ssl_path', getenv('VHOSTS_SSLCERT_PATH'));
+set('vhost_path', getenv('VHOST_PATH'));
+set('vhost_sslcert_path', getenv('VHOST_SSLCERT_PATH'));
