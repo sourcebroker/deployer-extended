@@ -13,7 +13,6 @@ set('deployer_version', 4);
 set('random', md5(time() . rand()));
 set('web_path', '');
 set('temp_dir', sys_get_temp_dir() . '/');
-set('opcache_loop', 50);
 set('fetch_method', 'wget');
 
 set('current_server', function () {
