@@ -9,7 +9,6 @@ namespace Deployer;
  * Important when removing file based caches.
  */
 task('file:remove_recursive_atomic', function () {
-
     if (!get('remove_recursive_atomic_directories', false)) {
         if (isVerbose()) {
             writeln('Variable remove_recursive_atomic_directories not set. No directories removed.');
