@@ -24,6 +24,10 @@ task('db:truncate', function () {
             writeln('<info>Truncated tables: ' . implode(',', $cachingTables) . '</info>');
         };
     } else {
-        run("cd {{deploy_path}}/current && {{bin/php}} deployer.phar -q db:truncate");
+        if (test('[ -L {{deploy_path}}/release ]')) {
+            run("cd {{deploy_path}}/release && {{bin/php}} deployer.phar -q db:truncate");
+        } else {
+            run("cd {{deploy_path}}/current && {{bin/php}} deployer.phar -q db:truncate");
+        }
     }
 })->desc('Truncate tables defined as caching tables.');
