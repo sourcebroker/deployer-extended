@@ -145,6 +145,12 @@ To prevent this situation you can make "grunt watch" to generate file "deploy.lo
 
 #### deploy:composer_install_check
 
+Check if there is composer.lock file on current instance and if its there then make dry run for 
+"composer install". If "composer install" returns information that some packages needs to be updated
+or installed then it means that probably developer pulled composer.lock changes from repo but forget 
+to make "composer install". In that case deployment is stopped to allow developer to update packages,
+make some test and make deployment then. 
+
 #### deployer:download
 
 ### Files Tasks
