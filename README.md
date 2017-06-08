@@ -44,8 +44,7 @@ __Notice!:__ Usually you do not need to run this command as its part of db:pull 
 
 Export database to database storage on current instance. 
 
-The database will be stored in two separate files. 
-One with tables structure. The second with data only.
+The database will be stored in two separate files. One with tables structure. The second with data only.
 Example files: 
 
 * <sup>2017-02-26_14:56:08#server:live#dbcode:database_default#type:data#dumpcode:362d7ca0ff065f489c9b79d0a73720f5.sql</sup>
@@ -133,6 +132,16 @@ __Notice!:__ Usually you do not need to run this command as its part of db:move 
 ### Deploy Tasks
 
 #### deploy:check_lock
+
+Check for existance of file deploy.lock in root of current instance. If the file deploy.lock is there then 
+deployment is stopped. 
+
+You can use it for whatever reason you have. Imagine that you develop css/js locally with "grunt watch". 
+After you have working code you may forget to build final js/css with "grunt build" and you will deploy 
+css/js that will be not used on production which reads compiled css/js. 
+
+To prevent this situation you can make "grunt watch" to generate file "deploy.lock" (with text "Run 
+'grunt build'." inside) to inform you that you missed some step before deploying application. 
 
 #### deploy:composer_install_check
 

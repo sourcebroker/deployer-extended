@@ -4,6 +4,12 @@ namespace Deployer;
 
 task('deploy:check_lock', function () {
     if (file_exists('./deploy.lock')) {
-        throw new \RuntimeException('Please check deploy.lock file.');
+        $deployLockFileContent = trim(file_get_contents('./deploy.lock'));
+        if (!empty($deployLockFileContent)) {
+            $message = 'Deployment stopped! There is deploy.lock file with following message: ' . $deployLockFileContent;
+        } else {
+            $message = 'Deployment stopped! There is deploy.lock file.';
+        }
+        throw new \RuntimeException($message);
     }
-})->desc('Check lock file')->setPrivate();
+})->desc('Check for deploy.lock file existence and stop deploy if there.');
