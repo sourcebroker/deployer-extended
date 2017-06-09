@@ -1,9 +1,11 @@
 <?php
 
-// run only if called from deployer.phar context
-if (PHP_SAPI === 'cli' && function_exists('\Deployer\set')) {
+if (PHP_SAPI === 'cli' && defined('DEPLOYER')) {
     require_once 'recipe/common.php';
 
+    // Local call of deployer can be not standard. For example someone could have "dep3" and "dep4" symlinks and call
+    // "dep3 deploy live". He could expect then that if we will use deployer call inside task we will use then "dep3" and not "dep"
+    // so we store actual way of calling deployer into "deployer_exec" var to use it whenever we call deployer in tasks.
     if ($_SERVER['_'] == $_SERVER['PHP_SELF']) {
         \Deployer\set('deployer_exec', $_SERVER['_']);
     } else {
@@ -13,7 +15,7 @@ if (PHP_SAPI === 'cli' && function_exists('\Deployer\set')) {
     if (is_dir(getcwd()) && file_exists(getcwd() . '/deploy.php')) {
         \Deployer\set('current_dir', getcwd());
     } else {
-        throw new \RuntimeException('Can not set "current_dir" var.');
+        throw new \RuntimeException('Can not set "current_dir" var. Are you in folder with deploy.php file?');
     }
 
     \SourceBroker\DeployerExtended\Utility\FileUtility::requireFilesFromDirectoryReqursively(__DIR__ . '/../deployer/');
