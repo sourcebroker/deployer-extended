@@ -32,7 +32,7 @@ task('db:move', function () {
 
     $sourceInstance = get('server')['name'];
 
-    $command = parse("cd {{deploy_path}}/current && {{bin/php}} deployer.phar -q db:export");
+    $command = parse("cd {{deploy_path}}/current && {{bin/php}} {{bin/deployer}} -q db:export");
     $databaseDumpResult = run($command);
     $dbExportOnTargetInstanceResponse = json_decode(trim($databaseDumpResult->toString()), true);
     if ($dbExportOnTargetInstanceResponse == null) {
@@ -47,14 +47,14 @@ task('db:move', function () {
 
     $dumpCode = $dbExportOnTargetInstanceResponse['dumpCode'];
 
-    runLocally("{{deployer_exec}} db:download $sourceInstance --dumpcode=$dumpCode", 0);
-    runLocally("{{deployer_exec}} db:process --dumpcode=$dumpCode", 0);
+    runLocally("{{local/bin/deployer}} db:download $sourceInstance --dumpcode=$dumpCode", 0);
+    runLocally("{{local/bin/deployer}} db:process --dumpcode=$dumpCode", 0);
 
     if (get('instance') == $targetInstanceName) {
-        runLocally("{{deployer_exec}} db:import --dumpcode=$dumpCode", 0);
+        runLocally("{{local/bin/deployer}} db:import --dumpcode=$dumpCode", 0);
     } else {
-        runLocally("{{deployer_exec}} db:upload $targetInstanceName --dumpcode=$dumpCode", 0);
+        runLocally("{{local/bin/deployer}} db:upload $targetInstanceName --dumpcode=$dumpCode", 0);
         run("cd " . $targetInstanceEnv->get('deploy_path') . "/current && " . $targetInstanceEnv->get('bin/php') .
-            " deployer.phar -q db:import --dumpcode=$dumpCode");
+            " {{bin/deployer}} -q db:import --dumpcode=$dumpCode");
     }
 })->desc('Synchronize database between instances.');

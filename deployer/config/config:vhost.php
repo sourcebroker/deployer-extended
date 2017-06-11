@@ -5,7 +5,7 @@ namespace Deployer;
 use Deployer\Exception\Exception;
 use SourceBroker\DeployerExtended\Utility\FileUtility;
 
-task('deploy:vhost_apache', function () {
+task('config:vhost_apache', function () {
     if (get('public_urls', null)) {
         $publicUrls = get('public_urls');
         $serverNames = [];

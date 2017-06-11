@@ -18,18 +18,15 @@ task('file:remove_recursive_atomic', function () {
 
         set('random', str_replace('.', '', microtime(true)) . rand());
 
-        // Set active_dir so the task can be used before or after "symlink" task or standalone.
-        if (run('if [ -L {{deploy_path}}/release ] ; then echo true; fi')->toBool()) {
-            set('active_dir', get('deploy_path') . '/release');
-        } else {
-            set('active_dir', get('deploy_path') . '/current');
-        }
+        // Set active_path so the task can be used before or after "symlink" task or standalone.
+        set('active_path', get('deploy_path') . '/' . (test('[ -L {{deploy_path}}/release ]') ? 'release' : 'current'));
+
 
         foreach ($removeRecursiveAtomicDirectories as $removeRecursiveAtomicDirectory) {
             set('removeRecursiveAtomicDirectory', rtrim($removeRecursiveAtomicDirectory, '/'));
-            if (run('if [ -d "{{active_dir}}/{{removeRecursiveAtomicDirectory}}" ] ; then echo true; fi')->toBool()) {
-                run('cd "{{active_dir}}" && mv "{{removeRecursiveAtomicDirectory}}" "{{removeRecursiveAtomicDirectory}}{{random}}"');
-                run('cd "{{active_dir}}" && rm -rf "{{removeRecursiveAtomicDirectory}}{{random}}"');
+            if (run('if [ -d "{{active_path}}/{{removeRecursiveAtomicDirectory}}" ] ; then echo true; fi')->toBool()) {
+                run('cd "{{active_path}}" && mv "{{removeRecursiveAtomicDirectory}}" "{{removeRecursiveAtomicDirectory}}{{random}}"');
+                run('cd "{{active_path}}" && rm -rf "{{removeRecursiveAtomicDirectory}}{{random}}"');
             }
         }
     }

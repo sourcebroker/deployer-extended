@@ -9,7 +9,7 @@ task('db:pull', function () {
 
     $sourceInstance = get('server')['name'];
 
-    $command = parse("cd {{deploy_path}}/current && {{bin/php}} deployer.phar -q db:export");
+    $command = parse("cd {{deploy_path}}/current && {{bin/php}} {{bin/deployer}} -q db:export");
     $databaseDumpResult = run($command);
     $dbExportOnTargetInstanceResponse = json_decode(trim($databaseDumpResult->toString()), true);
     if ($dbExportOnTargetInstanceResponse == null) {
@@ -24,9 +24,9 @@ task('db:pull', function () {
 
     if ($dbExportOnTargetInstanceResponse !== null && isset($dbExportOnTargetInstanceResponse['dumpCode'])) {
         $dumpCode = $dbExportOnTargetInstanceResponse['dumpCode'];
-        runLocally("{{deployer_exec}} db:download $sourceInstance --dumpcode=$dumpCode", 0);
-        runLocally("{{deployer_exec}} db:process --dumpcode=$dumpCode", 0);
-        runLocally("{{deployer_exec}} db:import --dumpcode=$dumpCode", 0);
+        runLocally("{{local/bin/deployer}} db:download $sourceInstance --dumpcode=$dumpCode", 0);
+        runLocally("{{local/bin/deployer}} db:process --dumpcode=$dumpCode", 0);
+        runLocally("{{local/bin/deployer}} db:import --dumpcode=$dumpCode", 0);
     } else {
         throw new \RuntimeException('db:export did not returned dumpcode in json! 
         Check if json response is clean. Sometimes there are PHP Warnings before 

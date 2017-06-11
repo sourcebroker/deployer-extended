@@ -25,9 +25,9 @@ task('db:truncate', function () {
         };
     } else {
         if (test('[ -L {{deploy_path}}/release ]')) {
-            run("cd {{deploy_path}}/release && {{bin/php}} deployer.phar -q db:truncate");
+            run("cd {{deploy_path}}/release && {{bin/php}} {{bin/deployer}} -q db:truncate");
         } else {
-            run("cd {{deploy_path}}/current && {{bin/php}} deployer.phar -q db:truncate");
+            run("cd {{deploy_path}}/current && {{bin/php}} {{bin/deployer}} -q db:truncate");
         }
     }
 })->desc('Truncate tables defined as caching tables.');
