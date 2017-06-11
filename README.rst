@@ -48,10 +48,10 @@ sourcebroker/deployer-extended:
 2) sourcebroker/deployer-extended-magento
 
 
-Task documentation
+Task's documentation
 ------------------
 
-Buffer
+buffer
 ~~~~~~
 
 buffer:start
@@ -247,7 +247,7 @@ deploy:check_lock
     'grunt build'." inside) to inform you that you missed some step before deploying application.
 
 
-Media
+media
 ~~~~~
 
 media:move
