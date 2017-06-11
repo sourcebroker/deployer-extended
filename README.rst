@@ -122,8 +122,6 @@ db:export
 
    dep db:export
 
-
-
 db:import
 +++++++++
 
@@ -136,8 +134,6 @@ db:import
   ::
 
    dep db:import --dumpcode=0772a8d396911951022db5ea385535f66
-
-
 
 db:move
 +++++++
@@ -272,13 +268,13 @@ php
 php:clear_cache_cli
 +++++++++++++++++++
 
-Documentation to do.
+This task clear the stat cache for real file pathes (http://php.net/manual/en/function.clearstatcache.php).
+Additionally it clears opcache and eaccelaeator cache for CLI context.
 
 php:clear_cache_http
 ++++++++++++++++++++
 
-Documentation to do.
-
+This task clear the opcache and eaccelaeator cache for WEB context.
 
 To-Do list
 ----------
