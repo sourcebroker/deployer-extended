@@ -247,6 +247,39 @@ deploy:check_lock
     'grunt build'." inside) to inform you that you missed some step before deploying application.
 
 
+Media
+~~~~~
+
+media:move
+++++++++++
+
+TODO.
+
+media:pull
+++++++++++
+
+TODO.
+
+media:push
+++++++++++
+
+TODO.
+
+
+php
+~~~
+
+php:clear_cache_cli
++++++++++++++++++++
+
+TODO.
+
+php:clear_cache_http
+++++++++++++++++++++
+
+TODO.
+
+
 To-Do list
 ----------
 
