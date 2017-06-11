@@ -101,7 +101,6 @@ set('bin/deployer', function () {
             writeln(parse('Removing {{deploy_path}}/shared/{{deployer_filename}}" because the file size when last '
                 . 'downloaded was ' . $downloadedFileSizeInBytes . ' bytes so downloads was probably not sucessful.'));
             run('rm -f {{deploy_path}}/shared/{{deployer_filename}}');
-
         }
     }
     //If we do not have yet this version fo deployer in shared then download it
@@ -121,7 +120,7 @@ set('bin/deployer', function () {
     }
     //Rebuild symlink of $deployerFilename to "{{active_path}}/deployer.phar"
     run("rm -f {{active_path}}/deployer.phar && cd {{active_path}} && {{bin/symlink}} {{deploy_path}}/shared/{{deployer_filename}} {{active_path}}/deployer.phar");
-    if(test('[ -f {{active_path}}/deployer.phar ]')) {
+    if (test('[ -f {{active_path}}/deployer.phar ]')) {
         $deployerBin = parse('{{active_path}}/deployer.phar');
     } else {
         throw new \RuntimeException(parse('Can not create symlink from {{deploy_path}}/shared/{{deployer_filename}} to {{active_path}}/deployer.phar'));

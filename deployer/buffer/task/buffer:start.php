@@ -7,7 +7,6 @@ task('buffer:start', function () {
     // Overwrite should be done in /release and /current
     foreach ($overwriteReleases as $overwriteRelease) {
         if (test('[ -L {{deploy_path}}/' . $overwriteRelease . ' ]')) {
-
             $overwriteReleasePath = get('deploy_path') . '/' . $overwriteRelease;
 
             $entrypointInjectStartComment = "\n\n// deployer extended buffering request code START\n";
