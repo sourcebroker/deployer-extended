@@ -8,7 +8,7 @@ task('buffer:start', function () {
     foreach ($overwriteReleases as $overwriteRelease) {
         if (test('[ -L {{deploy_path}}/' . $overwriteRelease . ' ]')) {
 
-            $overwritePath = get('deploy_path') . '/' . $overwriteRelease;
+            $overwriteReleasePath = get('deploy_path') . '/' . $overwriteRelease;
 
             $entrypointInjectStartComment = "\n\n// deployer extended buffering request code START\n";
             $entrypointInjectEndComment = "\n// deployer extended buffering request code END\n\n";
@@ -48,16 +48,16 @@ task('buffer:start', function () {
                                 $entrypointInject, $pos,
                                 strlen($entrypointNeedle));
 
-                            run('cd ' . $overwritePath . '  && echo ' . escapeshellarg($content) . ' > {{web_path}}' . $entrypointFilename . '{{random}}');
-                            run('mv -T ' . $overwritePath . '/{{web_path}}' . $entrypointFilename . '{{random}} ' . $overwritePath . '/{{web_path}}' . $entrypointFilename);
+                            run('cd ' . $overwriteReleasePath . '  && echo ' . escapeshellarg($content) . ' > {{web_path}}' . $entrypointFilename . '{{random}}');
+                            run('mv -T ' . $overwriteReleasePath . '/{{web_path}}' . $entrypointFilename . '{{random}} ' . $overwriteReleasePath . '/{{web_path}}' . $entrypointFilename);
                         } else {
                             throw new \RuntimeException('Can not find needle to inject with inclusion');
                         }
                     } else {
-                        throw new \RuntimeException('Can not find file to overwrite or the file is empty. File that was read is: ' . $overwritePath . '/' . get('web_path') . $entrypointFilename);
+                        throw new \RuntimeException('Can not find file to overwrite or the file is empty. File that was read is: ' . $overwriteReleasePath . '/' . get('web_path') . $entrypointFilename);
                     }
                 }
-                run('cd ' . $overwritePath . ' && touch ' . (dirname($entrypointFilename) ? dirname($entrypointFilename) . '/' : '') . $lockerFilename);
+                run('cd ' . $overwriteReleasePath . ' && touch ' . (dirname($entrypointFilename) ? dirname($entrypointFilename) . '/' : '') . $lockerFilename);
             }
         }
     }

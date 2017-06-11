@@ -7,10 +7,12 @@ task('buffer:stop', function () {
     // Remove lock files also from previous release because it can be still read by apache/nginx after switching.
     // get('releases_list') is cached by deployer on first call in other task so it does not have the latest release
     // this is why $releasesList[0] have last release and not current.
-    $overwriteReleases[] = 'releases/' . $releasesList[0];
-    $overwriteReleases[] = 'current';
+    $overwriteReleases = [
+        'releases/' . $releasesList[0],
+        'current'
+    ];
     foreach ($overwriteReleases as $overwriteRelease) {
-        $overwritePath = get('deploy_path') . '/' . $overwriteRelease;
+        $overwriteReleasePath = get('deploy_path') . '/' . $overwriteRelease;
         foreach (get('buffer_config') as $key => $buffer) {
             if (!isset($buffer['entrypoint_filename'])) {
                 throw new \RuntimeException('entrypoint_filename not set for buffer_data');
@@ -26,7 +28,7 @@ task('buffer:stop', function () {
             } else {
                 $entrypointDirectory = '';
             }
-            run('cd ' . $overwritePath . ' && rm -f {{web_path}}' . $entrypointDirectory . $lockerFilename);
+            run('cd ' . $overwriteReleasePath . ' && rm -f {{web_path}}' . $entrypointDirectory . $lockerFilename);
         }
     }
 })->desc('Stop buffering reqests to application entrypoints.');
