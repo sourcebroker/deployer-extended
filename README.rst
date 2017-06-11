@@ -1,3 +1,5 @@
+deployer-extended
+=================
 
 .. image:: https://styleci.io/repos/82486796/shield?branch=master
    :target: https://styleci.io/repos/82486796
@@ -10,10 +12,6 @@
 
 .. image:: https://img.shields.io/badge/license-MIT-blue.svg?style=flat
    :target: https://packagist.org/packages/sourcebroker/deployer-extended
-
-
-deployer-extended
-=================
 
 .. contents:: :local:
 
