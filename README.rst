@@ -13,6 +13,8 @@ deployer-extended
 .. image:: https://img.shields.io/badge/license-MIT-blue.svg?style=flat
    :target: https://packagist.org/packages/sourcebroker/deployer-extended
 
+|
+
 .. contents:: :local:
 
 What does it do?
@@ -33,7 +35,7 @@ generating vhost etc. Look for documentation for all available tasks.
 Installation
 ------------
 
-Just use composer.
+Just use composer:
 
 ::
 
@@ -79,14 +81,10 @@ or to move database between remote instances, eg: `dep db:move live dev`
 
 
 - | *Options*
-  | Domain name (string)
+  | **dumpcode** - database dump code
 
 - | *Arguments*
-  | Domain name (string)
-
-- | *Variables*
-  | Domain name (string)
-
+  | **targetStage** - run tasks only on this server
 
 db:download
 +++++++++++
@@ -96,7 +94,6 @@ db:download
     There is required option --dumpcode to be passed.
 
 - | *Example*
-
   ::
 
    dep db:download live --dumpcode=0772a8d396911951022db5ea385535f6
@@ -110,12 +107,10 @@ db:export
     The database will be stored in two separate files. One with tables structure. The second with data only.
     Example files:
 
-    * <sup>2017-02-26_14:56:08#server:live#dbcode:database_default#type:data#dumpcode:362d7ca0ff065f489c9b79d0a73720f5.sql</sup>
-    * <sup>2017-02-26_14:56:08#server:live#dbcode:database_default#type:structure#dumpcode:362d7ca0ff065f489c9b79d0a73720f5.sql</sup>
-
+    * 2017-02-26_14:56:08#server:live#dbcode:database_default#type:data#dumpcode:362d7ca0ff065f489c9b79d0a73720f5.sql
+    * 2017-02-26_14:56:08#server:live#dbcode:database_default#type:structure#dumpcode:362d7ca0ff065f489c9b79d0a73720f5.sql
 
 - | *Example*
-
   ::
 
    dep db:export
@@ -128,7 +123,6 @@ db:import
     There is required option --dumpcode to be passed.
 
 - | *Example*
-
   ::
 
    dep db:import --dumpcode=0772a8d396911951022db5ea385535f66
@@ -188,7 +182,6 @@ db:truncate
   | This command allows you to truncate database tables defined in database config var "caching_tables"
 
 - | *Example*
-  | Allow only request with GET param secret=999 to access frontend.
 
   ::
 
