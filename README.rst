@@ -49,7 +49,7 @@ sourcebroker/deployer-extended:
 
 
 Task's documentation
-------------------
+--------------------
 
 buffer
 ~~~~~~
@@ -57,12 +57,12 @@ buffer
 buffer:start
 ++++++++++++
 
-TODO.
+Documentation to do.
 
 buffer:end
 ++++++++++
 
-TODO.
+Documentation to do.
 
 config
 ~~~~~~
@@ -70,7 +70,7 @@ config
 config:vhost
 ++++++++++++
 
-TODO.
+Documentation to do.
 
 db
 ~~
@@ -253,17 +253,17 @@ media
 media:move
 ++++++++++
 
-TODO.
+Documentation to do.
 
 media:pull
 ++++++++++
 
-TODO.
+Documentation to do.
 
 media:push
 ++++++++++
 
-TODO.
+Documentation to do.
 
 
 php
@@ -272,12 +272,12 @@ php
 php:clear_cache_cli
 +++++++++++++++++++
 
-TODO.
+Documentation to do.
 
 php:clear_cache_http
 ++++++++++++++++++++
 
-TODO.
+Documentation to do.
 
 
 To-Do list
