@@ -16,6 +16,5 @@ task('file:rm2steps:1', function () {
             $itemToRenameNewName = escapeshellarg("$activePath/$removeRecursiveAtomicItem$random");
             run("if [ -e $itemToRename ]; then mv -f $itemToRename $itemToRenameNewName; fi");
         }
-
     }
 })->desc('Remove files and directories in two steps. First step: rename. Second step: remove.');
