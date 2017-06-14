@@ -71,13 +71,15 @@ Options:
   | *required:* yes
   |
   | The filename that will be overwritten with "entrypoint_inject" php code.
-
+  |
+  
 - | **entrypoint_needle**
   | *required:* no
   | *default value:* "<?php"
   |
   | A "needle" in "entrypoint_filename" after which the php code from "entrypoint_inject" will be injected.
-
+  |
+  
 - | **entrypoint_inject**
   | *required:* no
   | *default value*
@@ -99,7 +101,8 @@ Options:
   |
   | When file with name "buffer.lock" exists the reqests are buffered. The task "buffer:stop" just removes
   | the "buffer.lock" files without removing the "entrypoint_inject" code.
-
+  |
+  
 The simplest configuration example:
 ::
 
