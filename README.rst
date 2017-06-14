@@ -86,15 +86,15 @@ Options:
   |
   | A php code that actually do the buffering.
   |
-  |   ::
-  |
-  |     isset($_SERVER['HTTP_X_DEPLOYER_DEPLOYMENT']) && $_SERVER['HTTP_X_DEPLOYER_DEPLOYMENT'] == '823094823094' ? $deployerExtendedEnableBufferLock = false : $deployerExtendedEnableBufferLock = true;
-  |     isset($_ENV['DEPLOYER_DEPLOYMENT']) && $_ENV['DEPLOYER_DEPLOYMENT'] == '823094823094' ? $deployerExtendedEnableBufferLock = false: $deployerExtendedEnableBufferLock = true;
-  |     while (file_exists(__DIR__ . 'buffer.lock') && $deployerExtendedEnableBufferLock) {
-  |       usleep(200000);
-  |       clearstatcache(true, __DIR__ . '/buffer.lock');
-  |     }
-  |
+  ::
+  
+       isset($_SERVER['HTTP_X_DEPLOYER_DEPLOYMENT']) && $_SERVER['HTTP_X_DEPLOYER_DEPLOYMENT'] == '823094823094' ? $deployerExtendedEnableBufferLock = false : $deployerExtendedEnableBufferLock = true;
+       isset($_ENV['DEPLOYER_DEPLOYMENT']) && $_ENV['DEPLOYER_DEPLOYMENT'] == '823094823094' ? $deployerExtendedEnableBufferLock = false: $deployerExtendedEnableBufferLock = true;
+       while (file_exists(__DIR__ . 'buffer.lock') && $deployerExtendedEnableBufferLock) {
+         usleep(200000);
+         clearstatcache(true, __DIR__ . '/buffer.lock');
+       }
+  
   
 - | **locker_filename**
   | *required:* no
