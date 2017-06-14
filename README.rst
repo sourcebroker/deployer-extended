@@ -82,7 +82,6 @@ Options:
   
 - | **entrypoint_inject**
   | *required:* no
-  | *default value*
   |
   | A php code that actually do the buffering.
   |
@@ -300,26 +299,26 @@ deploy:check_composer_install
 
 - *Note*
 
-  - Check if there is composer.lock file on current instance and if its there then make dry run for
-    "composer install". If "composer install" returns information that some packages needs to be updated
-    or installed then it means that probably developer pulled composer.lock changes from repo but forget
-    to make "composer install". In that case deployment is stopped to allow developer to update packages,
-    make some test and make deployment then.
+  Check if there is composer.lock file on current instance and if its there then make dry run for
+  "composer install". If "composer install" returns information that some packages needs to be updated
+  or installed then it means that probably developer pulled composer.lock changes from repo but forget
+  to make "composer install". In that case deployment is stopped to allow developer to update packages,
+  make some test and make deployment then.
 
 deploy:check_lock
 +++++++++++++++++
 
 - *Note*
 
-  - Check for existance of file deploy.lock in root of current instance. If the file deploy.lock is there then
-    deployment is stopped.
+  Check for existance of file deploy.lock in root of current instance. If the file deploy.lock is there then
+  deployment is stopped.
 
-    You can use it for whatever reason you have. Imagine that you develop css/js locally with "grunt watch".
-    After you have working code you may forget to build final js/css with "grunt build" and you will deploy
-    css/js that will be not used on production which reads compiled css/js.
+  You can use it for whatever reason you have. Imagine that you develop css/js locally with "grunt watch".
+  After you have working code you may forget to build final js/css with "grunt build" and you will deploy
+  css/js that will be not used on production which reads compiled css/js.
 
-    To prevent this situation you can make "grunt watch" to generate file "deploy.lock" (with text "Run
-    'grunt build'." inside) to inform you that you missed some step before deploying application.
+  To prevent this situation you can make "grunt watch" to generate file "deploy.lock" (with text "Run
+  'grunt build'." inside) to inform you that you missed some step before deploying application.
 
 
 media
