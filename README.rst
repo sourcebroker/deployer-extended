@@ -44,8 +44,9 @@ Just use composer:
 For best experience look also for corensponding framework packages that depends on
 sourcebroker/deployer-extended:
 
+For now the only available is:
 1) sourcebroker/deployer-extended-typo3
-2) sourcebroker/deployer-extended-magento
+
 
 
 Task's documentation
@@ -57,12 +58,95 @@ buffer
 buffer:start
 ++++++++++++
 
-Documentation to do.
+Starts buffering requests to application entrypoints. Application entrypoints means here any php file that
+can handle Apache request or handle cli calls. For most frameworks there is only one or two entrypoints.
+
+You may want to buffer request to application in order to have full 100% zero downtime deployment.
+
+The entrypoints are taken from variable "buffer_config" which is array of entrypoints configurations.
+
+Options:
+
+- | **entrypoint_filename**
+  | *required:* yes
+  |
+  | The filename that will be overwritten with "entrypoint_inject" php code.
+
+- | **entrypoint_needle**
+  | *required:* no
+  | *default value:* "<?php"
+  |
+  | A "needle" in "entrypoint_filename" after which the php code from "entrypoint_inject" will be injected.
+
+- | **entrypoint_inject**
+  | *required:* no
+  | *default value*
+  |
+  | A php code that actually do the buffering.
+  |
+  |   ::
+  |
+  |   isset($_SERVER['HTTP_X_DEPLOYER_DEPLOYMENT']) && $_SERVER['HTTP_X_DEPLOYER_DEPLOYMENT'] == '823094823094' ? $deployerExtendedEnableBufferLock = false : $deployerExtendedEnableBufferLock = true;
+  |   isset($_ENV['DEPLOYER_DEPLOYMENT']) && $_ENV['DEPLOYER_DEPLOYMENT'] == '823094823094' ? $deployerExtendedEnableBufferLock = false: $deployerExtendedEnableBufferLock = true;
+  |   while (file_exists(__DIR__ . 'buffer.lock') && $deployerExtendedEnableBufferLock) {
+  |       usleep(200000);
+  |       clearstatcache(true, __DIR__ . '/buffer.lock');
+  |   }
+
+- | **locker_filename**
+  | *required:* no
+  | *default value* "buffer.lock"
+  |
+  | When file with name "buffer.lock" exists the reqests are buffered. The task "buffer:stop" just removes
+  | the "buffer.lock" files without removing the "entrypoint_inject" code.
+
+The simplest configuration example:
+::
+
+   set('buffer_config', [
+           'index.php' => [
+               'entrypoint_filename' => 'index.php',
+           ]
+       ]
+   );
+
+More entrypoints example:
+::
+
+   set('buffer_config', [
+           'index.php' => [
+               'entrypoint_filename' => 'index.php', // frontend
+           ]
+           'typo3/index.php' => [
+               'entrypoint_filename' => 'typo3/index.php', // backend
+           ],
+           'typo3/cli_dispatch.phpsh' => [
+               'entrypoint_filename' => 'typo3/cli_dispatch.phpsh', // cli
+           ]
+       ]
+   );
+More configuration options examples:
+::
+
+   set('buffer_config', [
+           'index.php' => [
+               'entrypoint_filename' => 'index.php',
+               'entrypoint_needle' => '// inject php code after this comment',
+               'locker_filename' => 'deployment.lock',
+               'entrypoint_inject' => 'while (file_exists(__DIR__ . "deployment.lock")){' . "\n"
+                                      . 'usleep(200000);' . "\n"
+                                      . 'clearstatcache(true, __DIR__ . "/buffer.lock")' . "\n"
+                                      . '}'
+           ]
+       ]
+   );
+
+
 
 buffer:end
 ++++++++++
 
-Documentation to do.
+Stop buffering requests to application entrypoints.
 
 config
 ~~~~~~
