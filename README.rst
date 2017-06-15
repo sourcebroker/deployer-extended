@@ -146,8 +146,8 @@ More configuration options examples:
    );
 
 
-buffer:end
-++++++++++
+buffer:stop
++++++++++++
 
 Stop buffering requests to application entrypoints. It deletes "buffer.lock" files.
 
@@ -213,6 +213,7 @@ This command allows you to move database between instances.
 In the background it runs several other tasks to accomplish this.
 
 Here is the list of tasks that will be done afer "db:move":
+
 1) First it runs `db:export`_ task on target instance and get the "dumpcode" as return to use it in next commands.
 2) Then it runs `db:download`_ on current instance (with "dumpcode" value from first task).
 3) Then it runs `db:process`_ on current instance (with "dumpcode" value from first task).
@@ -246,6 +247,7 @@ This command allows you to pull database from target instance to current instanc
 In the background it runs several other tasks to accomplish this.
 
 Here is the list of tasks that will be done afer "db:pull":
+
 1) First it runs `db:export`_ task on target instance and get the "dumpcode" as return to use it in next commands.
 2) Then it runs `db:download`_ on current instance (with "dumpcode" value from first task).
 3) Then it runs `db:process`_ on current instance (with "dumpcode" value from first task).
