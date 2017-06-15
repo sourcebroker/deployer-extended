@@ -339,8 +339,8 @@ in the same folder. We also gain speed because we can delete the folders/files a
 `file:rm2steps:2`_ if thats needed at all because deployer "clenup" task will remove old releases anyway.
 
 
-file:rm2steps:2
-+++++++++++++++
+file:rm2steps:a2
+++++++++++++++++
 
 The second step of file:rm2steps tandem. Read more on `file:rm2steps:1`_
 
