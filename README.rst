@@ -76,34 +76,34 @@ Options:
   |
 - | **entrypoint_needle**
   | *required:* no
-  | *default value:* "<?php"
+  | *default value:* <?php
   |
   | A "needle" in "entrypoint_filename" after which the php code from "entrypoint_inject" will be injected.
   |
-  
+
 - | **entrypoint_inject**
   | *required:* no
   |
   | A php code that actually do the buffering.
   | The default code with already prefilled variables (random, locker_filename):
   ::
-  
+
        isset($_SERVER['HTTP_X_DEPLOYER_DEPLOYMENT']) && $_SERVER['HTTP_X_DEPLOYER_DEPLOYMENT'] == '823094823094' ? $deployerExtendedEnableBufferLock = false : $deployerExtendedEnableBufferLock = true;
        isset($_ENV['DEPLOYER_DEPLOYMENT']) && $_ENV['DEPLOYER_DEPLOYMENT'] == '823094823094' ? $deployerExtendedEnableBufferLock = false: $deployerExtendedEnableBufferLock = true;
        while (file_exists(__DIR__ . 'buffer.lock') && $deployerExtendedEnableBufferLock) {
          usleep(200000);
          clearstatcache(true, __DIR__ . '/buffer.lock');
        }
-  
-  
+
+
 - | **locker_filename**
   | *required:* no
-  | *default value* "buffer.lock"
+  | *default value* buffer.lock
   |
   | When file with name "buffer.lock" exists the reqests are buffered. The task `buffer:stop`_ just removes
     the "buffer.lock" files without removing the "entrypoint_inject" code.
   |
-  
+
 The simplest configuration example:
 ::
 
@@ -314,8 +314,8 @@ To prevent this situation you can make "grunt watch" to generate file "deploy.lo
 file
 ~~~~
 
-file:rm2steps:1
-+++++++++++++++
+file\:rm2steps\:1
++++++++++++++++++
 
 Allows to remove files and directories in two steps for "security" and "speed".
 
@@ -339,8 +339,8 @@ in the same folder. We also gain speed because we can delete the folders/files a
 `file:rm2steps:2`_ if thats needed at all because deployer "clenup" task will remove old releases anyway.
 
 
-file:rm2steps:a2
-++++++++++++++++
+file\:rm2steps\:2
++++++++++++++++++
 
 The second step of file:rm2steps tandem. Read more on `file:rm2steps:1`_
 
@@ -348,20 +348,148 @@ The second step of file:rm2steps tandem. Read more on `file:rm2steps:1`_
 media
 ~~~~~
 
+Options:
+
+- | **exclude**
+  | *default value:* null
+  |
+  | Array with patterns to be excluded.
+
+  |
+- | **exclude-case-insensitive**
+  | *default value:* null
+  |
+  | Array with patterns to be excluded. Because rsync does not support case insensitive then
+    each value of array is set in state uppercase/lowercase. That means if you will have ``['*.mp4', '*.zip']``
+    then final exclude will be ``--exclude '*.[mM][pP]4' --exclude '*.[zZ][iI][pP]'``
+
+  |
+- | **exclude-file**
+  | *default value:* null
+  |
+  | String containing absolute path to file, which contains exclude patterns.
+
+  |
+- | **include**
+  | *default value:* null
+  |
+  | Array with patterns to be included.
+
+  |
+- | **include-file**
+  | *default value:* null
+  |
+  | String containing absolute path to file, which contains include patterns.
+
+  |
+- | **filter**
+  | *default value:* null
+  |
+  | Array of rsync filter rules
+
+  |
+- | **filter-file**
+  | *default value:* null
+  |
+  | String containing merge-file filename.
+
+  |
+- | **filter-perdir**
+  | *default value:* null
+  |
+  | String containing merge-file filename to be scanned and merger per each directory in rsync
+    list offiles to send.
+
+  |
+- | **flags**
+  | *default value:* rz
+  |
+  | Flags added to rsync command.
+
+  |
+- | **options**
+  | *default value:* ['copy-links', 'keep-dirlinks', 'safe-links']
+  |
+  | Array of options to be added to rsync command.
+
+  |
+- | **timeout**
+  | *default value:* 0
+  |
+  | Timeout for rsync task. Zero means no timeout.
+
+
+Default configuration for task:
+::
+   set('media-default',
+    [
+        'exclude' => [],
+        'exclude-case-insensitive' => [
+            '*.mp4',
+            '*.zip',
+            '*.pdf',
+            '*.exe',
+            '*.doc',
+            '*.docx',
+            '*.pptx',
+            '*.ppt',
+            '*.xls',
+            '*.xlsx',
+            '*.xlsm',
+            '*.tiff',
+            '*.tif',
+            '*.potx',
+            '*.mpg',
+            '*.mp3',
+            '*.avi',
+            '*.wmv',
+            '*.flv',
+            '*.eps',
+            '*.ai',
+            '*.mov',
+        ],
+        'exclude-file' => false,
+        'include' => [],
+        'include-file' => false,
+        'filter' => [],
+        'filter-file' => false,
+        'filter-perdir' => false,
+        'flags' => 'rz',
+        'options' => ['copy-links', 'keep-dirlinks', 'safe-links'],
+        'timeout' => 0,
+    ]);
+
 media:move
 ++++++++++
 
-Documentation to do.
+Move media from target instance to second target instance using rsync and options from "media-default" and "media".
+
+Its a shortcut for two separated commands.
+::
+
+   media:move target1 target2
+
+
+Is in fact:
+::
+
+   media:pull target1
+   media:push target2
+
+**Notice!**
+
+Media are not moved directly from target1 to target2. First its synchronised from target1 instance to current
+instance and then from current instance to target2 instance.
 
 media:pull
 ++++++++++
 
-Documentation to do.
+Pull media from target instance to current instance using rsync and options from "media-default" and "media".
 
 media:push
 ++++++++++
 
-Documentation to do.
+Pull media from current instance to target instance using rsync and options from "media-default" and "media".
 
 
 php
@@ -390,4 +518,23 @@ Changelist
 2.0.0
 ~~~~~
 
-b) Update documentation
+Task renamed:
+
+a) Rename deploy:composer_check_install to `deploy:check_composer_install`_
+b) Rename cache:clearstatcache to `php:clear_cache_cli`_
+c) Rename cache:frontendreset to `php:clear_cache_http`_
+d) Rename deploy:vhosts to `config:vhost`_
+
+Task splitted/renamed with no simple replacement:
+
+a) file:remove_recursive_atomic - replaced by `file:rm2steps:1`_, `file:rm2steps:2`_
+b) lock:create_lock_files - replaced by `buffer:start`_
+c) lock:delete_lock_files - replaced by `buffer:stop`_
+d) lock:overwrite_entry_point - replaced by `buffer:start`_
+
+Task removed with no replacement:
+
+a) file:copy_from_shared
+b) file:copy_from_previous
+c) git:check_status
+d) lock:stop_if_http_status_200
