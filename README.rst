@@ -184,6 +184,7 @@ One with tables structure. The second with data only. This tasks return json str
 be used in other tasks.
 
 **Example**
+
 Example task call:
 ::
 
@@ -220,6 +221,7 @@ Here is the list of tasks that will be done afer "db:move":
 
 
 **Example**
+
 Example call when you are on your local instance can be:
 ::
 
@@ -260,7 +262,6 @@ db:truncate
 This command allows you to truncate database tables defined in database config var "caching_tables"
 
 **Example**
-
 ::
 
    dep db:truncate --dumpcode=0772a8d396911951022db5ea385535f6
@@ -273,6 +274,7 @@ This command uploads the sql dump file to target instance.
 There is required option --dumpcode to be passed.
 
 **Example**
+
 Upload database with dumpcode 0772a8d396911951022db5ea385535f6 to live instance
 and store it on database storage folder.
 
