@@ -22,17 +22,18 @@ set('db_settings_mysql_path', function () {
 
 set('databases_config', function () {
     $databaseConfigsMerged = [];
-    foreach (get('db_databases') as $databaseConfigServer) {
-        if (is_array($databaseConfigServer)) {
-            $databaseConfigsMerged = ArrayUtility::arrayMergeRecursiveDistinct($databaseConfigsMerged, $databaseConfigServer);
-            continue;
-        }
-
-        if (file_exists(get('current_dir') . DIRECTORY_SEPARATOR . $databaseConfigServer)) {
-            $mergeArray = include(get('current_dir') . DIRECTORY_SEPARATOR . $databaseConfigServer);
-            $databaseConfigsMerged = ArrayUtility::arrayMergeRecursiveDistinct($databaseConfigsMerged, $mergeArray);
-        } else {
-            throw new \RuntimeException('The config file does not exists: ' . $databaseConfigServer);
+    foreach (get('db_databases') as $databaseIdentifies => $databaseConfigs) {
+        foreach ($databaseConfigs as $databaseConfig) {
+            if (is_array($databaseConfig)) {
+                $databaseConfigsMerged[$databaseIdentifies] = ArrayUtility::arrayMergeRecursiveDistinct($databaseConfigsMerged[$databaseIdentifies], $databaseConfig);
+                continue;
+            }
+            if (file_exists(get('current_dir') . DIRECTORY_SEPARATOR . $databaseConfig)) {
+                $mergeArray = include(get('current_dir') . DIRECTORY_SEPARATOR . $databaseConfig);
+                $databaseConfigsMerged[$databaseIdentifies] = ArrayUtility::arrayMergeRecursiveDistinct($databaseConfigsMerged[$databaseIdentifies], $mergeArray);
+            } else {
+                throw new \RuntimeException('The config file does not exists: ' . $databaseConfig);
+            }
         }
     }
     return $databaseConfigsMerged;
