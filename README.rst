@@ -61,7 +61,7 @@ The request are buffered but at the same time if you set special http header (by
 with special value you will be able to make regular request. This can be very handy to check if the application
 is working at all after switch (symliking to current) and to warm up some caches.
 
-When you run "buffer:stop" all the waiting requests will hit the https server (or cli entrypoint).
+When you run `buffer:stop`_ all the waiting requests will hit the https server (or cli entrypoint).
 
 The entrypoints are taken from variable "buffer_config" which is array of entrypoints configurations.
 
@@ -100,7 +100,7 @@ Options:
   | *required:* no
   | *default value* "buffer.lock"
   |
-  | When file with name "buffer.lock" exists the reqests are buffered. The task "buffer:stop" just removes
+  | When file with name "buffer.lock" exists the reqests are buffered. The task `buffer:stop`_ just removes
     the "buffer.lock" files without removing the "entrypoint_inject" code.
   |
   
@@ -213,11 +213,11 @@ This command allows you to move database between instances.
 In the background it runs several other tasks to accomplish this.
 
 Here is the list of tasks that will be done afer "db:move":
-1) First it runs db:export task on target instance and get the "dumpcode" as return to use it in next commands.
-2) Then it runs db:download on current instance (with "dumpcode" value from first task).
-3) Then it runs db:process on current instance (with "dumpcode" value from first task).
-4) Then it runs db:upload on current instance (with "dumpcode" value from first task).
-5) Then it runs db:import on target instance (with "dumpcode" value from first task).
+1) First it runs `db:export`_ task on target instance and get the "dumpcode" as return to use it in next commands.
+2) Then it runs `db:download`_ on current instance (with "dumpcode" value from first task).
+3) Then it runs `db:process`_ on current instance (with "dumpcode" value from first task).
+4) Then it runs `db:upload`_ on current instance (with "dumpcode" value from first task).
+5) Then it runs `db:import`_ on target instance (with "dumpcode" value from first task).
 
 
 **Example**
@@ -246,10 +246,10 @@ This command allows you to pull database from target instance to current instanc
 In the background it runs several other tasks to accomplish this.
 
 Here is the list of tasks that will be done afer "db:pull":
-1) First it runs db:export task on target instance and get the "dumpcode" as return to use it in next commands.
-2) Then it runs db:download on current instance (with "dumpcode" value from first task).
-3) Then it runs db:process on current instance (with "dumpcode" value from first task).
-4) Then it runs db:import on current instance (with "dumpcode" value from first task).
+1) First it runs `db:export`_ task on target instance and get the "dumpcode" as return to use it in next commands.
+2) Then it runs `db:download`_ on current instance (with "dumpcode" value from first task).
+3) Then it runs `db:process`_ on current instance (with "dumpcode" value from first task).
+4) Then it runs `db:import`_ on current instance (with "dumpcode" value from first task).
 
 **Example**
 ::
@@ -333,13 +333,13 @@ Allows to remove files and directories in two steps for "security" and "speed".
 The solution for both problems of "security" and "speed" is first rename the folder to some temporary and then delete it
 later in next step. Renaming is atomic operation so there is no possibility that new http hit will start to build cache
 in the same folder. We also gain speed because we can delete the folders/files at the end of deployment with task
-"file:rm2steps:2" if thats needed at all because deployer "clenup" task will remove old releases anyway.
+`file:rm2steps:2`_ if thats needed at all because deployer "clenup" task will remove old releases anyway.
 
 
 file:rm2steps:2
 +++++++++++++++
 
-The second step of "file:rm2steps:*" tandem. Read more on `file:rm2steps:1`_
+The second step of "file:rm2steps:\*" tandem. Read more on `file:rm2steps:1`_
 
 
 media
