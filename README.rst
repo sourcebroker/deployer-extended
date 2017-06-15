@@ -129,6 +129,7 @@ More entrypoints example. An example for CMS TYPO3 8.7 LTS:
            ]
        ]
    );
+
 More configuration options examples:
 ::
 
@@ -341,7 +342,7 @@ in the same folder. We also gain speed because we can delete the folders/files a
 file:rm2steps:2
 +++++++++++++++
 
-The second step of "file:rm2steps:\*" tandem. Read more on `file:rm2steps:1`_
+The second step of file:rm2steps tandem. Read more on `file:rm2steps:1`_
 
 
 media
