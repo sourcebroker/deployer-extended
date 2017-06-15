@@ -321,16 +321,16 @@ Allows to remove files and directories in two steps for "security" and "speed".
 
 **Security**
 
-   Sometimes removing cache folders with lot of files takes few seconds. In meantime of that process a new frontend
-   request can hit http server and new file cache will start to being generated because it will detect that some cache
-   files are missing and cache needs to be regnerated. A process which is deleting the cache folder can then delete
-   the newly generated cache files. The output of cache folder is not predictable in that case and can crash
-   the application.
+Sometimes removing cache folders with lot of files takes few seconds. In meantime of that process a new frontend
+request can hit http server and new file cache will start to being generated because it will detect that some cache
+files are missing and cache needs to be regnerated. A process which is deleting the cache folder can then delete
+the newly generated cache files. The output of cache folder is not predictable in that case and can crash
+the application.
 
 **Speed**
 
-   If you decide to remove the cache folder during the `buffer:start`_ then its crucial to do it as fast as possbile in
-   order to buffer as low requests as possible.
+If you decide to remove the cache folder during the `buffer:start`_ then its crucial to do it as fast as possbile in
+order to buffer as low requests as possible.
 
 
 The solution for both problems of "security" and "speed" is first rename the folder to some temporary and then delete it
