@@ -23,6 +23,7 @@ set('db_settings_mysql_path', function () {
 set('databases_config', function () {
     $databaseConfigsMerged = [];
     foreach (get('db_databases') as $databaseIdentifies => $databaseConfigs) {
+        $databaseConfigsMerged[$databaseIdentifies] = [];
         foreach ($databaseConfigs as $databaseConfig) {
             if (is_array($databaseConfig)) {
                 $databaseConfigsMerged[$databaseIdentifies] = ArrayUtility::arrayMergeRecursiveDistinct($databaseConfigsMerged[$databaseIdentifies], $databaseConfig);
