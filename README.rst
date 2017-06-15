@@ -35,8 +35,6 @@ generating vhost etc. Look for documentation for all available tasks.
 Installation
 ------------
 
-Just use composer:
-
 ::
 
     composer require sourcebroker/deployer-extended
@@ -77,7 +75,7 @@ Options:
   | The filename that will be overwritten with "entrypoint_inject" php code. If entrypoint is inside folder then
     write it with this folder like: 'entrypoint_filename' => 'typo3/index.php'
 
-  
+  |
 - | **entrypoint_needle**
   | *required:* no
   | *default value:* "<?php"
@@ -105,7 +103,7 @@ Options:
   | *default value* "buffer.lock"
   |
   | When file with name "buffer.lock" exists the reqests are buffered. The task "buffer:stop" just removes
-  | the "buffer.lock" files without removing the "entrypoint_inject" code.
+    the "buffer.lock" files without removing the "entrypoint_inject" code.
   |
   
 The simplest configuration example:
@@ -302,7 +300,6 @@ deploy:check_composer_install
 +++++++++++++++++++++++++++++
 
 - *Note*
-
   Check if there is composer.lock file on current instance and if its there then make dry run for
   "composer install". If "composer install" returns information that some packages needs to be updated
   or installed then it means that probably developer pulled composer.lock changes from repo but forget
@@ -313,7 +310,6 @@ deploy:check_lock
 +++++++++++++++++
 
 - *Note*
-
   Check for existance of file deploy.lock in root of current instance. If the file deploy.lock is there then
   deployment is stopped.
 
