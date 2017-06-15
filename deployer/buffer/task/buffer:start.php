@@ -8,7 +8,6 @@ task('buffer:start', function () {
     foreach ($overwriteReleases as $overwriteRelease) {
         $overwriteReleasePath = get('deploy_path') . '/' . $overwriteRelease;
         if (test("[ -L $overwriteReleasePath ]")) {
-
             $entrypointInjectStartComment = "\n\n// deployer extended buffering request code START\n";
             $entrypointInjectEndComment = "\n// deployer extended buffering request code END\n\n";
 
