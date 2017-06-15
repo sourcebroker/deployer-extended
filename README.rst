@@ -166,6 +166,88 @@ This tasks allows you to make database operation on current instance and between
 The most useful is ability to pull database from remote instance to current instance: `dep db:pull live`
 or to move database between remote instances, eg: `dep db:move live dev`
 
+Options:
+
+- | **caching_tables**
+  | *default value:* null
+  |
+  | Tables that will be truncated with task `db:truncate`_. Usually it should be some caching tables that
+    should be truncated while deployment.
+
+  |
+- | **ignore_tables_out**
+  | *default value:* null
+  |
+  | Tables that will be ignored while pulling database from target instance with task `db:pull`_
+
+  |
+- | **post_sql_in**
+  | *default value:* null
+  |
+  | SQL that will be executed after importing database on current instance.
+
+|
+There is support to synchronise more than one database.
+
+::
+
+   set(
+       'db_databases',
+       [
+           'database_foo' => [
+               [
+                   'host' => '127.0.0.1',
+                   'database' => 'foo',
+                   'user' => 'foo',
+                   'password' => 'foopass',
+               ],
+               get('db_default')
+           ],
+           'database_bar' => [
+               [
+                   'host' => '127.0.0.1',
+                   'database' => 'bar',
+                   'user' => 'bar',
+                   'password' => 'barpass',
+               ],
+               get('db_default')
+           ],
+       ]
+   );
+
+Example configuration for TYPO3:
+
+::
+
+   set('db_default', [
+       'caching_tables' => [
+           'cf_.*'
+       ],
+       'ignore_tables_out' => [
+           'cf_.*',
+           'cache_.*',
+           'be_sessions',
+           'sys_history',
+           'sys_file_processedfile',
+           'sys_log',
+           'sys_refindex',
+           'tx_devlog',
+           'tx_extensionmanager_domain_model_extension',
+           'tx_realurl_chashcache',
+           'tx_realurl_errorlog',
+           'tx_realurl_pathcache',
+           'tx_realurl_uniqalias',
+           'tx_realurl_urldecodecache',
+           'tx_realurl_urlencodecache',
+           'tx_powermail_domain_model_mails',
+           'tx_powermail_domain_model_answers',
+           'tx_solr_.*',
+           'tx_crawler_queue',
+           'tx_crawler_process',
+       ],
+       'post_sql_in' => ''
+   ]);
+
 db:download
 +++++++++++
 
@@ -458,6 +540,25 @@ Default configuration for task:
         'options' => ['copy-links', 'keep-dirlinks', 'safe-links'],
         'timeout' => 0,
     ]);
+
+
+In your project you should set "media" which will be merged with "media-default" configuration.
+
+Example configuration for TYPO3:
+::
+
+   set('media',
+       [
+        'filter' => [
+            '+ /fileadmin/',
+            '- /fileadmin/_processed_/*',
+            '+ /fileadmin/**',
+            '+ /uploads/',
+            '+ /uploads/**',
+            '- *'
+       ]
+   ]);
+
 
 media:move
 ++++++++++
