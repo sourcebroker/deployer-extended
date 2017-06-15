@@ -34,17 +34,15 @@ generating vhost etc. Look for documentation for all available tasks.
 
 Installation
 ------------
-
 ::
 
-    composer require sourcebroker/deployer-extended
+   composer require sourcebroker/deployer-extended
 
 For best experience look also for corensponding framework packages that depends on
 sourcebroker/deployer-extended:
 
 For now the only available is:
 1) sourcebroker/deployer-extended-typo3
-
 
 
 Task's documentation
@@ -163,7 +161,6 @@ Documentation to do.
 
 db
 ~~
-
 This tasks allows you to make database operation on current instance and between instances.
 The most useful is ability to pull database from remote instance to current instance: `dep db:pull live`
 or to move database between remote instances, eg: `dep db:move live dev`
@@ -175,7 +172,7 @@ Download database from target instance to current instance.
 There is required option --dumpcode to be passed.
 
 **Example**
-  ::
+::
 
    dep db:download live --dumpcode=0772a8d396911951022db5ea385535f6
 
@@ -187,17 +184,16 @@ One with tables structure. The second with data only. This tasks return json str
 be used in other tasks.
 
 **Example**
-Example task call
-  ::
+Example task call:
+::
 
    dep db:export
 
 Example output files:
-   ::
+::
 
    2017-02-26_14:56:08#server:live#dbcode:database_default#type:data#dumpcode:362d7ca0ff065f489c9b79d0a73720f5.sql
    2017-02-26_14:56:08#server:live#dbcode:database_default#type:structure#dumpcode:362d7ca0ff065f489c9b79d0a73720f5.sql
-
 
 db:import
 +++++++++
@@ -205,7 +201,7 @@ db:import
 Import database from current instance database storage. There is required option --dumpcode to be passed.
 
 **Example**
-  ::
+::
 
    dep db:import --dumpcode=0772a8d396911951022db5ea385535f66
 
@@ -224,7 +220,10 @@ Here is the list of tasks that will be done afer "db:move":
 
 
 **Example**
-Example call when you are on your local instance can be ``dep db:move live dev``
+Example call when you are on your local instance can be:
+::
+
+   dep db:move live dev
 
 db:process
 ++++++++++
@@ -233,7 +232,7 @@ This command will run some defined commands on pure sql file as its sometimes ne
 directly on sql file before importing. There is required option --dumpcode to be passed.
 
 **Example**
-  ::
+::
 
    dep db:process --dumpcode=0772a8d396911951022db5ea385535f66
 
@@ -251,7 +250,7 @@ Here is the list of tasks that will be done afer "db:pull":
 4) Then it runs db:import on current instance (with "dumpcode" value from first task).
 
 **Example**
-  ::
+::
 
    dep db:pull live
 
@@ -262,7 +261,7 @@ This command allows you to truncate database tables defined in database config v
 
 **Example**
 
-  ::
+::
 
    dep db:truncate --dumpcode=0772a8d396911951022db5ea385535f6
 
@@ -273,11 +272,11 @@ db:upload
 This command uploads the sql dump file to target instance.
 There is required option --dumpcode to be passed.
 
-**Exampl*e*
+**Example**
 Upload database with dumpcode 0772a8d396911951022db5ea385535f6 to live instance
 and store it on database storage folder.
 
-  ::
+::
 
    dep db:upload live --dumpcode=0772a8d396911951022db5ea385535f6
 
