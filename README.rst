@@ -168,21 +168,13 @@ This tasks allows you to make database operation on current instance and between
 The most useful is ability to pull database from remote instance to current instance: `dep db:pull live`
 or to move database between remote instances, eg: `dep db:move live dev`
 
-
-- | *Options*
-  | **dumpcode** - database dump code
-
-- | *Arguments*
-  | **targetStage** - run tasks only on this server
-
 db:download
 +++++++++++
 
-- | *Note*
-  | Download database from target instance to current instance.
-    There is required option --dumpcode to be passed.
+Download database from target instance to current instance.
+There is required option --dumpcode to be passed.
 
-- | *Example*
+**Example**
   ::
 
    dep db:download live --dumpcode=0772a8d396911951022db5ea385535f6
@@ -190,28 +182,29 @@ db:download
 db:export
 +++++++++
 
-- | *Note*
-  | Export database to database storage on current instance.
+Export database to database storage on current instance. The database will be stored in two separate files.
+One with tables structure. The second with data only. This tasks return json structure with dumpcode to
+be used in other tasks.
 
-    The database will be stored in two separate files. One with tables structure. The second with data only.
-    Example files:
-
-    * 2017-02-26_14:56:08#server:live#dbcode:database_default#type:data#dumpcode:362d7ca0ff065f489c9b79d0a73720f5.sql
-    * 2017-02-26_14:56:08#server:live#dbcode:database_default#type:structure#dumpcode:362d7ca0ff065f489c9b79d0a73720f5.sql
-
-- | *Example*
+**Example**
+Example task call
   ::
 
    dep db:export
 
+Example output files:
+   ::
+
+   2017-02-26_14:56:08#server:live#dbcode:database_default#type:data#dumpcode:362d7ca0ff065f489c9b79d0a73720f5.sql
+   2017-02-26_14:56:08#server:live#dbcode:database_default#type:structure#dumpcode:362d7ca0ff065f489c9b79d0a73720f5.sql
+
+
 db:import
 +++++++++
 
-- | *Note*
-  | Import database from current instance database storage.
-    There is required option --dumpcode to be passed.
+Import database from current instance database storage. There is required option --dumpcode to be passed.
 
-- | *Example*
+**Example**
   ::
 
    dep db:import --dumpcode=0772a8d396911951022db5ea385535f66
@@ -219,29 +212,27 @@ db:import
 db:move
 +++++++
 
-- | *Note*
-  | This command allows you to move database between instances.
-    In the background it runs several commands to accomplish this task.
+This command allows you to move database between instances.
+In the background it runs several other tasks to accomplish this.
 
-- | *Example*
-  | Example call when you are on your local instance can be ``dep db:move live dev``
-    This will move database from live instance to dev instance.
-    It will do following:
-    1) First it runs db:export task on target instance and get the "dumpcode" as return to use it in next commands.
-    2) Then it runs db:download (with "dumpcode" value from first task).
-    3) Then it runs db:process (with "dumpcode" value from first task).
-    4) Then it runs db:import (with "dumpcode" value from first task).
+Here is the list of tasks that will be done afer "db:move":
+1) First it runs db:export task on target instance and get the "dumpcode" as return to use it in next commands.
+2) Then it runs db:download on current instance (with "dumpcode" value from first task).
+3) Then it runs db:process on current instance (with "dumpcode" value from first task).
+4) Then it runs db:upload on current instance (with "dumpcode" value from first task).
+5) Then it runs db:import on target instance (with "dumpcode" value from first task).
 
+
+**Example**
+Example call when you are on your local instance can be ``dep db:move live dev``
 
 db:process
 ++++++++++
 
-- | *Note*
-  | This command will run some defined commands on pure sql file as its sometimes needed to remove
-    or replace some strings directly on sql file before importing.
-    There is required option --dumpcode to be passed.
+This command will run some defined commands on pure sql file as its sometimes needed to remove or replace some strings
+directly on sql file before importing. There is required option --dumpcode to be passed.
 
-- | *Example*
+**Example**
   ::
 
    dep db:process --dumpcode=0772a8d396911951022db5ea385535f66
@@ -250,16 +241,16 @@ db:process
 db:pull
 +++++++
 
-- | *Note*
-  | This command allows you to download database from target instance to current instance.
-    In the background it runs several commands to accomplish this task.
-    It will do following:
-    1) First it runs db:export task on target instance and get the "dumpcode" as return to use it in next commands.
-    2) Then it runs db:download (with "dumpcode" value from first task).
-    3) Then it runs db:process (with "dumpcode" value from first task).
-    4) Then it runs db:import (with "dumpcode" value from first task).
+This command allows you to pull database from target instance to current instance.
+In the background it runs several other tasks to accomplish this.
 
-- | *Example*
+Here is the list of tasks that will be done afer "db:pull":
+1) First it runs db:export task on target instance and get the "dumpcode" as return to use it in next commands.
+2) Then it runs db:download on current instance (with "dumpcode" value from first task).
+3) Then it runs db:process on current instance (with "dumpcode" value from first task).
+4) Then it runs db:import on current instance (with "dumpcode" value from first task).
+
+**Example**
   ::
 
    dep db:pull live
@@ -267,10 +258,9 @@ db:pull
 db:truncate
 +++++++++++
 
-- | *Note*
-  | This command allows you to truncate database tables defined in database config var "caching_tables"
+This command allows you to truncate database tables defined in database config var "caching_tables"
 
-- | *Example*
+**Example**
 
   ::
 
@@ -280,13 +270,12 @@ db:truncate
 db:upload
 +++++++++
 
-- | *Note*
-  | This command will upload the sql dump file to target instance.
-  | There is required option --dumpcode to be passed.
+This command uploads the sql dump file to target instance.
+There is required option --dumpcode to be passed.
 
-- | *Example*
-  | Upload database with dumpcode 0772a8d396911951022db5ea385535f6 to live instance
-    and store it on database storage folder.
+**Exampl*e*
+Upload database with dumpcode 0772a8d396911951022db5ea385535f6 to live instance
+and store it on database storage folder.
 
   ::
 
@@ -299,26 +288,24 @@ deploy
 deploy:check_composer_install
 +++++++++++++++++++++++++++++
 
-- *Note*
-  Check if there is composer.lock file on current instance and if its there then make dry run for
-  "composer install". If "composer install" returns information that some packages needs to be updated
-  or installed then it means that probably developer pulled composer.lock changes from repo but forget
-  to make "composer install". In that case deployment is stopped to allow developer to update packages,
-  make some test and make deployment then.
+Check if there is composer.lock file on current instance and if its there then make dry run for
+"composer install". If "composer install" returns information that some packages needs to be updated
+or installed then it means that probably developer pulled composer.lock changes from repo but forget
+to make "composer install". In that case deployment is stopped to allow developer to update packages,
+make some test and make deployment then.
 
 deploy:check_lock
 +++++++++++++++++
 
-- *Note*
-  Check for existance of file deploy.lock in root of current instance. If the file deploy.lock is there then
-  deployment is stopped.
+Checks for existance of file deploy.lock in root of current instance. If the file deploy.lock is there then
+deployment is stopped.
 
-  You can use it for whatever reason you have. Imagine that you develop css/js locally with "grunt watch".
-  After you have working code you may forget to build final js/css with "grunt build" and you will deploy
-  css/js that will be not used on production which reads compiled css/js.
+You can use it for whatever reason you have. Imagine that you develop css/js locally with "grunt watch".
+After you have working code you may forget to build final js/css with "grunt build" and you will deploy
+css/js that will be not used on production which reads compiled css/js.
 
-  To prevent this situation you can make "grunt watch" to generate file "deploy.lock" (with text "Run
-  'grunt build'." inside) to inform you that you missed some step before deploying application.
+To prevent this situation you can make "grunt watch" to generate file "deploy.lock" (with text "Run
+'grunt build'." inside) to inform you that you missed some step before deploying application.
 
 
 media
