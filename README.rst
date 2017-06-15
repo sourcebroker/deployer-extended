@@ -59,9 +59,13 @@ buffer:start
 ++++++++++++
 
 Starts buffering requests to application entrypoints. Application entrypoints means here any php file that
-can handle Apache request or handle cli calls. For most frameworks there is only one or two entrypoints.
+can handle Apache request or handle cli calls. For most good frameworks there is only one or two entrypoints.
 
-You may want to buffer request to application in order to have full 100% zero downtime deployment.
+The request are buffered but at the same time if you set special http header (by default HTTP_X_DEPLOYER_DEPLOYMENT)
+with special value you will be able to make regular request. This can be very handy to check if the application
+is working at all after switch (symliking to current) and to warm up some caches.
+
+When you run "buffer:stop" all the waiting requests will hit the https server (or cli entrypoint).
 
 The entrypoints are taken from variable "buffer_config" which is array of entrypoints configurations.
 
@@ -70,8 +74,9 @@ Options:
 - | **entrypoint_filename**
   | *required:* yes
   |
-  | The filename that will be overwritten with "entrypoint_inject" php code.
-  |
+  | The filename that will be overwritten with "entrypoint_inject" php code. If entrypoint is inside folder then
+    write it with this folder like: 'entrypoint_filename' => 'typo3/index.php'
+
   
 - | **entrypoint_needle**
   | *required:* no
@@ -84,7 +89,7 @@ Options:
   | *required:* no
   |
   | A php code that actually do the buffering.
-  |
+  | The default code with already prefilled variables (random, locker_filename):
   ::
   
        isset($_SERVER['HTTP_X_DEPLOYER_DEPLOYMENT']) && $_SERVER['HTTP_X_DEPLOYER_DEPLOYMENT'] == '823094823094' ? $deployerExtendedEnableBufferLock = false : $deployerExtendedEnableBufferLock = true;
@@ -113,7 +118,7 @@ The simplest configuration example:
        ]
    );
 
-More entrypoints example:
+More entrypoints example. An example for CMS TYPO3 8.7 LTS:
 ::
 
    set('buffer_config', [
@@ -145,11 +150,10 @@ More configuration options examples:
    );
 
 
-
 buffer:end
 ++++++++++
 
-Stop buffering requests to application entrypoints.
+Stop buffering requests to application entrypoints. It deletes "buffer.lock" files.
 
 config
 ~~~~~~
