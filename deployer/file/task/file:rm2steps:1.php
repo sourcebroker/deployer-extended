@@ -11,7 +11,7 @@ task('file:rm2steps:1', function () {
     $activePath = get('deploy_path') . '/' . (test('[ -L {{deploy_path}}/release ]') ? 'release' : 'current');
     foreach ($removeRecursiveAtomicItems as $removeRecursiveAtomicItem) {
         $removeRecursiveAtomicItem = FileUtility::normalizeFolder(trim($removeRecursiveAtomicItem));
-        if(strlen($removeRecursiveAtomicItem)) {
+        if (strlen($removeRecursiveAtomicItem)) {
             $itemToRename = escapeshellarg("$activePath/$removeRecursiveAtomicItem");
             $itemToRenameNewName = escapeshellarg("$activePath/$removeRecursiveAtomicItem$random");
             run("if [ -e $itemToRename ]; then mv -f $itemToRename $itemToRenameNewName; fi");
