@@ -6,8 +6,8 @@ task('buffer:start', function () {
     $overwriteReleases = ['release', 'current'];
     // Overwrite should be done in /release and /current
     foreach ($overwriteReleases as $overwriteRelease) {
-        if (test('[ -L {{deploy_path}}/' . $overwriteRelease . ' ]')) {
-            $overwriteReleasePath = get('deploy_path') . '/' . $overwriteRelease;
+        $overwriteReleasePath = get('deploy_path') . '/' . $overwriteRelease;
+        if (test("[ -L $overwriteReleasePath ]")) {
 
             $entrypointInjectStartComment = "\n\n// deployer extended buffering request code START\n";
             $entrypointInjectEndComment = "\n// deployer extended buffering request code END\n\n";
@@ -31,11 +31,9 @@ task('buffer:start', function () {
                     $entrypointInject = $buffer['entrypoint_inject'];
                 } else {
                     $entrypointInject =
-                        $entrypointInjectStartComment
-                        . "isset(\$_SERVER['HTTP_X_DEPLOYER_DEPLOYMENT']) && \$_SERVER['HTTP_X_DEPLOYER_DEPLOYMENT'] == '{{random}}' ? \$deployerExtendedEnableBufferLock = false: \$deployerExtendedEnableBufferLock = true;\n"
+                        "isset(\$_SERVER['HTTP_X_DEPLOYER_DEPLOYMENT']) && \$_SERVER['HTTP_X_DEPLOYER_DEPLOYMENT'] == '{{random}}' ? \$deployerExtendedEnableBufferLock = false: \$deployerExtendedEnableBufferLock = true;\n"
                         . "isset(\$_ENV['DEPLOYER_DEPLOYMENT']) && \$_ENV['DEPLOYER_DEPLOYMENT'] == '{{random}}' ? \$deployerExtendedEnableBufferLock = false: \$deployerExtendedEnableBufferLock = true;\n"
-                        . "while (file_exists(__DIR__ . '/$lockerFilename') && \$deployerExtendedEnableBufferLock) {\n    usleep(200000);\n    clearstatcache(true, __DIR__ . '/$lockerFilename');\n}"
-                        . $entrypointInjectEndComment;
+                        . "while (file_exists(__DIR__ . '/$lockerFilename') && \$deployerExtendedEnableBufferLock) {\n    usleep(200000);\n    clearstatcache(true, __DIR__ . '/$lockerFilename');\n}";
                 }
                 $entrypointFileContent = trim(run('cd {{release_path}} && [ -f {{web_path}}' . $entrypointFilename . ' ] && cat {{web_path}}' . $entrypointFilename . ' || echo ""')->toString());
                 if (strpos($entrypointFileContent, $entrypointInjectStartComment) === false) {
@@ -44,7 +42,7 @@ task('buffer:start', function () {
                         if ($pos !== false) {
                             $content = substr_replace($entrypointFileContent,
                                 $entrypointNeedle .
-                                $entrypointInject, $pos,
+                                $entrypointInjectStartComment . $entrypointInject . $entrypointInjectEndComment, $pos,
                                 strlen($entrypointNeedle));
 
                             run('cd ' . $overwriteReleasePath . '  && echo ' . escapeshellarg($content) . ' > {{web_path}}' . $entrypointFilename . '{{random}}');
