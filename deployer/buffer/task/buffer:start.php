@@ -57,4 +57,4 @@ task('buffer:start', function () {
             }
         }
     }
-})->desc('Start buffering reqests to all application entrypoints.');
+})->desc('Start buffering reqests to application entrypoints.');
