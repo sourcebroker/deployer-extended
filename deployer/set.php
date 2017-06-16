@@ -56,4 +56,3 @@ set('local/bin/composer', function () {
     }
     return $composerBin;
 });
-
