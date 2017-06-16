@@ -227,4 +227,4 @@ To-Do list
 Changelog
 ---------
 
-See https://github.com/sourcebroker/deployer-extended/CHANGELOG.rst
+See https://github.com/sourcebroker/deployer-extended/blob/master/CHANGELOG.rst
