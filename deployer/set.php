@@ -57,17 +57,3 @@ set('local/bin/composer', function () {
     return $composerBin;
 });
 
-set('current_server', function () {
-    try {
-        $currentServer = Deployer::get()->environments[get('instance')];
-    } catch (\RuntimeException $e) {
-        $servers = '';
-        $i = 1;
-        foreach (Deployer::get()->environments as $key => $server) {
-            $servers .= "\n" . $i++ . '. ' . $key;
-        }
-        throw new \RuntimeException("Name of instance \"" . get('instance') . "\" is not on the server list:" . $servers
-            . "\nPlease check case sensitive. [Error code: 1458412947]");
-    }
-    return $currentServer;
-});
