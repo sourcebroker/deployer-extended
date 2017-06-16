@@ -187,8 +187,8 @@ Options:
   | SQL that will be executed after importing database on current instance.
 
 |
-There is support to synchronise more than one database.
-
+There is support to synchronise more than one database. Below and example for two database config.
+All of the arrays in each database defined by key will be merged.
 ::
 
    set(
@@ -210,7 +210,8 @@ There is support to synchronise more than one database.
                    'user' => 'bar',
                    'password' => 'barpass',
                ],
-               get('db_default')
+               get('db_default'),
+               get('current_dir') . '/path/to/file/with/config_array.php'
            ],
        ]
    );
@@ -615,6 +616,62 @@ To-Do list
 
 Changelist
 ----------
+
+3.0.0
+~~~~~
+
+Flatten structure of databases settings for database tasks.
+
+Structure was:
+::
+
+ set(
+       'db_databases',
+       [
+           ['database_foo' => [
+                   'host' => '127.0.0.1',
+                   'database' => 'foo',
+                   'user' => 'foo',
+                   'password' => 'foopass',
+                  ]
+           ],
+           ['database_foo' => get('db_default')]
+           ['database_bar' => [
+                   'host' => '127.0.0.1',
+                   'database' => 'bar',
+                   'user' => 'bar',
+                   'password' => 'barpass',
+                  ],
+           ],
+           ['database_bar' => get('db_default')]
+           ['database_bar' => '/aboslute/path/to/file/with/config_array.php']
+       ]
+   );
+
+Should be now:
+::
+
+ set(
+       'db_databases',
+       [
+           'database_foo' => [
+               [
+                   'host' => '127.0.0.1',
+                   'database' => 'foo',
+                   'user' => 'foo',
+                   'password' => 'foopass',
+               ],
+               get('db_default'),
+               '/aboslute/path/to/file/with/config_array.php'
+           ],
+           'database_bar' => [
+               get('db_default'),
+               '/aboslute/path/to/file/with/config_array.php'
+           ],
+       ]
+   );
+
+All of the arrays in each database defined by key will be merged.
 
 2.0.0
 ~~~~~
