@@ -2,8 +2,6 @@
 
 namespace Deployer;
 
-require_once 'recipe/common.php';
-
 // deployer default settings overrides
 set('ssh_type', 'native');
 set('ssh_multiplexing', true);
@@ -55,4 +53,13 @@ set('local/bin/composer', function () {
         throw new \RuntimeException("No composer found or can be installed on current instance. [Error code: 1496953936]");
     }
     return $composerBin;
+});
+
+set('current_dir', function () {
+    $current = getcwd();
+    if (is_dir($current) && file_exists($current . '/deploy.php')) {
+        return $current;
+    } else {
+        throw new \RuntimeException('Can not set "current_dir" var. Are you in folder with deploy.php file?');
+    }
 });
