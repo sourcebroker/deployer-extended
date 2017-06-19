@@ -22,6 +22,7 @@ What does it do?
 
 The package provides additional tasks for deployer (deployer.org).
 
+**NOTE! Its tested only with Deployer 4.3.0!**
 
 Installation
 ------------
