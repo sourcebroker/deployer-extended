@@ -8,8 +8,8 @@ task('buffer:stop', function () {
     // get('releases_list') is cached by deployer on first call in other task so it does not have the latest release
     // this is why $releasesList[0] have last release and not current.
     $overwriteReleases = ['current'];
-    if (!empty($releasesList[0])) {
-        $overwriteReleases[] = $releasesList[0];
+    if (isset($releasesList[0])) {
+        $overwriteReleases[] = 'releases/' . $releasesList[0];
     }
     foreach ($overwriteReleases as $overwriteRelease) {
         $overwriteReleasePath = get('deploy_path') . '/' . $overwriteRelease;
