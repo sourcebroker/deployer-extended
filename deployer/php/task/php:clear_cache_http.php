@@ -38,9 +38,4 @@ task('php:clear_cache_http', function () {
             runLocally('php -r \'file_get_contents("' . $defaultPublicUrl . $fileName . '");\'', 15);
             break;
     }
-
-    // Do not remove this file to have ability to call the same fileName again. This prevents problems with real_cache
-    // when "current/" folder still points to old release directory and Apache is trying to find clear_cache_ file in
-    // old release path giving 404 error.
-    //run('cd {{deploy_path}} && rm -f current/' . $fileName);
 })->desc('Clear Apache/Nginx php caches for current release.');
