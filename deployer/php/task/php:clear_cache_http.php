@@ -10,8 +10,14 @@ task('php:clear_cache_http', function () {
 
     // Try to find fileName from previous release to prevent real_cache problems when "current" folder still points to
     // old release directory and Apache is giving 404 error becase clear_cache_* file does not exist in old release dir.
-    $previosClearCacheFiles = preg_split('/\R/',
-        run("find {{deploy_path}}/current/ -name 'cache_clear_*'")->toString());
+    $releasesList = get('releases_list');
+    // get('releases_list') is cached by deployer on first call in other task so it does not have the latest release
+    // this is why $releasesList[0] have last release and not current.
+    $previosClearCacheFiles = null;
+    if(isset($releasesList[0]) && test('[ -e {{deploy_path}}/releases/' . $releasesList[0] . ' ]')) {
+        $previosClearCacheFiles = preg_split('/\R/',
+            run("find {{deploy_path}}/releases/" . $releasesList[0] . " -name 'cache_clear_*'")->toString());
+    }
     if (!empty($previosClearCacheFiles) && isset($previosClearCacheFiles[0]) && !empty($previosClearCacheFiles[0])) {
         $fileName = pathinfo($previosClearCacheFiles[0], PATHINFO_BASENAME);
     } else {
