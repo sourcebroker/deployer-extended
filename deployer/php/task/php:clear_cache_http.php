@@ -3,22 +3,22 @@
 namespace Deployer;
 
 task('php:clear_cache_http', function () {
-    $fileName = "cache_clear_" . get('random') . '.php';
-    $phpCode = <<<EOT
-<?php
-clearstatcache(true);
-if(function_exists('opcache_reset')) opcache_reset();
-if(function_exists('eaccelerator_clear')) eaccelerator_clear();
-EOT;
+    $phpCode = "<?php\n"
+        . "clearstatcache(true);\n"
+        . "if(function_exists('opcache_reset')) opcache_reset();\n"
+        . "if(function_exists('eaccelerator_clear')) eaccelerator_clear();";
 
-    $path = get('temp_dir') . md5($fileName . get('random'));
-    file_put_contents($path, $phpCode);
-
+    // Try to find fileName from previous release to prevent real_cache problems when "current" folder still points to
+    // old release directory and Apache is giving 404 error becase clear_cache_* file does not exist in old release dir.
+    $previosClearCacheFiles = preg_split('/\R/',
+        run("find {{deploy_path}}/current/ -name 'cache_clear_*'")->toString());
+    if (!empty($previosClearCacheFiles) && isset($previosClearCacheFiles[0]) && !empty($previosClearCacheFiles[0])) {
+        $fileName = pathinfo($previosClearCacheFiles[0], PATHINFO_BASENAME);
+    } else {
+        $fileName = "cache_clear_" . get('random') . '.php';
+    }
     if (run('if [ -L {{deploy_path}}/current ] ; then echo true; fi')->toBool()) {
-        upload($path, "{{deploy_path}}/current/" . $fileName);
-        if (file_exists($path)) {
-            unlink($path);
-        }
+        run('cd {{deploy_path}}/current && echo ' . escapeshellarg($phpCode) . ' > ' . $fileName);
     }
 
     $publicUrls = get('public_urls');
@@ -38,5 +38,9 @@ EOT;
             runLocally('php -r \'file_get_contents("' . $defaultPublicUrl . $fileName . '");\'', 15);
             break;
     }
-    run('cd {{deploy_path}} && rm -f current/' . $fileName);
+
+    // Do not remove this file to have ability to call the same fileName again. This prevents problems with real_cache
+    // when "current/" folder still points to old release directory and Apache is trying to find clear_cache_ file in
+    // old release path giving 404 error.
+    //run('cd {{deploy_path}} && rm -f current/' . $fileName);
 })->desc('Clear Apache/Nginx php caches for current release.');
