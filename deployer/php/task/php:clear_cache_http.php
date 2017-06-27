@@ -14,7 +14,7 @@ task('php:clear_cache_http', function () {
     // get('releases_list') is cached by deployer on first call in other task so it does not have the latest release
     // this is why $releasesList[0] have last release and not current.
     $previosClearCacheFiles = null;
-    if(isset($releasesList[0]) && test('[ -e {{deploy_path}}/releases/' . $releasesList[0] . ' ]')) {
+    if (isset($releasesList[0]) && test('[ -e {{deploy_path}}/releases/' . $releasesList[0] . ' ]')) {
         $previosClearCacheFiles = preg_split('/\R/',
             run("find {{deploy_path}}/releases/" . $releasesList[0] . "/{{web_path}} -name 'cache_clear_*'")->toString());
     }
