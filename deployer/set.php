@@ -2,20 +2,30 @@
 
 namespace Deployer;
 
-// deployer default settings overrides
+// SOME DEFAULT VARS SPECIFIC FOR DEPLOYER
+
+// Turn on the fast defaults
 set('ssh_type', 'native');
 set('ssh_multiplexing', true);
 
-// some default vars specific for deployer-extended
+
+// SOME DEFAULT VARS SPECIFIC FOR DEPLOYER-EXTENDED
+
+// Common random that can be used between tasks. Must be in form that can be used directly in filename!
 set('random', md5(time() . rand()));
+
+// Path to public when not in root of project. Must be like "pub/" so without starting slash and with ending slash.
 set('web_path', '');
-set('temp_dir', sys_get_temp_dir() . '/');
+
+// Declare the way you want to fetch remote files on current instance. Options are "wget" / "file_get_content".
 set('fetch_method', 'wget');
 
+// Return path to php on current instance
 set('local/bin/php', function () {
     return runLocally('which php')->toString();
 });
 
+// Return path to composer on current instance
 set('local/bin/composer', function () {
     $composerBin = null;
     //check for composer in local project
@@ -55,6 +65,7 @@ set('local/bin/composer', function () {
     return $composerBin;
 });
 
+// We assume deploy.php is in project root.
 set('current_dir', function () {
     $current = getcwd();
     if (is_dir($current) && file_exists($current . '/deploy.php')) {
@@ -63,3 +74,6 @@ set('current_dir', function () {
         throw new \RuntimeException('Can not set "current_dir" var. Are you in folder with deploy.php file?');
     }
 });
+
+// TODO: REMOVE this var in some major change
+set('temp_dir', sys_get_temp_dir() . '/');
