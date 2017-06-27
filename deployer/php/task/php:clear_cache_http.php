@@ -16,7 +16,7 @@ task('php:clear_cache_http', function () {
     $previosClearCacheFiles = null;
     if(isset($releasesList[0]) && test('[ -e {{deploy_path}}/releases/' . $releasesList[0] . ' ]')) {
         $previosClearCacheFiles = preg_split('/\R/',
-            run("find {{deploy_path}}/releases/" . $releasesList[0] . " -name 'cache_clear_*'")->toString());
+            run("find {{deploy_path}}/releases/" . $releasesList[0] . "/{{web_path}} -name 'cache_clear_*'")->toString());
     }
     if (!empty($previosClearCacheFiles) && isset($previosClearCacheFiles[0]) && !empty($previosClearCacheFiles[0])) {
         $fileName = pathinfo($previosClearCacheFiles[0], PATHINFO_BASENAME);
@@ -24,7 +24,7 @@ task('php:clear_cache_http', function () {
         $fileName = "cache_clear_" . get('random') . '.php';
     }
     if (run('if [ -L {{deploy_path}}/current ] ; then echo true; fi')->toBool()) {
-        run('cd {{deploy_path}}/current && echo ' . escapeshellarg($phpCode) . ' > ' . $fileName);
+        run('cd {{deploy_path}}/current/{{web_path}} && echo ' . escapeshellarg($phpCode) . ' > ' . $fileName);
     }
 
     $publicUrls = get('public_urls');
