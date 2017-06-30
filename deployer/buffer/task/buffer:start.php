@@ -43,9 +43,13 @@ task('buffer:start', function () {
                                 $entrypointNeedle .
                                 $entrypointInjectStartComment . $entrypointInject . $entrypointInjectEndComment, $pos,
                                 strlen($entrypointNeedle));
+                            $entrypointAbsoluteTmpPath = parse($overwriteReleasePath . '/{{web_path}}' . $entrypointFilename . '{{random}}');
+                            $entrypointAbsolutePath = parse($overwriteReleasePath . '/{{web_path}}' . $entrypointFilename);
 
-                            run('cd ' . $overwriteReleasePath . '  && echo ' . escapeshellarg($content) . ' > {{web_path}}' . $entrypointFilename . '{{random}}');
-                            run('mv -T ' . $overwriteReleasePath . '/{{web_path}}' . $entrypointFilename . '{{random}} ' . $overwriteReleasePath . '/{{web_path}}' . $entrypointFilename);
+                            // cp -pt will create copy preserving the paermissions
+                            run('cp -pt ' . $entrypointAbsolutePath . ' ' . $entrypointAbsoluteTmpPath);
+                            run('echo ' . escapeshellarg($content) . ' > ' . $entrypointAbsoluteTmpPath);
+                            run('mv -T ' . $entrypointAbsoluteTmpPath . ' ' . $entrypointAbsolutePath);
                         } else {
                             throw new \RuntimeException('Can not find needle to inject with inclusion');
                         }
