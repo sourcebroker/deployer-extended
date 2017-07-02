@@ -48,9 +48,9 @@ Installation
      monolog/monolog version because they are most common between projects. In that case use deployer installed as
      composer package and resolve the dependency problems on composer level. Example of error when you run "dep" command
      and there are dependencies problems:
-     ::
+   ::
 
-        Fatal error: Declaration of Symfony\Component\Console\Input\ArrayInput::hasParameterOption() must be compatible with Symfony\Component\Console\Input\InputInterface::hasParameterOption($values, $onlyParams = false) in /.../vendor/symfony/symfony/src/Symfony/Component/Console/Input/ArrayInput.php on line 190
+      Fatal error: Declaration of Symfony\Component\Console\Input\ArrayInput::hasParameterOption() must be compatible with Symfony\Component\Console\Input\InputInterface::hasParameterOption($values, $onlyParams = false) in /.../vendor/symfony/symfony/src/Symfony/Component/Console/Input/ArrayInput.php on line 190
 
 
 Task's documentation
