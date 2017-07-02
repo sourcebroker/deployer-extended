@@ -29,7 +29,7 @@ Installation
 1) Install package with composer:
    ::
 
-   composer require sourcebroker/deployer-extended
+      composer require sourcebroker/deployer-extended
 
 2) If you are using deployer as composer package then just put following line in your deploy.php:
    ::
