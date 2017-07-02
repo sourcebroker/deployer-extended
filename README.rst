@@ -34,13 +34,13 @@ Installation
 2) If you are using deployer as composer package then just put following line in your deploy.php:
    ::
 
-      new \SourceBroker\DeployerExtendedTypo3\Loader();
+      new \SourceBroker\DeployerExtended\Loader();
 
 3) If you are using deployer as phar then put following lines in your deploy.php:
    ::
 
       require __DIR__ . '/vendor/autoload.php';
-      new \SourceBroker\DeployerExtendedTypo3\Loader();
+      new \SourceBroker\DeployerExtended\Loader();
 
    | IMPORTANT NOTE!
    | Because there is inclusion of '/vendor/autoload.php' inside deployer realm then sometimes there can be conflict
