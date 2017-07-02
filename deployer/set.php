@@ -60,7 +60,7 @@ set('local/bin/composer', function () {
         }
     }
     if (empty($composerBin)) {
-        throw new \RuntimeException("No composer found or can be installed on current instance. [Error code: 1496953936]");
+        throw new \Exception("No composer found or can be installed on current instance.");
     }
     return $composerBin;
 });
@@ -71,6 +71,6 @@ set('current_dir', function () {
     if (is_dir($current) && file_exists($current . '/deploy.php')) {
         return $current;
     } else {
-        throw new \RuntimeException('Can not set "current_dir" var. Are you in folder with deploy.php file?');
+        throw new \Exception('Can not set "current_dir" var. Are you in folder with deploy.php file?');
     }
 });

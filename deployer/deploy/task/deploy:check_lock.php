@@ -10,6 +10,6 @@ task('deploy:check_lock', function () {
         } else {
             $message = 'Deployment stopped! There is deploy.lock file.';
         }
-        throw new \RuntimeException($message);
+        throw new \Exception($message);
     }
 })->desc('Check for deploy.lock file existence and stop deploy if there.');

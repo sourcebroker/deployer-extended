@@ -2,7 +2,6 @@
 
 namespace Deployer;
 
-use Deployer\Exception\Exception;
 use SourceBroker\DeployerExtended\Utility\FileUtility;
 
 task('config:vhost_apache', function () {
@@ -37,9 +36,9 @@ task('config:vhost_apache', function () {
                 writeln(parse('You did not set "VHOST_PATH" env var so we do not know where to copy generated vhosts. This is why vhost was stored in {{current_dir}} so you can move it manually.'));
             }
         } else {
-            throw new Exception(parse('There is already vhost with the name {{reponame}}.conf at directory {{vhost_path}}. This is why vhost was stored in {{current_dir}} so you can move it manually.'));
+            throw new \Exception(parse('There is already vhost with the name {{reponame}}.conf at directory {{vhost_path}}. This is why vhost was stored in {{current_dir}} so you can move it manually.'));
         }
     } else {
-        throw new Exception('"public_urls" var was not set for server. Vhost can not be generated without it.');
+        throw new \Exception('"public_urls" var was not set for server. Vhost can not be generated without it.');
     }
 })->desc('Create vhost and copy to env path set in "VHOST_PATH"');

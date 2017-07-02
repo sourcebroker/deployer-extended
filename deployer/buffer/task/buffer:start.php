@@ -4,14 +4,13 @@ namespace Deployer;
 
 task('buffer:start', function () {
     if (empty(get('deploy_path'))) {
-        throw new \RuntimeException('The "deploy_path" var is empty. [Error: 1498989780841]');
+        throw new \Exception('The "deploy_path" var is empty.');
     }
     if (empty(get('random'))) {
-        throw new \RuntimeException('The "random" var is empty. [Error: 1498989790330]');
+        throw new \Exception('The "random" var is empty.');
     }
     if (preg_match('/^[a-zA-Z0-9]$/', get('random'))) {
-        throw new \RuntimeException('The "random" var should be only /^[a-zA-Z0-9]$/ because its used in filenames. 
-        [Error: 1498989790330]');
+        throw new \Exception('The "random" var should be only /^[a-zA-Z0-9]$/ because its used in filenames.');
     }
     $overwriteReleases = ['release', 'current'];
     foreach ($overwriteReleases as $overwriteRelease) {
@@ -23,7 +22,7 @@ task('buffer:start', function () {
             $entrypointInjectEndComment = "\n// deployer extended buffering request code END\n\n";
             foreach ((array)get('buffer_config') as $key => $buffer) {
                 if (empty($buffer['entrypoint_filename'])) {
-                    throw new \RuntimeException('entrypoint_filename not set for buffer_data [Error: 1498990095089]');
+                    throw new \Exception('entrypoint_filename not set for buffer_data');
                 }
                 $entrypointFilename = $buffer['entrypoint_filename'];
                 if (empty($buffer['entrypoint_needle'])) {
@@ -58,10 +57,10 @@ task('buffer:start', function () {
                             run('echo ' . escapeshellarg($content) . ' > ' . $tempPath . '/' . basename($entrypointAbsolutePath));
                             run('mv -T ' . $tempPath . '/' . basename($entrypointAbsolutePath) . ' ' . $entrypointAbsolutePath);
                         } else {
-                            throw new \RuntimeException('Can not find needle to inject with inclusion. [Error: 1498990135243]');
+                            throw new \Exception('Can not find needle to inject with inclusion.');
                         }
                     } else {
-                        throw new \RuntimeException('Can not find file to overwrite or the file is empty. File that was read is: ' . $overwriteReleasePath . '/' . $entrypointFilename . '. [Error: 1498990146197]');
+                        throw new \Exception('Can not find file to overwrite or the file is empty. File that was read is: ' . $overwriteReleasePath . '/' . $entrypointFilename . '.');
                     }
                 }
                 run('cd ' . $overwriteReleasePath . ' && touch ' . (dirname($entrypointFilename) ? dirname($entrypointFilename) . '/' : '') . $lockerFilename);

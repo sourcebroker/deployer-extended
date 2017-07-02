@@ -29,7 +29,7 @@ task('php:clear_cache_http', function () {
 
     $publicUrls = get('public_urls');
     if (!count($publicUrls)) {
-        throw new \Deployer\Exception\ConfigurationException('You need at least one "public_url" to call task cache:frontendreset');
+        throw new \Exception('You need at least one "public_url" to call task cache:frontendreset');
     }
 
     $defaultPublicUrl = rtrim(get('public_urls')[0], '/') . '/';
