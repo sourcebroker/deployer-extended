@@ -26,9 +26,31 @@ The package provides additional tasks for deployer (deployer.org).
 
 Installation
 ------------
-::
+1) Install package with composer:
+   ::
 
    composer require sourcebroker/deployer-extended
+
+2) If you are using deployer as composer package then just put following line in your deploy.php:
+   ::
+
+      new \SourceBroker\DeployerExtendedTypo3\Loader();
+
+3) If you are using deployer as phar then put following lines in your deploy.php:
+   ::
+
+      require __DIR__ . '/vendor/autoload.php';
+      new \SourceBroker\DeployerExtendedTypo3\Loader();
+
+   | IMPORTANT NOTE!
+   | Because there is inclusion of '/vendor/autoload.php' inside deployer realm then sometimes there can be conflict
+     of deployer dependencies with you project dependencies. Quite often its about symfony/console version or
+     monolog/monolog version because they are most common between projects. In that case use deployer installed as
+     composer package and resolve the dependency problems on composer level. Example of error when you run "dep" command
+     and there are dependencies problems:
+     ::
+
+      Fatal error: Declaration of Symfony\Component\Console\Input\ArrayInput::hasParameterOption() must be compatible with Symfony\Component\Console\Input\InputInterface::hasParameterOption($values, $onlyParams = false) in /.../vendor/symfony/symfony/src/Symfony/Component/Console/Input/ArrayInput.php on line 190
 
 
 Task's documentation
