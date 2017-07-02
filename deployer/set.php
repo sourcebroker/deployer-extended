@@ -74,6 +74,3 @@ set('current_dir', function () {
         throw new \RuntimeException('Can not set "current_dir" var. Are you in folder with deploy.php file?');
     }
 });
-
-// TODO: REMOVE this var in some major change
-set('temp_dir', sys_get_temp_dir() . '/');
