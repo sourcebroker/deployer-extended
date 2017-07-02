@@ -2,6 +2,23 @@
 Changelog
 ---------
 
+6.0.0
+~~~~~
+
+a) Start entrypoints in task "buffer:start" and "buffer:stop" from deploy_path and not form web_path
+b) Remove not used var "tmp_dir".
+
+5.1.0
+~~~~~
+
+a) Rework of php:clear_cache_http. Look for old clear_cache file in previous release.
+
+5.0.0
+~~~~~
+
+a) Remove autoload of recipes. From now an object of class Loader must be created that will load
+   the recipes.
+
 4.0.0
 ~~~~~
 
