@@ -60,7 +60,7 @@ task('buffer:start', function () {
                             throw new \Exception('Can not find needle to inject with inclusion.');
                         }
                     } else {
-                        throw new \Exception('Can not find file to overwrite or the file is empty. File that was read is: ' . $overwriteReleasePath . '/' . $entrypointFilename . '.');
+                        throw new \Exception('Can not find file to overwrite or the file is empty. File that was read is: ' . $overwriteReleasePath . $entrypointFilename);
                     }
                 }
                 run('cd ' . $overwriteReleasePath . ' && touch ' . (dirname($entrypointFilename) ? dirname($entrypointFilename) . '/' : '') . $lockerFilename);
