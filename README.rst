@@ -89,6 +89,14 @@ Options:
   | A "needle" in "entrypoint_filename" after which the php code from "entrypoint_inject" will be injected.
   |
 
+  |
+- | **entrypoint_refresh**
+  | *required:* no
+  | *default value:* 200000 microseconds (200ms)
+  |
+  | How often the entrypoint will recheck if buffer.lock is still there.
+  |
+
 - | **entrypoint_inject**
   | *required:* no
   |

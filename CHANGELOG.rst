@@ -6,6 +6,7 @@ Changelog
 ~~~~~
 
 a) Add option to buffer:start to auto remove lock files after some time.
+b) Add option "entrypoint_refresh"
 
 6.0.0
 ~~~~~
