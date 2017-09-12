@@ -2,6 +2,17 @@
 Changelog
 ---------
 
+6.1.2
+~~~~~
+
+a) Fix missing changelog.
+
+6.1.1
+~~~~~
+
+a) Fix hardcoded locker file name.
+b) Docs update.
+
 6.1.0
 ~~~~~
 
