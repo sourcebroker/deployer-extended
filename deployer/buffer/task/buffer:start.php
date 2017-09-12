@@ -52,7 +52,7 @@ task('buffer:start', function () {
                         . "while (file_exists(__DIR__ . '/$lockerFilename') && \$deployerExtendedEnableBufferLock) {\n"
                         . "    usleep($entrypointRefresh);\n"
                         . "    clearstatcache(true, __DIR__ . '/$lockerFilename');\n"
-                        . "    if(time() - filectime(__DIR__ . '/buffer.lock') > $lockerExpire) unlink(__DIR__ . '/buffer.lock');\n"
+                        . "    if(time() - filectime(__DIR__ . '/$lockerFilename') > $lockerExpire) unlink(__DIR__ . '/$lockerFilename');\n"
                         . "}";
                 } else {
                     $entrypointInject = $buffer['entrypoint_inject'];
