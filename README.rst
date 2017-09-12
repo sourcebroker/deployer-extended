@@ -69,7 +69,7 @@ The request are buffered but at the same time if you set special http header (by
 with special value you will be able to make regular request. This can be very handy to check if the application
 is working at all after switch (symliking to current) and to warm up some caches.
 
-When you run `buffer:stop`_ all the waiting requests will hit the https server (or cli entrypoint).
+When you run `buffer:stop`_ all the waiting requests will hit the http server (or cli entrypoint).
 
 The entrypoints are taken from variable "buffer_config" which is array of entrypoints configurations.
 
@@ -87,21 +87,21 @@ Options:
   | *default value:* <?php
   |
   | A "needle" in "entrypoint_filename" after which the php code from "entrypoint_inject" will be injected.
-  |
 
   |
 - | **entrypoint_refresh**
   | *required:* no
-  | *default value:* 200000 microseconds (200ms)
+  | *default value:* 200000 μs (200ms)
   |
-  | How often the entrypoint will recheck if buffer.lock is still there.
+  | How often the entrypoint will recheck if buffer.lock is still there. Values in microseconds.
+  | 100000 μs = 100 ms = 0,1 s.
   |
 
 - | **entrypoint_inject**
   | *required:* no
   |
   | A php code that actually do the buffering.
-  | The default code with already prefilled variables (random, locker_filename):
+  | The default code with already prefilled variables (random, locker_filename, locker_expire, entrypoint_refresh):
   ::
 
        isset($_SERVER['HTTP_X_DEPLOYER_DEPLOYMENT']) && $_SERVER['HTTP_X_DEPLOYER_DEPLOYMENT'] == '823094823094' ? $deployerExtendedEnableBufferLock = false : $deployerExtendedEnableBufferLock = true;
@@ -246,7 +246,6 @@ file\:rm2steps\:2
 +++++++++++++++++
 
 The second step of file:rm2steps tandem. Read more on `file:rm2steps:1`_
-
 
 
 php
