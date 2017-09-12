@@ -2,6 +2,11 @@
 Changelog
 ---------
 
+6.1.0
+~~~~~
+
+a) Add option to buffer:start to auto remove lock files after some time.
+
 6.0.0
 ~~~~~
 

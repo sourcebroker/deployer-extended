@@ -101,16 +101,29 @@ Options:
        while (file_exists(__DIR__ . 'buffer.lock') && $deployerExtendedEnableBufferLock) {
          usleep(200000);
          clearstatcache(true, __DIR__ . '/buffer.lock');
+         if(time() - filectime(__DIR__ . '/buffer.lock') > 60) unlink(__DIR__ . '/buffer.lock');
        }
 
 
 - | **locker_filename**
   | *required:* no
-  | *default value* buffer.lock
+  | *default value:* buffer.lock
   |
   | When file with name "buffer.lock" exists the reqests are buffered. The task `buffer:stop`_ just removes
     the "buffer.lock" files without removing the "entrypoint_inject" code.
   |
+
+- | **locker_expire**
+  | *required:* no
+  | *default value:* 60
+  |
+  | The time in seconds after which the buffer.lock files will be removed automatically.
+  |
+  | Usually its buffer:stop task that should remove buffer.lock files. Unfortunatly sometimes deploy can fail. If deploy
+  | will fail after buffer:start task and before buffer:stop then the buffer.lock files will stay and block access to
+  | entrypoints for good. In edge cases it can lead to run out all apache forks or if CLI entrypoint will be called
+  | often by cron it can overload RAM. This is why its important to remove buffer.lock files after some time no matter
+  | if the task buffer:stop will be called or not.
 
 The simplest configuration example:
 ::

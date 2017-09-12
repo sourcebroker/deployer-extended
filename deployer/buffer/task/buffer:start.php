@@ -35,11 +35,20 @@ task('buffer:start', function () {
                 } else {
                     $lockerFilename = $buffer['locker_filename'];
                 }
+                if (empty($buffer['locker_expire'])) {
+                    $lockerExpire = 60;
+                } else {
+                    $lockerExpire = intval($buffer['locker_expire']);
+                }
                 if (empty($buffer['entrypoint_inject'])) {
                     $entrypointInject =
                         "isset(\$_SERVER['HTTP_X_DEPLOYER_DEPLOYMENT']) && \$_SERVER['HTTP_X_DEPLOYER_DEPLOYMENT'] == '{{random}}' ? \$deployerExtendedEnableBufferLock = false: \$deployerExtendedEnableBufferLock = true;\n"
                         . "isset(\$_ENV['DEPLOYER_DEPLOYMENT']) && \$_ENV['DEPLOYER_DEPLOYMENT'] == '{{random}}' ? \$deployerExtendedEnableBufferLock = false: \$deployerExtendedEnableBufferLock = true;\n"
-                        . "while (file_exists(__DIR__ . '/$lockerFilename') && \$deployerExtendedEnableBufferLock) {\n    usleep(200000);\n    clearstatcache(true, __DIR__ . '/$lockerFilename');\n}";
+                        . "while (file_exists(__DIR__ . '/$lockerFilename') && \$deployerExtendedEnableBufferLock) {\n"
+                        . "    usleep(200000);\n"
+                        . "    clearstatcache(true, __DIR__ . '/$lockerFilename');\n"
+                        . "    if(time() - filectime(__DIR__ . '/buffer.lock') > $lockerExpire) unlink(__DIR__ . '/buffer.lock');\n"
+                        . "}";
                 } else {
                     $entrypointInject = $buffer['entrypoint_inject'];
                 }
