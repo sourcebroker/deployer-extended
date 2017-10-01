@@ -2,6 +2,11 @@
 Changelog
 ---------
 
+6.1.3
+~~~~~
+
+a) [BUGFIX] Fix problem when few request want to delete the same file in buffer tasks.
+
 6.1.2
 ~~~~~
 
