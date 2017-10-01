@@ -6,6 +6,7 @@ Changelog
 ~~~~~
 
 a) [BUGFIX] Fix problem when few request want to delete the same file in buffer tasks.
+b) [TASK] Increase req for php to 5.6 as deployer does not work with php 5.4.
 
 6.1.2
 ~~~~~
