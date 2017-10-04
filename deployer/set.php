@@ -25,6 +25,16 @@ set('local/bin/php', function () {
     return runLocally('which php')->toString();
 });
 
+// Return path to curl on current instance
+set('local/bin/curl', function () {
+    return runLocally('which curl')->toString();
+});
+
+// Return path to wget on current instance
+set('local/bin/wget', function () {
+    return runLocally('which wget')->toString();
+});
+
 // Return path to composer on current instance
 set('local/bin/composer', function () {
     $composerBin = null;

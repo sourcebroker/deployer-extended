@@ -2,16 +2,16 @@ deployer-extended
 =================
 
 .. image:: https://styleci.io/repos/82486796/shield?branch=master
-   :target: https://styleci.io/repos/82486796
+    :target: https://styleci.io/repos/82486796
 
 .. image:: https://scrutinizer-ci.com/g/sourcebroker/deployer-extended/badges/quality-score.png?b=master
-   :target: https://scrutinizer-ci.com/g/sourcebroker/deployer-extended/?branch=master
+    :target: https://scrutinizer-ci.com/g/sourcebroker/deployer-extended/?branch=master
 
 .. image:: http://img.shields.io/packagist/v/sourcebroker/deployer-extended.svg?style=flat
-   :target: https://packagist.org/packages/sourcebroker/deployer-extended
+    :target: https://packagist.org/packages/sourcebroker/deployer-extended
 
 .. image:: https://img.shields.io/badge/license-MIT-blue.svg?style=flat
-   :target: https://packagist.org/packages/sourcebroker/deployer-extended
+    :target: https://packagist.org/packages/sourcebroker/deployer-extended
 
 |
 
@@ -43,8 +43,9 @@ Installation
       new \SourceBroker\DeployerLoader\Load([['path' => 'vendor/sourcebroker/deployer-extended/deployer']]);
 
    | IMPORTANT NOTE!
-   | Do not put require('/vendor/autoload.php') inside your deploy.php because you can have dependency problems.
-     Use `require_once(__DIR__ . '/vendor/sourcebroker/deployer-loader/autoload.php');` instead.
+   | Do not put ``require(__DIR__ . '/vendor/autoload.php');`` inside your deploy.php because you can have dependency problems as
+     packages from your vendor will overwrite the one from deployer vendors.
+     Use ``require(__DIR__ . '/vendor/sourcebroker/deployer-loader/autoload.php');`` instead.
 
 
 Task's documentation
@@ -57,7 +58,7 @@ buffer:start
 ++++++++++++
 
 Starts buffering requests to application entrypoints. Application entrypoints means here any php file that
-can handle Apache request or handle cli calls. For most good frameworks there is only one or two entrypoints.
+can handle HTTP requests or handle CLI calls. For most good frameworks there is only few entrypoints.
 
 The request are buffered but at the same time if you set special http header (by default HTTP_X_DEPLOYER_DEPLOYMENT)
 with special value you will be able to make regular request. This can be very handy to check if the application
@@ -103,7 +104,7 @@ Options:
        while (file_exists(__DIR__ . 'buffer.lock') && $deployerExtendedEnableBufferLock) {
          usleep(200000);
          clearstatcache(true, __DIR__ . '/buffer.lock');
-         if(time() - filectime(__DIR__ . '/buffer.lock') > 60) unlink(__DIR__ . '/buffer.lock');
+         if(time() - filectime(__DIR__ . '/buffer.lock') > 60) @unlink(__DIR__ . '/buffer.lock');
        }
 
 
@@ -248,13 +249,91 @@ php
 php:clear_cache_cli
 +++++++++++++++++++
 
-This task clear the stat cache for real file pathes (http://php.net/manual/en/function.clearstatcache.php).
-Additionally it clears opcache and eaccelaeator cache for CLI context.
+This task clears the file status cache, opcache and eaccelerator cache for CLI context.
 
 php:clear_cache_http
 ++++++++++++++++++++
 
-This task clear the opcache and eaccelaeator cache for WEB context.
+This task clears the file status cache, opcache and eaccelerator cache for HTTP context. It does following:
+
+1) Creates file "cache_clear_[random].php" in "{{deploy_path}}/current" folder.
+2) Fetch this file with selected method - curl / wget / file_get_contents - by default its wget.
+3) The file is not removed after clearing cache for reason. It allows to prevent problems with realpath_cache. For
+   more infor read http://blog.jpauli.tech/2014/06/30/realpath-cache.html
+
+You must set **public_urls** configuration variable so the script knows the domain it should fetch the php script.
+Here is example:
+
+::
+
+  server('prelive', 'example.com', 22)
+    ->user('deploy')
+    ->stage('prelive')
+    ->set('deploy_path', '/home/web/html/www.example.com.prelive')
+    ->set('public_urls', ['https://prelive.example.com']);
+
+
+Task configuration variables:
+
+- | **php:clear_cache_http:phpcontent**
+  | *required:* no
+  | *type:* string
+  | *default value:*
+  ::
+
+    <?php
+      clearstatcache(true);
+      if(function_exists('opcache_reset')) opcache_reset();
+      if(function_exists('eaccelerator_clear')) eaccelerator_clear();
+
+  |
+  | Php content that will be put into dynamicaly created file that should clear the caches.
+  |
+
+- | **public_urls**
+  | *required:* yes
+  | *default value:* none
+  | *type:* array
+  |
+  | Domain used to prepare url to fetch clear cache php file. Its expected to be array so you can put there more than one
+    domain and use it for different purposes but here for this task the first domain will be taken.
+  |
+
+- | **fetch_method**
+  | *required:* no
+  | *default value:* file_get_contents
+  | *type:* string
+  |
+  | Can be one of following value:
+  | - curl,
+  | - wget,
+  | - file_get_contents
+  |
+
+- | **local/bin/curl**
+  | *required:* no
+  | *default value:* value of "which curl"
+  | *type:* string
+  |
+  | Path to curl binary on current system.
+  |
+
+- | **local/bin/wget**
+  | *required:* no
+  | *default value:* value of "which wget"
+  | *type:* string
+  |
+  | Path to wget binary on current system.
+  |
+
+- | **local/bin/php**
+  | *required:* no
+  | *type:* string
+  |
+  | Path to php binary on current system.
+  |
+
+
 
 To-Do list
 ----------
