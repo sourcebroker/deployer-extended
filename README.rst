@@ -301,13 +301,21 @@ Task configuration variables:
 
 - | **fetch_method**
   | *required:* no
-  | *default value:* file_get_contents
+  | *default value:* wget
   | *type:* string
   |
   | Can be one of following value:
   | - curl,
   | - wget,
   | - file_get_contents
+  |
+
+- | **php:clear_cache_http:timeout**
+  | *required:* no
+  | *default value:* 15
+  | *type:* integer
+  |
+  | Set the timeout in seconds for fetching php clear cache script.
   |
 
 - | **local/bin/curl**

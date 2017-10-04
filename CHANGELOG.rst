@@ -2,6 +2,25 @@
 Changelog
 ---------
 
+7.1.1
+~~~~~
+
+a) [BUGFIX] Fix wrongly set default fetch_method for "php:clear_cache_http"
+b) [DOC] Update changelog.
+
+7.1.0
+~~~~~
+
+a) [FEATURE] Add curl as additional fetch_method.
+b) [FEATURE] Add fallback when fetch_method is not set.
+c) [BUGFIX] Change wget command to not store file at all. Previous settings causes wget to return error
+   when there was no access to write on current folder. Right now there is no need to have write
+   access.
+d) [BUGFIX] Do fallback for get('public_urls', []) so right exeption is shown.
+e) [FEATURE] Introduce {{bin/local/wget}}
+f) [FEATURE] Introduce {{bin/local/curl}}
+g) [DOC] Extend documentation about task properties.
+
 7.0.0
 ~~~~~
 

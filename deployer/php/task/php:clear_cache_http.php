@@ -38,14 +38,7 @@ task('php:clear_cache_http', function () {
     }
     $clearCacheUrl = rtrim(get('public_urls')[0], '/') . '/' . $fileName;
 
-    switch (get('fetch_method', 'file_get_contents')) {
-        case 'wget':
-            runLocally(
-                '{{local/bin/wget}} -q -O /dev/null ' . escapeshellarg($clearCacheUrl),
-                get('php:clear_cache_http:timeout', 15)
-            );
-            break;
-
+    switch (get('fetch_method', 'wget')) {
         case 'curl':
             runLocally(
                 '{{local/bin/curl}} --insecure --silent --location ' . escapeshellarg($clearCacheUrl) . ' > /dev/null',
@@ -54,9 +47,16 @@ task('php:clear_cache_http', function () {
             break;
 
         case 'file_get_contents':
-        default:
             runLocally(
                 '{{local/bin/php}} -r \'file_get_contents("' . escapeshellarg($clearCacheUrl) . '");\'',
+                get('php:clear_cache_http:timeout', 15)
+            );
+            break;
+
+        case 'wget':
+        default:
+            runLocally(
+                '{{local/bin/wget}} -q -O /dev/null ' . escapeshellarg($clearCacheUrl),
                 get('php:clear_cache_http:timeout', 15)
             );
             break;
