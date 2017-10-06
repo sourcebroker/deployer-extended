@@ -2,6 +2,17 @@
 Changelog
 ---------
 
+7.1.3
+~~~~~
+
+a) [DOCS] Update changelog.
+
+
+7.1.2
+~~~~~
+
+a) [BUGFIX] In task "buffer:start" add -f (force) to mv command as on some linux distro its asking to overwrite by default.
+
 7.1.1
 ~~~~~
 
