@@ -69,7 +69,7 @@ task('buffer:start', function () {
                             $entrypointAbsolutePath = $overwriteReleasePath . $entrypointFilename;
                             run('cp -p ' . $entrypointAbsolutePath . ' ' . $tempPath . '/');
                             run('echo ' . escapeshellarg($content) . ' > ' . $tempPath . '/' . basename($entrypointAbsolutePath));
-                            run('mv -T ' . $tempPath . '/' . basename($entrypointAbsolutePath) . ' ' . $entrypointAbsolutePath);
+                            run('mv -fT ' . $tempPath . '/' . basename($entrypointAbsolutePath) . ' ' . $entrypointAbsolutePath);
                         } else {
                             throw new \Exception('Can not find needle to inject with inclusion.');
                         }
