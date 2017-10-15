@@ -3,10 +3,8 @@
 namespace Deployer;
 
 task('config:vhost_apache', function () {
-
     if (get('public_urls', false)) {
         if (is_array(get('public_urls'))) {
-
             if (get('vhost_template', false) === false) {
                 set('vhost_template', '<VirtualHost *:80>
     ServerAdmin webmaster@localhost
