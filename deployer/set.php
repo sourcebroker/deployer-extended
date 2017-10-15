@@ -2,15 +2,6 @@
 
 namespace Deployer;
 
-// SOME DEFAULT VARS SPECIFIC FOR DEPLOYER
-
-// Turn on the fast defaults
-set('ssh_type', 'native');
-set('ssh_multiplexing', true);
-
-
-// SOME DEFAULT VARS SPECIFIC FOR DEPLOYER-EXTENDED
-
 // Common random that can be used between tasks. Must be in form that can be used directly in filename!
 set('random', md5(time() . rand()));
 

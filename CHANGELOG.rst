@@ -8,7 +8,8 @@ Changelog
 a) [TASK][!!!BREAKING] Remove default set('fetch_method', 'wget'); as it should have fallback in task itself.
 b) [BUGFIX] Create lock file in buffer:start only when directory exists.
 c) [TASK] Tasks buffer:start, buffer:stop code cleanup.
-
+d) [TASK][!!!BREAKING] Remove multiplexing on from deployer-extended default config vars as it should be part of higher
+   level package.
 
 7.1.3
 ~~~~~
