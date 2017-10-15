@@ -14,6 +14,7 @@ e) [TASK][!!!BREAKING] Remove FileUtility class to make tasks more independent. 
    usage was not really big in the end.
 f) [TASK][!!!BREAKING] Refactor confg:vhost_apache task. Start of docs for this task.
 g) [TASK] Rewrite log file creation for config:vhost_apache.
+h) [TASK] Change composer.json description. Remove psr-4 as no classes.
 
 7.1.3
 ~~~~~

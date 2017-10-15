@@ -1,6 +1,6 @@
 {
   "name": "sourcebroker/deployer-extended",
-  "description": "Deployment tool for PHP - additional commands.",
+  "description": "Library with some additional tasks for deployer (deployer.org).",
   "license": "MIT",
   "keywords": [
     "deployer"
@@ -18,10 +18,5 @@
   "require": {
     "php": ">=5.6",
     "sourcebroker/deployer-loader": "^1.0.0"
-  },
-  "autoload": {
-    "psr-4": {
-      "SourceBroker\\DeployerExtended\\": "src/"
-    }
   }
 }

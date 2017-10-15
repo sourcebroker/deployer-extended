@@ -20,7 +20,7 @@ deployer-extended
 What does it do?
 ----------------
 
-The package provides additional tasks for deployer (deployer.org).
+Library with some additional tasks for deployer (deployer.org).
 
 **NOTE! Its tested only with Deployer 4.3.1!**
 
