@@ -4,7 +4,7 @@ namespace Deployer;
 
 task('buffer:stop', function () {
     if (empty(get('deploy_path'))) {
-        throw new \Exception('The "deploy_path" var is empty.');
+        throw new \Exception('The "deploy_path" var is empty but its used for file operations so its dangerous state.');
     }
     $releasesList = get('releases_list');
     // Remove lock files also from previous release because it can be still read by apache/nginx after switching.
