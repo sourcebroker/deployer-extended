@@ -179,10 +179,17 @@ Stop buffering requests to application entrypoints. It deletes "buffer.lock" fil
 config
 ~~~~~~
 
-config:vhost
+config:vhost_apache
 ++++++++++++
 
-Documentation to do.
+Allows to create vhost for project. Domains for vhost are taken from config var "public_urls". Rest of params can be
+set by config variables. Lot of them have fallback in environment vars. By default:
+
+1) ProxyPassMatch and php-fpm is used. Port for php-fpm by default is 90xx there xx is php version read from
+   composer.json file from node config/platform/php.
+2) By default access_log and error_log are configured to be stored in {(deploy_path)}/.dqp/logs folder.
+3) If vhost config filename is taken from project folder and if file with such name already exist in vhost folder then
+   a copy of that file is created and current version overwrittem.
 
 deploy
 ~~~~~~

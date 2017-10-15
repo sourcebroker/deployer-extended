@@ -12,6 +12,7 @@ d) [TASK][!!!BREAKING] Remove multiplexing on from deployer-extended default con
    level package.
 e) [TASK][!!!BREAKING] Remove FileUtility class to make tasks more independent. The method usage from this class
    usage was not really big in the end.
+f) [TASK][!!!BREAKING] Refactor confg:vhost_apache task. Start of docs for this task.
 
 7.1.3
 ~~~~~
