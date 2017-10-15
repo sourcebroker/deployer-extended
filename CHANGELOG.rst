@@ -2,6 +2,11 @@
 Changelog
 ---------
 
+8.0.0
+~~~~~
+
+a) [TASK][!!!BREAKING] Remove default set('fetch_method', 'wget'); as it should have fallback in task itself.
+
 7.1.3
 ~~~~~
 

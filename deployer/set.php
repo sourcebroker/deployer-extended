@@ -17,9 +17,6 @@ set('random', md5(time() . rand()));
 // Path to public when not in root of project. Must be like "pub/" so without starting slash and with ending slash.
 set('web_path', '');
 
-// Declare the way you want to fetch remote files on current instance. Options are "wget" / "file_get_content".
-set('fetch_method', 'wget');
-
 // Return path to php on current instance
 set('local/bin/php', function () {
     return runLocally('which php')->toString();
