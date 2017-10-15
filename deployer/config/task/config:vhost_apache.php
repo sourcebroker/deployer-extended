@@ -71,7 +71,7 @@ task('config:vhost_apache', function () {
             }
             if (get('vhost_sslcert_path', '') !== '') {
                 array_map(function ($file) {
-                    if(!file_exists(rtrim(get('vhost_sslcert_path'), '/'))) {
+                    if (!file_exists(rtrim(get('vhost_sslcert_path'), '/'))) {
                         writeln('A SSL file ' . $file . ' is missing in path: "' . get('vhost_sslcert_path') . '"');
                     }
                 }, ['domain.pem', 'domain.key', 'domain.intermediate']);
