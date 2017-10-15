@@ -6,6 +6,7 @@ Changelog
 ~~~~~
 
 a) [TASK][!!!BREAKING] Remove default set('fetch_method', 'wget'); as it should have fallback in task itself.
+b) [BUGFIX] Create lock file in buffer:start only when directory exists.
 
 7.1.3
 ~~~~~

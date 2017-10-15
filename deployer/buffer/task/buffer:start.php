@@ -77,7 +77,9 @@ task('buffer:start', function () {
                         throw new \Exception('Can not find file to overwrite or the file is empty. File that was read is: ' . $overwriteReleasePath . $entrypointFilename);
                     }
                 }
-                run('cd ' . $overwriteReleasePath . ' && touch ' . (dirname($entrypointFilename) ? dirname($entrypointFilename) . '/' : '') . $lockerFilename);
+                if (test('[ -e ' . $overwriteReleasePath . dirname($entrypointFilename) . ' ]')) {
+                    run('cd ' . $overwriteReleasePath . ' && touch ' . (dirname($entrypointFilename) ? dirname($entrypointFilename) . '/' : '') . $lockerFilename);
+                }
             }
             run('rmdir ' . $tempPath);
         }
