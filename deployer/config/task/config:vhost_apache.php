@@ -21,7 +21,7 @@ task('config:vhost_apache', function () {
         Require all granted
     </Directory>
 
-    LogFormat "%v:%p %h %l %u %t \"%r\" %>s %b \"%{Referer}i\"" vhostcombined
+    LogFormat "%v:%p %h %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-Agent}i\"" vhostcombined
     CustomLog "{{vhost_logs_path}}{{vhost_logs_access_log_filename}}" vhostcombined
     ErrorLog "{{vhost_logs_path}}{{vhost_logs_error_log_filename}}"
 </VirtualHost>
@@ -46,7 +46,7 @@ task('config:vhost_apache', function () {
     {{vhost_sslcert_path_missing}}SSLCertificateKeyFile "{{vhost_sslcert_path}}/domain.key"
     {{vhost_sslcert_path_missing}}SSLCACertificateFile "{{vhost_sslcert_path}}/domain.intermediate"
 
-    LogFormat "%v:%p %h %l %u %t \"%r\" %>s %b \"%{Referer}i\"" vhostcombined
+    LogFormat "%v:%p %h %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-Agent}i\"" vhostcombined
     CustomLog "{{vhost_logs_path}}{{vhost_logs_access_log_filename}}" vhostcombined
     ErrorLog "{{vhost_logs_path}}{{vhost_logs_error_log_filename}}"
 </VirtualHost>
