@@ -21,13 +21,9 @@ task('buffer:stop', function () {
                 throw new \Exception('entrypoint_filename not set for buffer_data');
             }
             $entrypointFilename = $buffer['entrypoint_filename'];
-            if (empty($buffer['locker_filename'])) {
-                $lockerFilename = 'buffer.lock';
-            } else {
-                $lockerFilename = $buffer['locker_filename'];
-            }
+            $lockerFilename = empty($buffer['locker_filename']) ? 'buffer.lock' : $buffer['locker_filename'];
             $entrypointDirectory = dirname($entrypointFilename) === '.' ? '' : dirname($entrypointFilename) . '/';
             run('cd ' . $overwriteReleasePath . ' && rm -f ' . $entrypointDirectory . $lockerFilename);
         }
     }
-})->desc('Stop buffering reqests to application entrypoints.');
+})->desc('Stop buffering requests to application entrypoints.');

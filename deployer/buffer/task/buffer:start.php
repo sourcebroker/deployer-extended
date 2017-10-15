@@ -4,16 +4,15 @@ namespace Deployer;
 
 task('buffer:start', function () {
     if (empty(get('deploy_path'))) {
-        throw new \Exception('The "deploy_path" var is empty.');
+        throw new \Exception('The "deploy_path" var is empty but its used for file operations so its dangerous state.');
     }
     if (empty(get('random'))) {
-        throw new \Exception('The "random" var is empty.');
+        throw new \Exception('The "random" config var is empty. Its needed for file operation.');
     }
     if (preg_match('/^[a-zA-Z0-9]$/', get('random'))) {
-        throw new \Exception('The "random" var should be only /^[a-zA-Z0-9]$/ because its used in filenames.');
+        throw new \Exception('The "random" config var should be only /^[a-zA-Z0-9]$/ because its used in filenames.');
     }
-    $overwriteReleases = ['release', 'current'];
-    foreach ($overwriteReleases as $overwriteRelease) {
+    foreach (['release', 'current'] as $overwriteRelease) {
         $overwriteReleasePath = get('deploy_path') . '/' . $overwriteRelease . '/';
         if (test("[ -e $overwriteReleasePath ]")) {
             $tempPath = $overwriteReleasePath . get('random');
