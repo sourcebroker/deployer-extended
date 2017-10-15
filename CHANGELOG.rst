@@ -10,6 +10,8 @@ b) [BUGFIX] Create lock file in buffer:start only when directory exists.
 c) [TASK] Tasks buffer:start, buffer:stop code cleanup.
 d) [TASK][!!!BREAKING] Remove multiplexing on from deployer-extended default config vars as it should be part of higher
    level package.
+e) [TASK][!!!BREAKING] Remove FileUtility class to make tasks more independent. The method usage from this class
+   usage was not really big in the end.
 
 7.1.3
 ~~~~~
