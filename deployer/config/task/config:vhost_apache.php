@@ -102,9 +102,12 @@ task('config:vhost_apache', function () {
                 }, get('public_urls'), array_keys(get('public_urls')))));
 
             // Apache writes log with different user so lets create it for him
-            @file_put_contents(get('vhost_logs_path') . get('vhost_logs_access_log_filename'), '', FILE_APPEND);
-            @file_put_contents(get('vhost_logs_path') . get('vhost_logs_error_log_filename'), '', FILE_APPEND);
-
+            if (!file_exists(get('vhost_logs_path') . get('vhost_logs_access_log_filename'))) {
+                touch(get('vhost_logs_path') . get('vhost_logs_access_log_filename'));
+            }
+            if (!file_exists(get('vhost_logs_path') . get('vhost_logs_error_log_filename'))) {
+                touch(get('vhost_logs_path') . get('vhost_logs_error_log_filename'));
+            }
             if (get('vhost_proxy', true)) {
                 if (get('vhost_proxy_directive', false) === false) {
                     if (get('vhost_proxy_port', false) === false) {
