@@ -16,6 +16,7 @@ f) [TASK][!!!BREAKING] Refactor confg:vhost_apache task. Start of docs for this 
 g) [TASK] Rewrite log file creation for config:vhost_apache.
 h) [TASK] Change composer.json description. Remove psr-4 as no classes.
 i) [TASK] Add support for edge cases in config:vhost_apache task.
+j) [TASK] Task config:vhost_apache - add more descriptive user messages for different missing data cases.
 
 7.1.3
 ~~~~~

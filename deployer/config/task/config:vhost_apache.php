@@ -65,14 +65,14 @@ task('config:vhost_apache', function () {
                     set('vhost_sslcert_path_missing', '#');
                     set('vhost_sslcert_path', '');
 
-                    writeln('A path to ssl certificates is missing! Set it on you env "VHOST_SSLCERT_PATH" or ' .
-                        'or with configuration var "vhost_sslcert_path". For now the SSL is disabled.');
+                    writeln('WARNING! A path to ssl certificates is missing! Set it on your env "VHOST_SSLCERT_PATH" or ' .
+                        'or with configuration var "vhost_sslcert_path". For now the SSL in vhost is disabled.');
                 }
             }
             if (get('vhost_sslcert_path', '') !== '') {
                 array_map(function ($file) {
                     if (!file_exists(rtrim(get('vhost_sslcert_path'), '/'))) {
-                        writeln('A SSL file ' . $file . ' is missing in path: "' . get('vhost_sslcert_path') . '"');
+                        writeln('WARNING! A SSL file ' . $file . ' is missing in path: "' . get('vhost_sslcert_path') . '"');
                     }
                 }, ['domain.pem', 'domain.key', 'domain.intermediate']);
             }
@@ -134,11 +134,11 @@ task('config:vhost_apache', function () {
                 }, get('public_urls'), array_keys(get('public_urls')))));
 
             // Apache writes log with different user so lets create it for him
-            if (!file_exists(get('vhost_logs_path') . get('vhost_logs_access_log_filename'))) {
-                touch(get('vhost_logs_path') . get('vhost_logs_access_log_filename'));
+            if (!file_exists(rtrim(get('vhost_logs_path'), '/') . '/' . get('vhost_logs_access_log_filename'))) {
+                touch(rtrim(get('vhost_logs_path'), '/') . '/' . get('vhost_logs_access_log_filename'));
             }
-            if (!file_exists(get('vhost_logs_path') . get('vhost_logs_error_log_filename'))) {
-                touch(get('vhost_logs_path') . get('vhost_logs_error_log_filename'));
+            if (!file_exists(rtrim(get('vhost_logs_path'), '/') . '/' . get('vhost_logs_error_log_filename'))) {
+                touch(rtrim(get('vhost_logs_path'), '/') . '/' . get('vhost_logs_error_log_filename'));
             }
             if (get('vhost_proxy', true)) {
                 if (get('vhost_proxy_directive', false) === false) {
@@ -158,18 +158,18 @@ task('config:vhost_apache', function () {
                                     }
                                     $askForVhostProxyPort = false;
                                 } else {
-                                    writeln('deployer-extended has problem trying to detect proper version of ' .
+                                    writeln('WARNING! deployer-extended has problem trying to detect proper version of ' .
                                         'php needed to be set later in ProxyPassMatch. The version of php was tried to be read from the ' .
                                         'value stored in composer.json config/platform/php but it is set with some strange value that can' .
                                         'not be parsed.');
                                 }
                             } else {
-                                writeln('deployer-extended has problem trying to detect proper version of ' .
+                                writeln('WARNING! deployer-extended has problem trying to detect proper version of ' .
                                     'php needed to be set later in ProxyPassMatch. The version of php was tried to be read from the ' .
                                     'value stored in composer.json config/platform/php but it is not set.');
                             }
                         } else {
-                            writeln('deployer-extended has problem trying to detect proper version of ' .
+                            writeln('WARNING! deployer-extended has problem trying to detect proper version of ' .
                                 'php needed to be set later in ProxyPassMatch. The version of php was tried to be read from the ' .
                                 'value stored in composer.json config/platform/php but the file is missing.');
                         }
@@ -189,9 +189,10 @@ task('config:vhost_apache', function () {
             if (get('vhost_path', false) !== false) {
                 runLocally('mv ' . parse('{{vhost_path}}/{{vhost_projectname}}.conf {{vhost_path}}/{{vhost_projectname}}.conf.' . strftime('%Y%m%d%H%M%S')));
                 runLocally('mv {{current_dir}}/{{vhost_projectname}}.conf ' . parse('{{vhost_path}}/{{vhost_projectname}}.conf'));
+                writeln(parse('SUCCESS! Vhost generated and saved under {{vhost_path}}/{{vhost_projectname}}.conf'));
             } else {
-                writeln(parse('You did not set "VHOST_PATH" env var so we do not know where to copy generated vhosts.' .
-                    'This is why vhost was stored in {{current_dir}} so you can move it manually.'));
+                writeln(parse('SUCCESS! Vhost generated and saved under {{current_dir}}/{{vhost_projectname}}.conf.' . "\n" .
+                    'NOTICE! If you would set "VHOST_PATH" env var then deployer can copy the generated vhost to your vhosts directory!'));
             }
         } else {
             throw new \Exception('"public_urls" config var must be an array of urls.');
@@ -199,4 +200,4 @@ task('config:vhost_apache', function () {
     } else {
         throw new \Exception('"public_urls" config var was not set for server. Vhost can not be generated without it.');
     }
-})->desc('Create vhost and copy to env path set in "VHOST_PATH"');
+})->desc('Create vhost and copy to path set in "VHOST_PATH" env var.');
