@@ -71,7 +71,7 @@ task('config:vhost_apache', function () {
             }
             if (get('vhost_sslcert_path', '') !== '') {
                 array_map(function ($file) {
-                    if (!file_exists(rtrim(get('vhost_sslcert_path'), '/'))) {
+                    if (testLocally('[ ! -e ' . get('vhost_sslcert_path') . ' ]')) {
                         writeln('WARNING! A SSL file ' . $file . ' is missing in path: "' . get('vhost_sslcert_path') . '"');
                     }
                 }, ['domain.pem', 'domain.key', 'domain.intermediate']);
@@ -122,8 +122,8 @@ task('config:vhost_apache', function () {
                     set('vhost_logs_path', get('vhost_document_root') . '/.dep/logs/');
                 }
             }
-            if (!file_exists(get('vhost_logs_path'))) {
-                mkdir(get('vhost_logs_path'), 0777, true);
+            if (testLocally('[ ! -e ' . get('vhost_logs_path') . ' ]')) {
+                runLocally('mkdir -p ' . get('vhost_logs_path'));
             }
             set('vhost_projectname', basename(get('current_dir')));
 
@@ -134,19 +134,20 @@ task('config:vhost_apache', function () {
                 }, get('public_urls'), array_keys(get('public_urls')))));
 
             // Apache writes log with different user so lets create it for him
-            if (!file_exists(rtrim(get('vhost_logs_path'), '/') . '/' . get('vhost_logs_access_log_filename'))) {
-                touch(rtrim(get('vhost_logs_path'), '/') . '/' . get('vhost_logs_access_log_filename'));
+            if (testLocally('[ -e ' . rtrim(get('vhost_logs_path'),
+                    '/') . '/' . get('vhost_logs_access_log_filename') . ' ]')) {
+                runLocally('touch ' . rtrim(get('vhost_logs_path'), '/') . '/' . get('vhost_logs_access_log_filename'));
             }
-            if (!file_exists(rtrim(get('vhost_logs_path'), '/') . '/' . get('vhost_logs_error_log_filename'))) {
-                touch(rtrim(get('vhost_logs_path'), '/') . '/' . get('vhost_logs_error_log_filename'));
+            if (testLocally('[ -e ' . rtrim(get('vhost_logs_path'),
+                    '/') . '/' . get('vhost_logs_error_log_filename') . ' ]')) {
+                runLocally('touch ' . rtrim(get('vhost_logs_path'), '/') . '/' . get('vhost_logs_error_log_filename'));
             }
             if (get('vhost_proxy', true)) {
                 if (get('vhost_proxy_directive', false) === false) {
                     if (get('vhost_proxy_port', false) === false) {
                         $askForVhostProxyPort = true;
-                        if (file_exists(get('current_dir') . '/composer.json')) {
-                            $composerJson = \json_decode(file_get_contents(get('current_dir') . '/composer.json'),
-                                true);
+                        if (runLocally('[ -e ' . get('current_dir') . '/composer.json' . ' ]')) {
+                            $composerJson = \json_decode(runLocally('cat ' . escapeshellarg(get('current_dir') . '/composer.json'))->toString(), true);
                             if (!empty($composerJson['config']) && !empty($composerJson['config']['platform']) && !empty($composerJson['config']['platform']['php'])) {
                                 $phpVersionParts = explode('.', $composerJson['config']['platform']['php']);
                                 if (count($phpVersionParts)) {
@@ -183,11 +184,12 @@ task('config:vhost_apache', function () {
             } else {
                 set('vhost_proxy_directive', '');
             }
-
-            file_put_contents(parse('{{current_dir}}/{{vhost_projectname}}.conf'), parse(get('vhost_template')));
+            runLocally('echo ' . escapeshellarg(parse(get('vhost_template'))) . ' > ' . parse('{{current_dir}}/{{vhost_projectname}}.conf'));
 
             if (get('vhost_path', false) !== false) {
-                runLocally('mv ' . parse('{{vhost_path}}/{{vhost_projectname}}.conf {{vhost_path}}/{{vhost_projectname}}.conf.' . strftime('%Y%m%d%H%M%S')));
+                if (testLocally('[ -e {{vhost_path}}/{{vhost_projectname}}.conf ]')) {
+                    runLocally('mv ' . parse('{{vhost_path}}/{{vhost_projectname}}.conf {{vhost_path}}/{{vhost_projectname}}.conf.' . strftime('%Y%m%d%H%M%S')));
+                }
                 runLocally('mv {{current_dir}}/{{vhost_projectname}}.conf ' . parse('{{vhost_path}}/{{vhost_projectname}}.conf'));
                 writeln(parse('SUCCESS! Vhost generated and saved under {{vhost_path}}/{{vhost_projectname}}.conf'));
             } else {

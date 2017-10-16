@@ -17,6 +17,8 @@ g) [TASK] Rewrite log file creation for config:vhost_apache.
 h) [TASK] Change composer.json description. Remove psr-4 as no classes.
 i) [TASK] Add support for edge cases in config:vhost_apache task.
 j) [TASK] Task config:vhost_apache - add more descriptive user messages for different missing data cases.
+k) [TASK] Task config:vhost_apache - convert all files operation to runLocally / testLocally.
+
 
 7.1.3
 ~~~~~
