@@ -14,6 +14,7 @@ task('buffer:start', function () {
     }
     foreach (['release', 'current'] as $overwriteRelease) {
         $overwriteReleasePath = get('deploy_path') . '/' . $overwriteRelease . '/';
+        run('[ -e ' . $overwriteReleasePath . '/current' . ' ] || touch ' . get('deploy_path') . '/current/.oldinstance.flag');
         if (test("[ -e $overwriteReleasePath ]")) {
             $tempPath = $overwriteReleasePath . get('random');
             run('[ -e ' . $tempPath . ' ] || mkdir -p ' . $tempPath);
@@ -34,25 +35,53 @@ task('buffer:start', function () {
                 } else {
                     $entrypointRefresh = intval($buffer['entrypoint_refresh']);
                 }
-                if (empty($buffer['locker_filename'])) {
-                    $lockerFilename = 'buffer.lock';
+                if (empty($buffer['clearcache_refresh'])) {
+                    $clearcacheRefresh = 1000000; // 1s
                 } else {
-                    $lockerFilename = $buffer['locker_filename'];
+                    $clearcacheRefresh = intval($buffer['clearcache_refresh']);
+                }
+                if (empty($buffer['locker_filename'])) {
+                    $activateBufferFlagFilename = '.activatebuffer.flag';
+                } else {
+                    $activateBufferFlagFilename = $buffer['activate_buffer_flag_filename'];
+                }
+                if (empty($buffer['cache_clear_filename'])) {
+                    $clearCacheFlagFilename = '.clearcache.flag';
+                } else {
+                    $clearCacheFlagFilename = $buffer['clear_cache_flag_filename'];
                 }
                 if (empty($buffer['locker_expire'])) {
                     $lockerExpire = 60;
                 } else {
                     $lockerExpire = intval($buffer['locker_expire']);
                 }
+                if (empty($buffer['cache_clear_expire'])) {
+                    $clearCacheExpire = 120;
+                } else {
+                    $clearCacheExpire = intval($buffer['cache_clear_expire']);
+                }
                 if (empty($buffer['entrypoint_inject'])) {
                     $entrypointInject =
-                        "isset(\$_SERVER['HTTP_X_DEPLOYER_DEPLOYMENT']) && \$_SERVER['HTTP_X_DEPLOYER_DEPLOYMENT'] == '{{random}}' ? \$deployerExtendedEnableBufferLock = false: \$deployerExtendedEnableBufferLock = true;\n"
-                        . "isset(\$_ENV['DEPLOYER_DEPLOYMENT']) && \$_ENV['DEPLOYER_DEPLOYMENT'] == '{{random}}' ? \$deployerExtendedEnableBufferLock = false: \$deployerExtendedEnableBufferLock = true;\n"
-                        . "while (file_exists(__DIR__ . '/$lockerFilename') && \$deployerExtendedEnableBufferLock) {\n"
-                        . "    usleep($entrypointRefresh);\n"
-                        . "    clearstatcache(true, __DIR__ . '/$lockerFilename');\n"
-                        . "    if(time() - filectime(__DIR__ . '/$lockerFilename') > $lockerExpire) @unlink(__DIR__ . '/$lockerFilename');\n"
-                        . "}";
+                        "isset(\$_SERVER['HTTP_X_DEPLOYER_DEPLOYMENT']) && \$_SERVER['HTTP_X_DEPLOYER_DEPLOYMENT'] == '{{random}}' ? \$deployerExtendedEnableBufferLock = false: \$deployerExtendedEnableBufferLock = true;\n" .
+                        "isset(\$_ENV['DEPLOYER_DEPLOYMENT']) && \$_ENV['DEPLOYER_DEPLOYMENT'] == '{{random}}' ? \$deployerExtendedEnableBufferLock = false: \$deployerExtendedEnableBufferLock = true;\n" .
+                        "while (file_exists(__DIR__ . '/$activateBufferFlagFilename') && \$deployerExtendedEnableBufferLock) {\n" .
+                        "    usleep($entrypointRefresh);\n" .
+                        "    clearstatcache(true);\n" .
+                        "    if(time() - filectime(__DIR__ . '/$activateBufferFlagFilename') > $lockerExpire) @unlink(__DIR__ . '/$activateBufferFlagFilename');\n" .
+                        "}\n" .
+                        "if (file_exists(__DIR__ . '/$clearCacheFlagFilename')) {\n" .
+                        "    clearstatcache(true);\n" .
+                        "    if(time() - filectime(__DIR__ . '/$clearCacheFlagFilename') > $clearCacheExpire) @unlink(__DIR__ . '/$clearCacheFlagFilename');\n" .
+                        "}\n" .
+                        "if(file_exists(__DIR__ . '/.oldinstance.flag')) {\n" .
+                        "    clearstatcache(true);\n" .
+                        "    usleep($clearcacheRefresh);\n" .
+                        "    if(!empty(\$_SERVER['REQUEST_SCHEME']) && !empty(\$_SERVER['SERVER_NAME'])) {\n" .
+                        "      header('Location: ' . \$_SERVER['REQUEST_SCHEME'] . '://' . \$_SERVER['SERVER_NAME'] . !empty(_SERVER['REQUEST_URI']) ? \$_SERVER['REQUEST_URI'] : '');\n" .
+                        "    } else {\n" .
+                        "      exit();\n" .
+                        "    }\n" .
+                        "}";
                 } else {
                     $entrypointInject = $buffer['entrypoint_inject'];
                 }
@@ -77,7 +106,9 @@ task('buffer:start', function () {
                     }
                 }
                 if (test('[ -e ' . $overwriteReleasePath . dirname($entrypointFilename) . ' ]')) {
-                    run('cd ' . $overwriteReleasePath . ' && touch ' . (dirname($entrypointFilename) ? dirname($entrypointFilename) . '/' : '') . $lockerFilename);
+                    run('cd ' . $overwriteReleasePath . ' && touch ' . (dirname($entrypointFilename) ? dirname($entrypointFilename) . '/' : '') . $activateBufferFlagFilename);
+                    run('cd ' . $overwriteReleasePath . ' && touch ' . (dirname($entrypointFilename) ? dirname($entrypointFilename) . '/' : '') . $clearCacheFlagFilename);
+
                 }
             }
             run('rmdir ' . $tempPath);
