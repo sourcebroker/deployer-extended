@@ -16,13 +16,13 @@ task('buffer:stop', function () {
     }
     foreach ($overwriteReleases as $overwriteRelease) {
         $overwriteReleasePath = get('deploy_path') . '/' . $overwriteRelease;
-        foreach (get('buffer_config') as $key => $buffer) {
-            if (empty($buffer['entrypoint_filename'])) {
+        foreach (get('buffer_config') as $key => $inject) {
+            if (empty($inject['entrypoint_filename'])) {
                 throw new \Exception('entrypoint_filename not set for buffer_data');
             }
-            $entrypointFilename = $buffer['entrypoint_filename'];
-            $activateBufferFlagFilename = empty($buffer['activate_buffer_flag_filename']) ?
-                '.activatebuffer.flag' : $buffer['activate_buffer_flag_filename'];
+            $entrypointFilename = $inject['entrypoint_filename'];
+            $activateBufferFlagFilename = empty($inject['requestbuffer_flag_filename']) ?
+                '.flag.requestbuffering' : $inject['requestbuffer_flag_filename'];
             $entrypointDirectory = dirname($entrypointFilename) === '.' ? '' : dirname($entrypointFilename) . '/';
             run('cd ' . $overwriteReleasePath . ' && rm -f ' . $entrypointDirectory . $activateBufferFlagFilename);
         }
