@@ -147,8 +147,9 @@ task('config:vhost_apache', function () {
                     if (get('vhost_proxy_port', false) === false) {
                         $askForVhostProxyPort = true;
                         if (runLocally('[ -e ' . get('current_dir') . '/composer.json' . ' ]')) {
-                            $composerJson = \json_decode(runLocally('cat ' . escapeshellarg(get('current_dir') . '/composer.json'))->toString(), true);
-                            if (!empty($composerJson['config']) && !empty($composerJson['config']['platform']) && !empty($composerJson['config']['platform']['php'])) {
+                            $composerJson = \json_decode(runLocally(
+                                'cat ' . escapeshellarg(get('current_dir') . '/composer.json'))->toString(), true);
+                            if (!empty($composerJson['config']['platform']['php'])) {
                                 $phpVersionParts = explode('.', $composerJson['config']['platform']['php']);
                                 if (count($phpVersionParts)) {
                                     $phpVersionTwoDigit = (count($phpVersionParts) === 1) ? $phpVersionParts[0] : $phpVersionParts[0] . $phpVersionParts[1];
@@ -188,13 +189,16 @@ task('config:vhost_apache', function () {
 
             if (get('vhost_path', false) !== false) {
                 if (testLocally('[ -e {{vhost_path}}/{{vhost_projectname}}.conf ]')) {
-                    runLocally('mv ' . parse('{{vhost_path}}/{{vhost_projectname}}.conf {{vhost_path}}/{{vhost_projectname}}.conf.' . strftime('%Y%m%d%H%M%S')));
+                    $oldVhostRename = parse('{{vhost_path}}/{{vhost_projectname}}.conf.' . strftime('%Y%m%d%H%M%S'));
+                    runLocally('mv ' . parse('{{vhost_path}}/{{vhost_projectname}}.conf ' . $oldVhostRename));
+                    writeln('Old vhost saved under ' . $oldVhostRename);
                 }
                 runLocally('mv {{current_dir}}/{{vhost_projectname}}.conf ' . parse('{{vhost_path}}/{{vhost_projectname}}.conf'));
-                writeln(parse('SUCCESS! Vhost generated and saved under {{vhost_path}}/{{vhost_projectname}}.conf'));
+                writeln(parse('New vhost saved under {{vhost_path}}/{{vhost_projectname}}.conf'));
             } else {
-                writeln(parse('SUCCESS! Vhost generated and saved under {{current_dir}}/{{vhost_projectname}}.conf.' . "\n" .
-                    'NOTICE! If you would set "VHOST_PATH" env var then deployer can copy the generated vhost to your vhosts directory!'));
+                writeln(parse('New vhost generated and saved under {{current_dir}}/{{vhost_projectname}}.conf.' . "\n" .
+                    'NOTICE! If you would set config var "vhost_path" or env "VHOST_PATH" then deployer could copy the ' .
+                    'generated vhost to your vhosts directory!'));
             }
         } else {
             throw new \Exception('"public_urls" config var must be an array of urls.');
