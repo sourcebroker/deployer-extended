@@ -77,7 +77,7 @@ task('buffer:start', function () {
 
                 if (empty($inject['entrypoint_inject'])) {
                     $entrypointInject =
-                        "// Buffering php requests" .
+                        "// Buffering php requests\n" .
                         "isset(\$_SERVER['HTTP_X_DEPLOYER_DEPLOYMENT']) && \$_SERVER['HTTP_X_DEPLOYER_DEPLOYMENT'] == '{{random}}' ? \$deployerExtendedEnableBufferLock = false: \$deployerExtendedEnableBufferLock = true;\n" .
                         "isset(\$_ENV['DEPLOYER_DEPLOYMENT']) && \$_ENV['DEPLOYER_DEPLOYMENT'] == '{{random}}' ? \$deployerExtendedEnableBufferLock = false: \$deployerExtendedEnableBufferLock = true;\n" .
                         "clearstatcache(true, __DIR__ . '/$requestBufferFlagFilename');\n" .
@@ -98,7 +98,7 @@ task('buffer:start', function () {
                         "    clearstatcache(true);\n" .
                         "    usleep($oldReleaseRedirectSleep);\n" .
                         "    if(!empty(\$_SERVER['REQUEST_SCHEME']) && !empty(\$_SERVER['SERVER_NAME'])) {\n" .
-                        "      header('Location: ' \$_SERVER['REQUEST_SCHEME'] . '://' . \$_SERVER['SERVER_NAME'] . !empty(\$_SERVER['REQUEST_URI']) ? \$_SERVER['REQUEST_URI'] : '', true, 307);\n" .
+                        "      header('Location: ' . \$_SERVER['REQUEST_SCHEME'] . '://' . \$_SERVER['SERVER_NAME'] . !empty(\$_SERVER['REQUEST_URI']) ? \$_SERVER['REQUEST_URI'] : '', true, 307);\n" .
                         "    } else {\n" .
                         "      exit();\n" .
                         "    }\n" .
