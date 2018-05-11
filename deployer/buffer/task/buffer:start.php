@@ -80,17 +80,17 @@ task('buffer:start', function () {
                         "// Buffering php requests" .
                         "isset(\$_SERVER['HTTP_X_DEPLOYER_DEPLOYMENT']) && \$_SERVER['HTTP_X_DEPLOYER_DEPLOYMENT'] == '{{random}}' ? \$deployerExtendedEnableBufferLock = false: \$deployerExtendedEnableBufferLock = true;\n" .
                         "isset(\$_ENV['DEPLOYER_DEPLOYMENT']) && \$_ENV['DEPLOYER_DEPLOYMENT'] == '{{random}}' ? \$deployerExtendedEnableBufferLock = false: \$deployerExtendedEnableBufferLock = true;\n" .
-                        "clearstatcache(true, __DIR__ . '/$requestBufferFlagFilename')\n" .
+                        "clearstatcache(true, __DIR__ . '/$requestBufferFlagFilename');\n" .
                         "while (file_exists(__DIR__ . '/$requestBufferFlagFilename') && \$deployerExtendedEnableBufferLock) {\n" .
                         "    usleep($requestBufferSleep);\n" .
                         "    clearstatcache(true);\n" .
-                        "    if(time() - filectime(__DIR__ . '/$requestBufferFlagFilename') > $requestBufferDuration) @unlink(__DIR__ . '/$requestBufferFlagFilename');\n" .
+                        "    if(time() - @filectime(__DIR__ . '/$requestBufferFlagFilename') > $requestBufferDuration) @unlink(__DIR__ . '/$requestBufferFlagFilename');\n" .
                         "}\n" .
                         "// Clearstatcache for n seconds after deploy" .
                         "clearstatcache(true, __DIR__ . '/$clearStatCacheFlagFilename')\n" .
                         "if (file_exists(__DIR__ . '/$clearStatCacheFlagFilename')) {\n" .
                         "    clearstatcache(true);\n" .
-                        "    if(time() - filectime(__DIR__ . '/$clearStatCacheFlagFilename') > $clearStatCacheDuration) @unlink(__DIR__ . '/$clearStatCacheFlagFilename');\n" .
+                        "    if(time() - @filectime(__DIR__ . '/$clearStatCacheFlagFilename') > $clearStatCacheDuration) @unlink(__DIR__ . '/$clearStatCacheFlagFilename');\n" .
                         "}\n" .
                         "// Action if php choosed old release to serve request" .
                         "clearstatcache(true, __DIR__ . '/$oldReleaseFlagFilename')\n" .
@@ -98,7 +98,7 @@ task('buffer:start', function () {
                         "    clearstatcache(true);\n" .
                         "    usleep($oldReleaseRedirectSleep);\n" .
                         "    if(!empty(\$_SERVER['REQUEST_SCHEME']) && !empty(\$_SERVER['SERVER_NAME'])) {\n" .
-                        "      header('Location: ' \$_SERVER['REQUEST_SCHEME'] . '://' . \$_SERVER['SERVER_NAME'] . !empty(_SERVER['REQUEST_URI']) ? \$_SERVER['REQUEST_URI'] : '', true, 307);\n" .
+                        "      header('Location: ' \$_SERVER['REQUEST_SCHEME'] . '://' . \$_SERVER['SERVER_NAME'] . !empty(\$_SERVER['REQUEST_URI']) ? \$_SERVER['REQUEST_URI'] : '', true, 307);\n" .
                         "    } else {\n" .
                         "      exit();\n" .
                         "    }\n" .
