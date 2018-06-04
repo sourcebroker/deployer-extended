@@ -1,19 +1,17 @@
 deployer-extended
 =================
 
-.. image:: https://styleci.io/repos/82486796/shield?branch=master
-    :target: https://styleci.io/repos/82486796
+    .. image:: https://styleci.io/repos/82486796/shield?branch=master
+        :target: https://styleci.io/repos/82486796
 
-.. image:: https://scrutinizer-ci.com/g/sourcebroker/deployer-extended/badges/quality-score.png?b=master
-    :target: https://scrutinizer-ci.com/g/sourcebroker/deployer-extended/?branch=master
+    .. image:: https://scrutinizer-ci.com/g/sourcebroker/deployer-extended/badges/quality-score.png?b=master
+        :target: https://scrutinizer-ci.com/g/sourcebroker/deployer-extended/?branch=master
 
-.. image:: http://img.shields.io/packagist/v/sourcebroker/deployer-extended.svg?style=flat
-    :target: https://packagist.org/packages/sourcebroker/deployer-extended
+    .. image:: http://img.shields.io/packagist/v/sourcebroker/deployer-extended.svg?style=flat
+        :target: https://packagist.org/packages/sourcebroker/deployer-extended
 
-.. image:: https://img.shields.io/badge/license-MIT-blue.svg?style=flat
-    :target: https://packagist.org/packages/sourcebroker/deployer-extended
-
-|
+    .. image:: https://img.shields.io/badge/license-MIT-blue.svg?style=flat
+        :target: https://packagist.org/packages/sourcebroker/deployer-extended
 
 .. contents:: :local:
 

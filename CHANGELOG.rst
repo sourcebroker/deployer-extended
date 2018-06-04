@@ -2,6 +2,12 @@
 Changelog
 ---------
 
+8.0.1
+~~~~~
+
+a) [BUGFIX] Remove unneeded comments.
+b) [DOCS] Docs cleanup.
+
 8.0.0
 ~~~~~
 
