@@ -19,42 +19,92 @@ task('buffer:start', function () {
             run('[ -e ' . $tempPath . ' ] || mkdir -p ' . $tempPath);
             $entrypointInjectStartComment = "\n\n// deployer extended buffering request code START\n";
             $entrypointInjectEndComment = "\n// deployer extended buffering request code END\n\n";
-            foreach ((array)get('buffer_config') as $key => $buffer) {
-                if (empty($buffer['entrypoint_filename'])) {
+            foreach ((array)get('buffer_config') as $key => $inject) {
+                if (empty($inject['entrypoint_filename'])) {
                     throw new \Exception('entrypoint_filename not set for buffer_data');
                 }
-                $entrypointFilename = $buffer['entrypoint_filename'];
-                if (empty($buffer['entrypoint_needle'])) {
+                // general inject settings
+                $entrypointFilename = $inject['entrypoint_filename'];
+                if (empty($inject['entrypoint_needle'])) {
                     $entrypointNeedle = '<?php';
                 } else {
-                    $entrypointNeedle = $buffer['entrypoint_needle'];
+                    $entrypointNeedle = $inject['entrypoint_needle'];
                 }
-                if (empty($buffer['entrypoint_refresh'])) {
-                    $entrypointRefresh = 200000; // 200ms
+
+                // Buffering php requests
+                if (empty($inject['requestbuffer_sleep'])) {
+                    $requestBufferSleep = 200000; // 200ms
                 } else {
-                    $entrypointRefresh = intval($buffer['entrypoint_refresh']);
+                    $requestBufferSleep = intval($inject['requestbuffer_sleep']);
                 }
-                if (empty($buffer['locker_filename'])) {
-                    $lockerFilename = 'buffer.lock';
+                if (empty($inject['requestbuffer_flag_filename'])) {
+                    $requestBufferFlagFilename = '.flag.requestbuffer';
                 } else {
-                    $lockerFilename = $buffer['locker_filename'];
+                    $requestBufferFlagFilename = $inject['requestbuffer_flag_filename'];
                 }
-                if (empty($buffer['locker_expire'])) {
-                    $lockerExpire = 60;
+                if (empty($inject['requestbuffer_duration'])) {
+                    $requestBufferDuration = 60;
                 } else {
-                    $lockerExpire = intval($buffer['locker_expire']);
+                    $requestBufferDuration = intval($inject['requestbuffer_duration']);
                 }
-                if (empty($buffer['entrypoint_inject'])) {
+
+                // Action if php choosed old release to serve request
+                if (empty($inject['oldrelease_flag__filename'])) {
+                    $oldReleaseFlagFilename = '.flag.oldrelease';
+                } else {
+                    $oldReleaseFlagFilename = $inject['oldrelease_flag_filename'];
+                }
+                if (empty($inject['oldrelease_redirect_sleep'])) {
+                    $oldReleaseRedirectSleep = 1000000; // 1s
+                } else {
+                    $oldReleaseRedirectSleep = intval($inject['oldrelease_redirect_sleep']);
+                }
+                // !!!! @TODO
+                run('[ -e ' . $overwriteReleasePath . '/current' . ' ] || touch ' . get('deploy_path') . '/current/.flag.oldinstance');
+
+
+                // Clearstatcache for n seconds after deploy
+                if (empty($inject['clearstatcache_flag_filename'])) {
+                    $clearStatCacheFlagFilename = '.flag.clearstatcache';
+                } else {
+                    $clearStatCacheFlagFilename = $inject['clearstatcache_flag_filename'];
+                }
+                if (empty($inject['clearstatcache_duration'])) {
+                    $clearStatCacheDuration = 150; // 120s is php default -> http://php.net/realpath-cache-ttl
+                } else {
+                    $clearStatCacheDuration = intval($inject['clearstatcache_duration']);
+                }
+
+                if (empty($inject['entrypoint_inject'])) {
                     $entrypointInject =
-                        "isset(\$_SERVER['HTTP_X_DEPLOYER_DEPLOYMENT']) && \$_SERVER['HTTP_X_DEPLOYER_DEPLOYMENT'] == '{{random}}' ? \$deployerExtendedEnableBufferLock = false: \$deployerExtendedEnableBufferLock = true;\n"
-                        . "isset(\$_ENV['DEPLOYER_DEPLOYMENT']) && \$_ENV['DEPLOYER_DEPLOYMENT'] == '{{random}}' ? \$deployerExtendedEnableBufferLock = false: \$deployerExtendedEnableBufferLock = true;\n"
-                        . "while (file_exists(__DIR__ . '/$lockerFilename') && \$deployerExtendedEnableBufferLock) {\n"
-                        . "    usleep($entrypointRefresh);\n"
-                        . "    clearstatcache(true, __DIR__ . '/$lockerFilename');\n"
-                        . "    if(time() - filectime(__DIR__ . '/$lockerFilename') > $lockerExpire) @unlink(__DIR__ . '/$lockerFilename');\n"
-                        . "}";
+                        "// Buffering php requests\n" .
+                        "isset(\$_SERVER['HTTP_X_DEPLOYER_DEPLOYMENT']) && \$_SERVER['HTTP_X_DEPLOYER_DEPLOYMENT'] == '{{random}}' ? \$deployerExtendedEnableBufferLock = false: \$deployerExtendedEnableBufferLock = true;\n" .
+                        "isset(\$_ENV['DEPLOYER_DEPLOYMENT']) && \$_ENV['DEPLOYER_DEPLOYMENT'] == '{{random}}' ? \$deployerExtendedEnableBufferLock = false: \$deployerExtendedEnableBufferLock = true;\n" .
+                        "clearstatcache(true, __DIR__ . '/$requestBufferFlagFilename');\n" .
+                        "while (file_exists(__DIR__ . '/$requestBufferFlagFilename') && \$deployerExtendedEnableBufferLock) {\n" .
+                        "    usleep($requestBufferSleep);\n" .
+                        "    clearstatcache(true);\n" .
+                        "    if(time() - @filectime(__DIR__ . '/$requestBufferFlagFilename') > $requestBufferDuration) @unlink(__DIR__ . '/$requestBufferFlagFilename');\n" .
+                        "}\n" .
+                        "// Clearstatcache for n seconds after deploy" .
+                        "clearstatcache(true, __DIR__ . '/$clearStatCacheFlagFilename')\n" .
+                        "if (file_exists(__DIR__ . '/$clearStatCacheFlagFilename')) {\n" .
+                        "    clearstatcache(true);\n" .
+                        "    if(time() - @filectime(__DIR__ . '/$clearStatCacheFlagFilename') > $clearStatCacheDuration) @unlink(__DIR__ . '/$clearStatCacheFlagFilename');\n" .
+                        "}\n" .
+                        "// Action if php choosed old release to serve request" .
+                        "clearstatcache(true, __DIR__ . '/$oldReleaseFlagFilename')\n" .
+                        "if(file_exists(__DIR__ . '/$oldReleaseFlagFilename')) {\n" .
+                        "    clearstatcache(true);\n" .
+                        "    usleep($oldReleaseRedirectSleep);\n" .
+                        "    if(!empty(\$_SERVER['REQUEST_SCHEME']) && !empty(\$_SERVER['SERVER_NAME'])) {\n" .
+                        "      header('Location: ' . \$_SERVER['REQUEST_SCHEME'] . '://' . \$_SERVER['SERVER_NAME'] . !empty(\$_SERVER['REQUEST_URI']) ? \$_SERVER['REQUEST_URI'] : '', true, 307);\n" .
+                        "    } else {\n" .
+                        "      exit();\n" .
+                        "    }\n" .
+                        "}";
                 } else {
-                    $entrypointInject = $buffer['entrypoint_inject'];
+                    $entrypointInject = $inject['entrypoint_inject'];
                 }
                 $entrypointFileContent = trim(run('cd {{release_path}} && [ -f ' . $entrypointFilename . ' ] && cat ' . $entrypointFilename . ' || echo ""')->toString());
                 if (strpos($entrypointFileContent, $entrypointInjectStartComment) === false) {
@@ -77,7 +127,8 @@ task('buffer:start', function () {
                     }
                 }
                 if (test('[ -e ' . $overwriteReleasePath . dirname($entrypointFilename) . ' ]')) {
-                    run('cd ' . $overwriteReleasePath . ' && touch ' . (dirname($entrypointFilename) ? dirname($entrypointFilename) . '/' : '') . $lockerFilename);
+                    run('cd ' . $overwriteReleasePath . ' && touch ' . (dirname($entrypointFilename) ? dirname($entrypointFilename) . '/' : '') . $requestBufferFlagFilename);
+                    run('cd ' . $overwriteReleasePath . ' && touch ' . (dirname($entrypointFilename) ? dirname($entrypointFilename) . '/' : '') . $clearStatCacheFlagFilename);
                 }
             }
             run('rmdir ' . $tempPath);

@@ -88,7 +88,7 @@ Options:
   | *required:* no
   | *default value:* 200000 μs (200ms)
   |
-  | How often the entrypoint will recheck if buffer.lock is still there. Values in microseconds.
+  | How often the entrypoint will recheck if ``.activatebuffer.flag`` is still there. Values in microseconds.
   | 100000 μs = 100 ms = 0,1 s.
   |
 
@@ -101,31 +101,31 @@ Options:
 
        isset($_SERVER['HTTP_X_DEPLOYER_DEPLOYMENT']) && $_SERVER['HTTP_X_DEPLOYER_DEPLOYMENT'] == '823094823094' ? $deployerExtendedEnableBufferLock = false : $deployerExtendedEnableBufferLock = true;
        isset($_ENV['DEPLOYER_DEPLOYMENT']) && $_ENV['DEPLOYER_DEPLOYMENT'] == '823094823094' ? $deployerExtendedEnableBufferLock = false: $deployerExtendedEnableBufferLock = true;
-       while (file_exists(__DIR__ . 'buffer.lock') && $deployerExtendedEnableBufferLock) {
+       while (file_exists(__DIR__ . '.activatebuffer.flag') && $deployerExtendedEnableBufferLock) {
          usleep(200000);
-         clearstatcache(true, __DIR__ . '/buffer.lock');
-         if(time() - filectime(__DIR__ . '/buffer.lock') > 60) @unlink(__DIR__ . '/buffer.lock');
+         clearstatcache(true, __DIR__ . '/.activatebuffer.flag');
+         if(time() - filectime(__DIR__ . '/.activatebuffer.flag') > 60) @unlink(__DIR__ . '/.activatebuffer.flag');
        }
 
 
 - | **locker_filename**
   | *required:* no
-  | *default value:* buffer.lock
+  | *default value:* .activatebuffer.flag
   |
-  | When file with name "buffer.lock" exists the reqests are buffered. The task `buffer:stop`_ just removes
-    the "buffer.lock" files without removing the "entrypoint_inject" code.
+  | When file with name ".activatebuffer.flag" exists the reqests are buffered. The task `buffer:stop`_ just removes
+    the ".activatebuffer.flag" files without removing the "entrypoint_inject" code.
   |
 
 - | **locker_expire**
   | *required:* no
   | *default value:* 60
   |
-  | The time in seconds after which the buffer.lock files will be removed automatically.
+  | The time in seconds after which the .activatebuffer.flag files will be removed automatically.
   |
-  | Usually its buffer:stop task that should remove buffer.lock files. Unfortunatly sometimes deploy can fail. If deploy
-  | will fail after buffer:start task and before buffer:stop then the buffer.lock files will stay and block access to
+  | Usually its buffer:stop task that should remove .activatebuffer.flag files. Unfortunatly sometimes deploy can fail. If deploy
+  | will fail after buffer:start task and before buffer:stop then the .activatebuffer.flag files will stay and block access to
   | entrypoints for good. In edge cases it can lead to run out all apache forks or if CLI entrypoint will be called
-  | often by cron it can overload RAM. This is why its important to remove buffer.lock files after some time no matter
+  | often by cron it can overload RAM. This is why its important to remove .activatebuffer.flag files after some time no matter
   | if the task buffer:stop will be called or not.
 
 The simplest configuration example:
@@ -162,9 +162,9 @@ More configuration options examples:
                'entrypoint_filename' => 'index.php',
                'entrypoint_needle' => '// inject php code after this comment',
                'locker_filename' => 'deployment.lock',
-               'entrypoint_inject' => 'while (file_exists(__DIR__ . "deployment.lock")){' . "\n"
+               'entrypoint_inject' => 'while (file_exists(__DIR__ . ".activatebuffer.flag")){' . "\n"
                                       . 'usleep(200000);' . "\n"
-                                      . 'clearstatcache(true, __DIR__ . "/buffer.lock")' . "\n"
+                                      . 'clearstatcache(true, __DIR__ . "/.activatebuffer.flag")' . "\n"
                                       . '}'
            ]
        ]
@@ -174,7 +174,7 @@ More configuration options examples:
 buffer:stop
 +++++++++++
 
-Stop buffering requests to application entrypoints. It deletes "buffer.lock" files.
+Stop buffering requests to application entrypoints. It deletes ".activatebuffer.flag" files.
 
 config
 ~~~~~~
