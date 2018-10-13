@@ -2,6 +2,12 @@
 Changelog
 ---------
 
+master
+~~~~~~
+
+a) [BUGFIX] Fix wrong flagname for old release and prevent creation of this flag if current folder does not exits.
+
+
 8.0.1
 ~~~~~
 
