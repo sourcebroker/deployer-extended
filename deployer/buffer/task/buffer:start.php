@@ -59,9 +59,6 @@ task('buffer:start', function () {
                 } else {
                     $oldReleaseRedirectSleep = intval($inject['oldrelease_redirect_sleep']);
                 }
-                if (test('[ -e ' . $overwriteReleasePath . ' ]')) {
-                    run('touch ' . $overwriteReleasePath . $oldReleaseFlagFilename);
-                }
                 // Clearstatcache for n seconds after deploy
                 if (empty($inject['clearstatcache_flag_filename'])) {
                     $clearStatCacheFlagFilename = '.flag.clearstatcache';
