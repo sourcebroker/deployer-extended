@@ -8,29 +8,33 @@ task('buffer:stop', function () {
     }
     $overwriteReleases = ['current'];
     $releasesList = get('releases_list');
+
+    // Add .flag.oldrelease for cases when php cache will decide to run code in old release path
     if (isset($releasesList[0])) {
-        $oldRelease = '/releases/' . $releasesList[0];
-        $overwriteReleases[] = $oldRelease;
-        // Add flag '.flag.oldrelease' to redirect if php choosed old release to serve request
-        $oldReleaseFlagFilename = empty($inject['oldrelease_flag__filename']) ?
-            '.flag.oldrelease' : $inject['oldrelease_flag_filename'];
-        if (test('[ -e ' . get('deploy_path') . $oldRelease . ' ]')) {
-            run('touch ' . get('deploy_path') . $oldRelease . '/' . $oldReleaseFlagFilename);
+        $overwriteReleases[] = '/releases/' . $releasesList[0];
+        foreach (get('buffer_config') as $key => $inject) {
+            if (empty($inject['entrypoint_filename'])) {
+                throw new \Exception('entrypoint_filename not set for buffer_data');
+            }
+            $overwriteReleasePath = get('deploy_path') . '/releases/' . $releasesList[0];
+            $oldReleaseFlagFilename = empty($inject['oldrelease_flag__filename']) ?
+                '.flag.oldrelease' : $inject['oldrelease_flag_filename'];
+            $entrypointDirectory = dirname($inject['entrypoint_filename']) === '.' ? '' : dirname($inject['entrypoint_filename']) . '/';
+            if (test('[ -e ' . $overwriteReleasePath . '/' . $entrypointDirectory . ' ]')) {
+                run('touch ' . $overwriteReleasePath . '/' . $entrypointDirectory . '/' . $oldReleaseFlagFilename);
+            }
         }
     }
-    // Remove .flag.requestbuffer lock files also from previous release because it can be still read by httpd after
-    // switching. get('releases_list') is cached by deployer on first call in other task so it does not have the
-    // latest release this is why $releasesList[0] have last release and not current.
+    // Remove .flag.requestbuffer also from previous release because it can be still read because php cache
     foreach ($overwriteReleases as $overwriteRelease) {
         $overwriteReleasePath = get('deploy_path') . '/' . $overwriteRelease;
         foreach (get('buffer_config') as $key => $inject) {
             if (empty($inject['entrypoint_filename'])) {
                 throw new \Exception('entrypoint_filename not set for buffer_data');
             }
-            $entrypointFilename = $inject['entrypoint_filename'];
             $activateBufferFlagFilename = empty($inject['requestbuffer_flag_filename']) ?
                 '.flag.requestbuffer' : $inject['requestbuffer_flag_filename'];
-            $entrypointDirectory = dirname($entrypointFilename) === '.' ? '' : dirname($entrypointFilename) . '/';
+            $entrypointDirectory = dirname($inject['entrypoint_filename']) === '.' ? '' : dirname($inject['entrypoint_filename']) . '/';
             run('cd ' . $overwriteReleasePath . ' && rm -f ' . $entrypointDirectory . $activateBufferFlagFilename);
         }
     }

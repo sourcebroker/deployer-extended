@@ -7,6 +7,7 @@ master
 
 a) [BUGFIX][BREAKING] Fix wrong flagname for old release and prevent creation of this flag if current folder does not exits.
 b) [BUGFIX][BREAKING] Create "old realease" flag just before removing "buffer request" flag.
+c) [TASK] Refactor buffer:stop
 
 
 8.0.1
