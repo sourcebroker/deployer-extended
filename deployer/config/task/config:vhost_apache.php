@@ -75,13 +75,12 @@ task('config:vhost_apache', function () {
                 }, get('public_urls'), array_keys(get('public_urls')))));
             // Apache logs
             if (testLocally('[ -e ' . escapeshellarg(rtrim(get('vhost_local_logs_path'))) . ' ]')) {
-                $accessLogPathFile = rtrim(get('vhost_logs_path'), '/') . '/' . get('vhost_logs_access_log_filename');
-                if (!testLocally('[ -e ' . escapeshellarg(get('vhost_local_logs_path') . '/access.log') . ' ]')) {
-                    runLocally('ln -s ' . escapeshellarg($accessLogPathFile) . ' ' . escapeshellarg(get('deploy_path') . '/.dep/logs/access.log'));
-                }
-                $errorLogPathFile = rtrim(get('vhost_logs_path'), '/') . '/' . get('vhost_logs_error_log_filename');
-                if (!testLocally('[ -e ' . escapeshellarg(get('vhost_local_logs_path') . '/error.log') . ' ]')) {
-                    runLocally('ln -s ' . escapeshellarg($errorLogPathFile) . ' ' . escapeshellarg(get('deploy_path') . '/.dep/logs/error.log'));
+                foreach (['access', 'error'] as $logType) {
+                    $logPathFile = rtrim(get('vhost_logs_path'),
+                            '/') . '/' . get('vhost_logs_' . $logType . '_log_filename');
+                    if (!testLocally('[ -e ' . escapeshellarg(get('vhost_local_logs_path') . '/' . $logType . '.log') . ' ]')) {
+                        runLocally('ln -s ' . escapeshellarg($logPathFile) . ' ' . escapeshellarg(get('vhost_local_logs_path') . '/' . $logType . '.log'));
+                    }
                 }
             }
             // Determine the PHP version

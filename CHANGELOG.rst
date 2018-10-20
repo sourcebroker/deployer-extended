@@ -11,6 +11,7 @@ c) [TASK] Refactor buffer:stop
 d) [TASK][BREAKING] Remove compsoer dependencies to sourcebroker/deployer-loader. It must be declared in higher level package as
    someone can use task without autoloader.
 e) [TASK][BREAKING] Refactor config:vhost_apache with possible breaking changes.
+f) [TASK] Refactor config:vhost_apache.
 
 8.0.1
 ~~~~~
