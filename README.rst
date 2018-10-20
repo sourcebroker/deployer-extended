@@ -48,7 +48,7 @@ Options:
   | *required:* yes
   |
   | The filename that will be overwritten with "entrypoint_inject" php code. If entrypoint is inside folder then
-    write it with this folder like: 'entrypoint_filename' => 'typo3/index.php'
+    write it with this folder like: 'entrypoint_filename' => 'index.php'
 
   |
 - | **entrypoint_needle**
@@ -97,8 +97,8 @@ Options:
   |
   | The time in seconds after which the .flag.requestbuffer files will be removed automatically.
   |
-  | Usually its buffer:stop task that should remove ".flag.requestbuffer" file. Unfortunatly sometimes deploy can fail. If deploy
-  | will fail after buffer:start task and before buffer:stop then the ".flag.requestbuffer" will be automatically removed
+  | Usually its buffer:stop task that should remove ".flag.requestbuffer" file. Unfortunatly sometimes deploy can fail.
+  | If deploy will fail after buffer:start task and before buffer:stop then the ".flag.requestbuffer" will be automatically removed
   | anyway after "locker_expire" time.
 
 The simplest configuration example:
