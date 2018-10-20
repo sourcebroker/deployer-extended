@@ -8,6 +8,8 @@ master
 a) [BUGFIX][BREAKING] Fix wrong flagname for old release and prevent creation of this flag if current folder does not exits.
 b) [BUGFIX][BREAKING] Create "old realease" flag just before removing "buffer request" flag.
 c) [TASK] Refactor buffer:stop
+d) [TASK][BREAKING] Remove compsoer dependencies to sourcebroker/deployer-loader. It must be declared in higher level package as
+   someone can use task without autoloader.
 
 
 8.0.1
