@@ -70,16 +70,17 @@ Options:
   | *required:* no
   |
   | A php code that actually do the buffering.
+  | The default code with already prefilled variables (random, locker_filename, locker_expire, entrypoint_refresh):
   ::
 
-          isset($_SERVER['HTTP_X_DEPLOYER_DEPLOYMENT']) && $_SERVER['HTTP_X_DEPLOYER_DEPLOYMENT'] == '{{random}}' ? $deployerExtendedEnableBufferLock = false : $deployerExtendedEnableBufferLock = true;
-          isset($_ENV['DEPLOYER_DEPLOYMENT']) && $_ENV['DEPLOYER_DEPLOYMENT'] == '{{random}}' ? $deployerExtendedEnableBufferLock = false : $deployerExtendedEnableBufferLock = true;
-          clearstatcache(true, __DIR__ . '$requestBufferFlagFilename');
-          while (file_exists(__DIR__ . '$requestBufferFlagFilename') && $deployerExtendedEnableBufferLock) {\n" .
-              usleep($requestBufferSleep);
-              clearstatcache(true);
-              if(time() - @filectime(__DIR__ . '/$requestBufferFlagFilename') > $requestBufferDuration) @unlink(__DIR__ . '/$requestBufferFlagFilename');
-          }
+      isset($_SERVER['HTTP_X_DEPLOYER_DEPLOYMENT']) && $_SERVER['HTTP_X_DEPLOYER_DEPLOYMENT'] == 'af37fd227cb6429c211168666dd28391' ? $deployerExtendedEnableBufferLo
+      isset($_ENV['DEPLOYER_DEPLOYMENT']) && $_ENV['DEPLOYER_DEPLOYMENT'] == 'af37fd227cb6429c211168666dd28391' ? $deployerExtendedEnableBufferLock = false: $deploye
+      clearstatcache(true, __DIR__ . '/.flag.requestbuffer');
+      while (file_exists(__DIR__ . '/.flag.requestbuffer') && $deployerExtendedEnableBufferLock) {
+          usleep(200000);
+          clearstatcache(true);
+          if(time() - @filectime(__DIR__ . '/.flag.requestbuffer') > 60) @unlink(__DIR__ . '/.flag.requestbuffer');
+      }
 
 
 - | **locker_filename**
