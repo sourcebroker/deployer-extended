@@ -22,30 +22,6 @@ Library with some additional tasks for deployer (deployer.org).
 
 **NOTE! Its tested only with Deployer 4.3.1!**
 
-Installation
-------------
-1) Install package with composer:
-   ::
-
-      composer require sourcebroker/deployer-extended
-
-2) If you are using deployer as composer package then just put following line in your deploy.php:
-   ::
-
-      new \SourceBroker\DeployerLoader\Load([['path' => 'vendor/sourcebroker/deployer-extended/deployer']]);
-
-3) If you are using deployer as phar then put following lines in your deploy.php:
-   ::
-
-      require_once(__DIR__ . '/vendor/sourcebroker/deployer-loader/autoload.php');
-      new \SourceBroker\DeployerLoader\Load([['path' => 'vendor/sourcebroker/deployer-extended/deployer']]);
-
-   | IMPORTANT NOTE!
-   | Do not put ``require(__DIR__ . '/vendor/autoload.php');`` inside your deploy.php because you can have dependency problems as
-     packages from your vendor will overwrite the one from deployer vendors.
-     Use ``require(__DIR__ . '/vendor/sourcebroker/deployer-loader/autoload.php');`` instead.
-
-
 Task's documentation
 --------------------
 
@@ -86,7 +62,7 @@ Options:
   | *required:* no
   | *default value:* 200000 μs (200ms)
   |
-  | How often the entrypoint will recheck if ``.activatebuffer.flag`` is still there. Values in microseconds.
+  | How often the entrypoint will recheck if ``.flag.requestbuffer`` is still there. Values in microseconds.
   | 100000 μs = 100 ms = 0,1 s.
   |
 
@@ -94,37 +70,35 @@ Options:
   | *required:* no
   |
   | A php code that actually do the buffering.
-  | The default code with already prefilled variables (random, locker_filename, locker_expire, entrypoint_refresh):
   ::
 
-       isset($_SERVER['HTTP_X_DEPLOYER_DEPLOYMENT']) && $_SERVER['HTTP_X_DEPLOYER_DEPLOYMENT'] == '823094823094' ? $deployerExtendedEnableBufferLock = false : $deployerExtendedEnableBufferLock = true;
-       isset($_ENV['DEPLOYER_DEPLOYMENT']) && $_ENV['DEPLOYER_DEPLOYMENT'] == '823094823094' ? $deployerExtendedEnableBufferLock = false: $deployerExtendedEnableBufferLock = true;
-       while (file_exists(__DIR__ . '.activatebuffer.flag') && $deployerExtendedEnableBufferLock) {
-         usleep(200000);
-         clearstatcache(true, __DIR__ . '/.activatebuffer.flag');
-         if(time() - filectime(__DIR__ . '/.activatebuffer.flag') > 60) @unlink(__DIR__ . '/.activatebuffer.flag');
-       }
+          isset($_SERVER['HTTP_X_DEPLOYER_DEPLOYMENT']) && $_SERVER['HTTP_X_DEPLOYER_DEPLOYMENT'] == '{{random}}' ? $deployerExtendedEnableBufferLock = false : $deployerExtendedEnableBufferLock = true;
+          isset($_ENV['DEPLOYER_DEPLOYMENT']) && $_ENV['DEPLOYER_DEPLOYMENT'] == '{{random}}' ? $deployerExtendedEnableBufferLock = false : $deployerExtendedEnableBufferLock = true;
+          clearstatcache(true, __DIR__ . '$requestBufferFlagFilename');
+          while (file_exists(__DIR__ . '$requestBufferFlagFilename') && $deployerExtendedEnableBufferLock) {\n" .
+              usleep($requestBufferSleep);
+              clearstatcache(true);
+              if(time() - @filectime(__DIR__ . '/$requestBufferFlagFilename') > $requestBufferDuration) @unlink(__DIR__ . '/$requestBufferFlagFilename');
+          }
 
 
 - | **locker_filename**
   | *required:* no
-  | *default value:* .activatebuffer.flag
+  | *default value:* .flag.requestbuffer
   |
-  | When file with name ".activatebuffer.flag" exists the reqests are buffered. The task `buffer:stop`_ just removes
-    the ".activatebuffer.flag" files without removing the "entrypoint_inject" code.
+  | When file with name ".flag.requestbuffer" exists the reqests are buffered. The task `buffer:stop`_ just removes
+    the ".flag.requestbuffer" files without removing the "entrypoint_inject" code.
   |
 
 - | **locker_expire**
   | *required:* no
   | *default value:* 60
   |
-  | The time in seconds after which the .activatebuffer.flag files will be removed automatically.
+  | The time in seconds after which the .flag.requestbuffer files will be removed automatically.
   |
-  | Usually its buffer:stop task that should remove .activatebuffer.flag files. Unfortunatly sometimes deploy can fail. If deploy
-  | will fail after buffer:start task and before buffer:stop then the .activatebuffer.flag files will stay and block access to
-  | entrypoints for good. In edge cases it can lead to run out all apache forks or if CLI entrypoint will be called
-  | often by cron it can overload RAM. This is why its important to remove .activatebuffer.flag files after some time no matter
-  | if the task buffer:stop will be called or not.
+  | Usually its buffer:stop task that should remove ".flag.requestbuffer" file. Unfortunatly sometimes deploy can fail. If deploy
+  | will fail after buffer:start task and before buffer:stop then the ".flag.requestbuffer" will be automatically removed
+  | anyway after "locker_expire" time.
 
 The simplest configuration example:
 ::
@@ -160,9 +134,9 @@ More configuration options examples:
                'entrypoint_filename' => 'index.php',
                'entrypoint_needle' => '// inject php code after this comment',
                'locker_filename' => 'deployment.lock',
-               'entrypoint_inject' => 'while (file_exists(__DIR__ . ".activatebuffer.flag")){' . "\n"
+               'entrypoint_inject' => 'while (file_exists(__DIR__ . ".flag.requestbuffer")){' . "\n"
                                       . 'usleep(200000);' . "\n"
-                                      . 'clearstatcache(true, __DIR__ . "/.activatebuffer.flag")' . "\n"
+                                      . 'clearstatcache(true, __DIR__ . "/.flag.requestbuffer")' . "\n"
                                       . '}'
            ]
        ]
@@ -172,7 +146,7 @@ More configuration options examples:
 buffer:stop
 +++++++++++
 
-Stop buffering requests to application entrypoints. It deletes ".activatebuffer.flag" files.
+Stop buffering requests to application entrypoints. It deletes ".flag.requestbuffer" files.
 
 config
 ~~~~~~
@@ -187,9 +161,9 @@ By default:
 
 1) ProxyPassMatch and php-fpm is used. Port for php-fpm by default is 90xx where xx is php version read from
    composer.json file from the node config/platform/php.
-2) By default access_log and error_log are configured to be stored in ``{(deploy_path)}/.dep/logs`` folder.
+2) By default access_log and error_log are symlinked to fiels in apache dir and acessible inside proejct folder ``.dep/logs``.
 3) If vhost config filename is taken from project folder and if file with such name already exist in vhost folder then
-   a copy of that file is created and current version overwrittem.
+   a copy of that file is created and current version overwritten.
 
 deploy
 ~~~~~~
