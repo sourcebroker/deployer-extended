@@ -2,13 +2,13 @@
 
 namespace Deployer;
 
+// Read more on https://github.com/sourcebroker/deployer-extended#buffer-stop
 task('buffer:stop', function () {
     if (empty(get('deploy_path'))) {
         throw new \Exception('The "deploy_path" var is empty but its used for file operations so its dangerous state.');
     }
     $overwriteReleases = ['current'];
     $releasesList = get('releases_list');
-
     // Add .flag.oldrelease for cases when php cache will decide to run code in old release path
     if (isset($releasesList[0])) {
         $overwriteReleases[] = '/releases/' . $releasesList[0];

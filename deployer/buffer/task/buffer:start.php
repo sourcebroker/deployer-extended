@@ -2,6 +2,7 @@
 
 namespace Deployer;
 
+// Read more on https://github.com/sourcebroker/deployer-extended#buffer-start
 task('buffer:start', function () {
     if (empty(get('deploy_path'))) {
         throw new \Exception('The "deploy_path" var is empty but its used for file operations so its dangerous state.');

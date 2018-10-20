@@ -2,6 +2,7 @@
 
 namespace Deployer;
 
+// Read more on https://github.com/sourcebroker/deployer-extended#config-vhost-apache
 task('config:vhost_apache', function () {
     if (get('public_urls', false)) {
         if (is_array(get('public_urls'))) {

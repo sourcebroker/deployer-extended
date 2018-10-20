@@ -2,6 +2,7 @@
 
 namespace Deployer;
 
+// Read more on https://github.com/sourcebroker/deployer-extended#php-clear-cache-http
 task('php:clear_cache_http', function () {
     if (empty(get('random'))) {
         throw new \Exception('The "random" var is empty.');

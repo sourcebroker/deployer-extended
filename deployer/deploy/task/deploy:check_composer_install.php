@@ -2,6 +2,7 @@
 
 namespace Deployer;
 
+// Read more on https://github.com/sourcebroker/deployer-extended#deploy-check-composer-install
 task('deploy:check_composer_install', function () {
     if (file_exists(get('current_dir') . '/composer.lock')) {
         $output = runLocally('{{local/bin/composer}} --ignore-platform-reqs install --dry-run 2>&1');

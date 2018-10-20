@@ -2,6 +2,7 @@
 
 namespace Deployer;
 
+// Read more on https://github.com/sourcebroker/deployer-extended#deploy-check-lock
 task('deploy:check_lock', function () {
     if (file_exists(get('current_dir') . '/deploy.lock')) {
         $deployLockFileContent = trim(file_get_contents(get('current_dir') . '/deploy.lock'));
