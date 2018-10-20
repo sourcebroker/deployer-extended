@@ -2,8 +2,8 @@
 Changelog
 ---------
 
-master
-~~~~~~
+9.0.0
+~~~~~
 
 a) [BUGFIX][BREAKING] Fix wrong flagname for old release and prevent creation of this flag if current folder does not exits.
 b) [BUGFIX][BREAKING] Create "old realease" flag just before removing "buffer request" flag.
