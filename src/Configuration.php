@@ -6,7 +6,6 @@ use Deployer\Deployer;
 
 class Configuration
 {
-
     public static function getEnvironment($name)
     {
         try {
@@ -40,5 +39,4 @@ class Configuration
 
         return $server;
     }
-
 }

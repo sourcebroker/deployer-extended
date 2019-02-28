@@ -16,9 +16,9 @@ task('file:backup', function () {
         : get('deploy_path');
 
     foreach ($backupFiles as $package => $filtersGroups) {
-        $filtersGroups = array_map(function($group) {
+        $filtersGroups = array_map(function ($group) {
             return is_array($group)
-                ? '\( '.  implode (' -and ', $group). ' \)'
+                ? '\( '.  implode(' -and ', $group). ' \)'
                 : $group;
         }, $filtersGroups);
 
