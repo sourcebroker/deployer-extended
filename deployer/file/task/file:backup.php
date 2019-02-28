@@ -7,13 +7,11 @@ task('file:backup', function () {
     $backupFiles = get('file_backup_packages');
 
     if ($backupFiles === null) {
-        writeln('Warning: No backup performed! Nothing defined in "backup_files"');
+        writeln('Warning: No backup performed! Nothing defined in "file_backup_packages"');
         return;
     }
 
-    $searchRootPath = test('[ -e '. get('deploy_path') .'/current ]')
-        ? get('deploy_path') .'/current'
-        : get('deploy_path');
+    $searchRootPath = get('deploy_path') .'/'. (test('[ -e {{deploy_path}}/current ]') ? 'current' : '');
 
     foreach ($backupFiles as $package => $filtersGroups) {
         $filtersGroups = array_map(function ($group) {
