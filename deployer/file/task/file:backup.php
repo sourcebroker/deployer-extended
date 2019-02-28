@@ -34,6 +34,5 @@ BASH;
         writeln('Creating backup. Package: "' . $package .'" Backup signature: "'. $backupName .'"');
         run($command);
     }
-
 })
 ->desc('Backup files - only files selected by filter will be backuped');
