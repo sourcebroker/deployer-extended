@@ -7,27 +7,38 @@ use Deployer\Deployer;
 class Configuration
 {
 
-    public static function getServer($instance)
+    public static function getEnvironment($name)
     {
         try {
-            $environment = Deployer::get()->environments[$instance];
-            $server = Deployer::get()->servers[$instance]->getConfiguration();
+            $environment = Deployer::get()->environments[$name];
+        } catch (\RuntimeException $e) {
+            $environments = '';
+            $i = 1;
+            foreach (Deployer::get()->environments as $key => $server) {
+                $environments .= "\n" . $i++ . '. ' . $key;
+            }
+            throw new \RuntimeException('Name of instance "' . $name . '" is not on the environments list:' .
+                $environments . "\n" . 'Please check case sensitive.', 1500717628491);
+        }
+
+        return $environment;
+    }
+
+    public static function getServer($name)
+    {
+        try {
+            $server = Deployer::get()->servers[$name];
         } catch (\RuntimeException $e) {
             $servers = '';
             $i = 1;
-            foreach (Deployer::get()->environments as $key => $server) {
+            foreach (Deployer::get()->servers as $key => $server) {
                 $servers .= "\n" . $i++ . '. ' . $key;
             }
-            throw new \RuntimeException('Name of instance "' . $instance . '" is not on the server list:' .
+            throw new \RuntimeException('Name of instance "' . $name . '" is not on the environments list:' .
                 $servers . "\n" . 'Please check case sensitive.', 1500717628491);
         }
 
-        return [
-            'server' => $environment->get('server'),
-            'deploy_path' => $environment->get('deploy_path'),
-            'public_urls' => $environment->get('public_urls'),
-            'user' => $server->getUser(),
-        ];
+        return $server;
     }
 
 }
