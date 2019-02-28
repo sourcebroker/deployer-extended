@@ -14,5 +14,10 @@
       "name": "Krystian Liński",
       "email": "krystian.linski@gmail.com"
     }
-  ]
+  ],
+  "autoload": {
+    "psr-4": {
+      "SourceBroker\\DeployerExtended\\": "src/"
+    }
+  }
 }
