@@ -1,6 +1,6 @@
 <?php
 
-namespace SourceBroker\DeployerExtended;
+namespace SourceBroker\DeployerExtended\Utility;
 
 use Deployer\Deployer;
 
