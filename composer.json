@@ -5,6 +5,10 @@
   "keywords": [
     "deployer"
   ],
+  "require": {
+    "deployer/dist": "^4.3.1",
+    "sourcebroker/deployer-instance": "^0.1.5"
+  },
   "authors": [
     {
       "name": "Krystian Szymukowicz",

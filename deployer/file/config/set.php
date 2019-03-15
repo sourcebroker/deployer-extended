@@ -2,8 +2,8 @@
 
 namespace Deployer;
 
-use SourceBroker\DeployerExtended\Utility\Instance;
-use SourceBroker\DeployerExtended\Utility\Configuration;
+use SourceBroker\DeployerInstance\Instance;
+use SourceBroker\DeployerInstance\Configuration;
 
 // Returns path to store file backups on remote instance.
 set('file_backup_path', function () {
