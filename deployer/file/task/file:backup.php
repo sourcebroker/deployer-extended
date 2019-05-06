@@ -37,7 +37,7 @@ if [ -d "{$searchRootPath}" ]
 then
     cd "{$searchRootPath}"
     [ -d "{{file_backup_path}}/{$package}" ] || mkdir -p "{{file_backup_path}}/{$package}"
-    find . -type f \( {$filtersConcat} \) -printf '%P\\n' | \
+    find . -type f -follow \( {$filtersConcat} \) -printf '%P\\n' | \
     tar -czf {{file_backup_path}}/{$package}/{$backupName}.tar.gz -T -
 fi
 BASH;
