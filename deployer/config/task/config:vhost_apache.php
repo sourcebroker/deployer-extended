@@ -34,10 +34,12 @@ task('config:vhost_apache', function () {
                     set('vhost_proxy', getenv('VHOST_PROXY'));
                 }
             }
-            if (get('vhost_nocurrent', false) === false) {
-                set('vhost_document_root', get('deploy_path') . '/current');
-            } else {
-                set('vhost_document_root', get('deploy_path'));
+            if (get('vhost_document_root', false) === false) {
+                if (get('vhost_nocurrent', false) === false) {
+                    set('vhost_document_root', get('deploy_path') . '/current');
+                } else {
+                    set('vhost_document_root', get('deploy_path'));
+                }
             }
             set('vhost_projectname', basename(get('current_dir')));
             if (get('vhost_logs_error_log_filename', false) === false) {

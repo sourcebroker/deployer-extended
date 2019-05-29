@@ -2,6 +2,11 @@
 Changelog
 ---------
 
+9.1.0
+~~~~~
+
+a) [FEATURE] Add possiblity to set "vhost_document_root" outside.
+
 9.0.0
 ~~~~~
 
