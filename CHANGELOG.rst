@@ -2,6 +2,12 @@
 Changelog
 ---------
 
+master
+~~~~~~
+
+a) [BUGFIX] Replace colon in filenames woth underscore for Windows compatibility.
+
+
 9.1.0
 ~~~~~
 
