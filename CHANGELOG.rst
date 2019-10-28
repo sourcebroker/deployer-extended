@@ -6,6 +6,7 @@ master
 ~~~~~~
 
 a) [BUGFIX] Replace colon in filenames woth underscore for Windows compatibility.
+b) [FEATURE] Add task deploy:check_branch to check if branch deployed to instance is the same as the one which is being deployed.
 
 
 9.1.0
