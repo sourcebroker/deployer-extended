@@ -224,6 +224,66 @@ file\:rm2steps\:2
 
 The second step of file:rm2steps tandem. Read more on `file:rm2steps:1`_
 
+file\:backup
+++++++++++++
+
+Creates backup of files.
+Single task may perform multiple archivizations using defined filters.
+Old ones are deleted after executing this task. Default limit is 5.
+
+Configuration description
+
+- | **file_backup_packages**
+  | *required:* yes
+  | *default value:* none
+  | *type:* array
+  |
+  | Packages definiton
+
+- | **file_backup_keep**
+  | *required:* no
+  | *default value:* 5
+  | *type:* int
+  |
+  | Limit of backups per package
+
+Sample configuration:
+::
+
+    set('file_backup_packages', [
+        'config' => [
+            '-path "./etc/*"',
+        ],
+        'translations' => [
+            '-path "./l10n/*"',
+            '-path "./modules/*/l10n/*"',
+        ],
+        'small_images' => [
+            [ '-path "./media/uploads/*"', '-size -25k' ],
+            [ '-path "./media/theme/*"', '-size -25k' ],
+        ],
+    ]);
+
+    set('file_backup_keep', 10);
+
+Config variable *file_backup_packages* stores information about backup packages and files filtring options.
+Each package defines filters which will be used in `find` command.
+First level element are groups which will be concanated using logical alternative operator operator OR.
+If group is array type then group elements will be concanated using logical conjunction operator.
+
+Package *config*:
+It is simplest definition.
+For this package all files from directory "./etc/" will be backuped.
+
+Package *translations*:
+For this one all files from directory "./l10n/" will be backuped.
+It will also include files from all "l10n/" from "modules" subdirectory.
+For example "modules/cookies/l10n"
+
+Package *small_images*:
+This one will contain all small (smaller than 25kB) files from "media/uploads" and "media/theme".
+
+As you can see *file_backup_keep* is set to 10 which means only newest 10 backups per package will be stored.
 
 php
 ~~~
