@@ -15,9 +15,12 @@ task('deploy:check_branch', function () {
                 $currentBranch = $metainfo[2];
                 $userName = $metainfo[3];
                 $branch = get('branch') ?: 'master';
-                if ($currentBranch != $branch && get('no-check-branch') === false) {
-                    throw new \RuntimeException(sprintf('On instance you deploy to there is currently branch "%s" deployed by "%s". This branch is different than you trying to deploy "%s". Add option \'set("no-check-branch", true)\' to server configuration to skip this checking.',
-                        $currentBranch, $userName, $branch));
+                if ($currentBranch != $branch) {
+                    if (!askConfirmation(sprintf('On instance you deploy to there is currently branch "%s" deployed by "%s". 
+                    This branch is different than you trying to deploy "%s". Do you really want to continue?',
+                        $currentBranch, $userName, $branch), false)) {
+                        throw new \RuntimeException('Process aborted.');
+                    }
                 }
             }
         }
