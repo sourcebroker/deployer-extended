@@ -2,6 +2,11 @@
 Changelog
 ---------
 
+10.0.1
+~~~~~~
+
+a) [BUGFIX] Fix wrong formatting for info form deploy:check_branch task. Add GracefulShutdownException.
+
 10.0.0
 ~~~~~~
 

@@ -3,6 +3,7 @@
 namespace Deployer;
 
 use Deployer\Type\Csv;
+use Deployer\Exception\GracefulShutdownException;
 
 // Read more on https://github.com/sourcebroker/deployer-extended#deploy-check-branch
 task('deploy:check_branch', function () {
@@ -16,10 +17,10 @@ task('deploy:check_branch', function () {
                 $userName = $metainfo[3];
                 $branch = get('branch') ?: 'master';
                 if ($currentBranch != $branch) {
-                    if (!askConfirmation(sprintf('On instance you deploy to there is currently branch "%s" deployed by "%s". 
-                    This branch is different than you trying to deploy "%s". Do you really want to continue?',
+                    if (!askConfirmation(sprintf('On instance you deploy to there is currently branch "%s" deployed by "%s". ' .
+                        'This branch is different than you trying to deploy "%s". Do you really want to continue?',
                         $currentBranch, $userName, $branch), false)) {
-                        throw new \RuntimeException('Process aborted.');
+                        throw new GracefulShutdownException('Process aborted.');
                     }
                 }
             }
