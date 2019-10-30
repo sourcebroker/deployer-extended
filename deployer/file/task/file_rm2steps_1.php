@@ -15,4 +15,4 @@ task('file:rm2steps:1', function () {
             run("if [ -e $itemToRename ]; then mv -f $itemToRename $itemToRenameNewName; fi");
         }
     }
-})->desc('Remove files and directories in two steps. First step: rename. Second step: remove.');
+})->desc('Remove files and directories in two steps - first step: rename - second step: remove');

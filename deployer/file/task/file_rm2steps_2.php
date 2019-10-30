@@ -14,4 +14,4 @@ task('file:rm2steps:2', function () {
             run("if [ -e $itemToRemove ]; then rm -rf $itemToRemove; fi");
         }
     }
-})->desc('Remove files and directories in two steps. First step: rename. Second step: remove.');
+})->desc('Remove files and directories in two steps - first step: rename - second step: remove');

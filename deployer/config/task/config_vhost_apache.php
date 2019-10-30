@@ -208,4 +208,4 @@ task('config:vhost_apache', function () {
     } else {
         throw new \Exception('"public_urls" config var was not set for server. Vhost can not be generated without it.');
     }
-})->desc('Create vhost and copy to path set in "VHOST_PATH" env var.');
+})->desc('Create vhost and copy to path set in "VHOST_PATH" env var');

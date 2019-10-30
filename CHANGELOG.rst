@@ -9,7 +9,7 @@ a) [BUGFIX] Replace colon in filenames woth underscore for Windows compatibility
 b) [FEATURE] Add task deploy:check_branch to check if branch deployed to instance is the same as the one which is being deployed.
 c) [FEATURE] Add task extedn:log to store additional info about deploy.
 d) [TASK] Increase version of sourcebroker/deployer-instance
-
+e) [TASK] Normalize use of dots at the end of task description.
 
 9.1.0
 ~~~~~

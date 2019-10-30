@@ -25,4 +25,4 @@ task('deploy:check_branch', function () {
             }
         }
     }
-})->desc('Check if branch deployed to instance is the same as the one which is being deployed.');
+})->desc('Check if branch deployed to instance is the same as the one which is being deployed');

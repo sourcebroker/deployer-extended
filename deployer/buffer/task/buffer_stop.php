@@ -38,4 +38,4 @@ task('buffer:stop', function () {
             run('cd ' . $overwriteReleasePath . ' && rm -f ' . $entrypointDirectory . $activateBufferFlagFilename);
         }
     }
-})->desc('Stop buffering requests to application entrypoints.');
+})->desc('Stop buffering requests to application entrypoints');

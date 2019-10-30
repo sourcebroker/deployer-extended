@@ -62,4 +62,4 @@ task('php:clear_cache_http', function () {
             );
             break;
     }
-})->desc('Clear php caches for current release.');
+})->desc('Clear php caches for current release');

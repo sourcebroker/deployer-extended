@@ -131,4 +131,4 @@ task('buffer:start', function () {
             run('rmdir ' . $tempPath);
         }
     }
-})->desc('Start buffering reqests to application entrypoints.');
+})->desc('Start buffering reqests to application entrypoints');
