@@ -57,4 +57,4 @@ fi
         run($command);
     }
 })
-->desc('Backup files - only files selected by filter will be backuped');
+->desc('Backup filtered files / directories');
