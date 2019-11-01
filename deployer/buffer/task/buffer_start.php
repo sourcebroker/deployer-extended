@@ -103,7 +103,7 @@ task('buffer:start', function () {
                 } else {
                     $entrypointInject = $inject['entrypoint_inject'];
                 }
-                $entrypointFileContent = trim(run('cd {{release_path}} && [ -f ' . $entrypointFilename . ' ] && cat ' . $entrypointFilename . ' || echo ""')->toString());
+                $entrypointFileContent = trim(run('cd {{release_path}} && [ -f ' . $entrypointFilename . ' ] && cat ' . $entrypointFilename . ' || echo ""'));
                 if (strpos($entrypointFileContent, $entrypointInjectStartComment) === false) {
                     if (!empty($entrypointFileContent)) {
                         $pos = strpos($entrypointFileContent, $entrypointNeedle);

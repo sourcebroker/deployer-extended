@@ -18,7 +18,7 @@ task('php:clear_cache_http', function () {
     $previousClearCacheFiles = null;
     if (isset($releasesList[0]) && test('[ -e {{deploy_path}}/releases/' . $releasesList[0] . ' ]')) {
         $previousClearCacheFiles = preg_split('/\R/',
-            run("find {{deploy_path}}/releases/" . $releasesList[0] . "/{{web_path}} -name 'cache_clear_*'")->toString());
+            run("find {{deploy_path}}/releases/" . $releasesList[0] . "/{{web_path}} -name 'cache_clear_*'"));
     }
     if (!empty($previousClearCacheFiles) && !empty($previousClearCacheFiles[0])) {
         $fileName = pathinfo($previousClearCacheFiles[0], PATHINFO_BASENAME);
@@ -43,14 +43,14 @@ task('php:clear_cache_http', function () {
         case 'curl':
             runLocally(
                 '{{local/bin/curl}} --insecure --silent --location ' . escapeshellarg($clearCacheUrl) . ' > /dev/null',
-                get('php:clear_cache_http:timeout', 15)
+                ['timeout', get('php:clear_cache_http:timeout', 15)]
             );
             break;
 
         case 'file_get_contents':
             runLocally(
                 '{{local/bin/php}} -r \'file_get_contents("' . escapeshellarg($clearCacheUrl) . '");\'',
-                get('php:clear_cache_http:timeout', 15)
+                ['timeout', get('php:clear_cache_http:timeout', 15)]
             );
             break;
 
@@ -58,7 +58,7 @@ task('php:clear_cache_http', function () {
         default:
             runLocally(
                 '{{local/bin/wget}} -q -O /dev/null ' . escapeshellarg($clearCacheUrl),
-                get('php:clear_cache_http:timeout', 15)
+                ['timeout', get('php:clear_cache_http:timeout', 15)]
             );
             break;
     }

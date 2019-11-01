@@ -23,6 +23,6 @@ task('deploy:extend_log', function () {
         }
     }
     $metainfo[2] = $branch;
-    $metainfo[3] = runLocally('git config user.name')->toString();
+    $metainfo[3] = runLocally('git config user.name');
     run("echo '" . implode(',', $metainfo) . "' >> .dep/logs");
 })->desc('Add custom information to the log file');

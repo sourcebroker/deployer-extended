@@ -8,7 +8,7 @@ use Deployer\Exception\GracefulShutdownException;
 // Read more on https://github.com/sourcebroker/deployer-extended#deploy-check-branch
 task('deploy:check_branch', function () {
     cd('{{deploy_path}}');
-    if (run('if [ -f .dep/logs ]; then echo "true"; fi')->toBool()) {
+    if (test('[ -f .dep/logs ]')) {
         $csv = run('tail -n 1 .dep/logs');
         if ($csv) {
             try {
