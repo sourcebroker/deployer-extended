@@ -10,16 +10,16 @@ task('buffer:stop', function () {
     $overwriteReleases = ['current'];
     $releasesList = get('releases_list');
     // Add .flag.oldrelease for cases when php cache will decide to run code in old release path
-    if (isset($releasesList[0])) {
-        $overwriteReleases[] = '/releases/' . $releasesList[0];
+    if (isset($releasesList[1])) {
+        $overwriteReleases[] = 'releases/' . $releasesList[1];
         foreach (get('buffer_config') as $key => $inject) {
             if (empty($inject['entrypoint_filename'])) {
                 throw new \Exception('entrypoint_filename not set for buffer_data');
             }
-            $overwriteReleasePath = get('deploy_path') . '/releases/' . $releasesList[0];
+            $overwriteReleasePath = get('deploy_path') . '/releases/' . $releasesList[1];
             $oldReleaseFlagFilename = empty($inject['oldrelease_flag__filename']) ?
                 '.flag.oldrelease' : $inject['oldrelease_flag_filename'];
-            $entrypointDirectory = dirname($inject['entrypoint_filename']) === '.' ? '' : dirname($inject['entrypoint_filename']) . '/';
+            $entrypointDirectory = dirname($inject['entrypoint_filename']) === '.' ? '' : dirname($inject['entrypoint_filename']);
             if (test('[ -e ' . $overwriteReleasePath . '/' . $entrypointDirectory . ' ]')) {
                 run('touch ' . $overwriteReleasePath . '/' . $entrypointDirectory . '/' . $oldReleaseFlagFilename);
             }
