@@ -2,6 +2,11 @@
 Changelog
 ---------
 
+10.0.2
+~~~~~~
+
+a) [BUGFIX] Replace colon in filenames with underscore for Windows compatibility.
+
 10.0.1
 ~~~~~~
 
@@ -10,7 +15,7 @@ a) [BUGFIX] Fix wrong formatting for info form deploy:check_branch task. Add Gra
 10.0.0
 ~~~~~~
 
-a) [BUGFIX] Replace colon in filenames woth underscore for Windows compatibility.
+a) [BUGFIX] Replace colon in filenames with underscore for Windows compatibility.
 b) [FEATURE] Add task deploy:check_branch to check if branch deployed to instance is the same as the one which is being deployed.
 c) [FEATURE] Add task extedn:log to store additional info about deploy.
 d) [TASK] Increase version of sourcebroker/deployer-instance
