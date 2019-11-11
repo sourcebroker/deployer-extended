@@ -2,6 +2,11 @@
 Changelog
 ---------
 
+master
+~~~~~~
+
+a) [TASK][BREAKING] Rename task php:clear_cache_cli.php to cache:clear_php_cli and php:clear_cache_http.php to cache:clear_php_http
+
 10.0.2
 ~~~~~~
 
