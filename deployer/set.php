@@ -10,17 +10,17 @@ set('web_path', '');
 
 // Return path to php on current instance
 set('local/bin/php', function () {
-    return runLocally('which php')->toString();
+    return runLocally('which php');
 });
 
 // Return path to curl on current instance
 set('local/bin/curl', function () {
-    return runLocally('which curl')->toString();
+    return runLocally('which curl');
 });
 
 // Return path to wget on current instance
 set('local/bin/wget', function () {
-    return runLocally('which wget')->toString();
+    return runLocally('which wget');
 });
 
 // Return path to composer on current instance
@@ -32,7 +32,7 @@ set('local/bin/composer', function () {
     }
     //check for composer in global
     if (empty($composerBin)) {
-        $composerBin = '{{local/bin/php}} ' . runLocally('which composer')->toString();
+        $composerBin = '{{local/bin/php}} ' . runLocally('which composer');
     }
     // no local and global then try to download composer
     // https://getcomposer.org/doc/faqs/how-to-install-composer-programmatically.md

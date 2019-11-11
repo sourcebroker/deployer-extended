@@ -285,15 +285,15 @@ This one will contain all small (smaller than 25kB) files from "media/uploads" a
 
 As you can see *file_backup_keep* is set to 10 which means only newest 10 backups per package will be stored.
 
-php
-~~~
+cache
+~~~~~
 
-php:clear_cache_cli
+cache:clear_php_cli
 +++++++++++++++++++
 
 This task clears the file status cache, opcache and eaccelerator cache for CLI context.
 
-php:clear_cache_http
+cache:clear_php_http
 ++++++++++++++++++++
 
 This task clears the file status cache, opcache and eaccelerator cache for HTTP context. It does following:
@@ -317,7 +317,7 @@ Here is example:
 
 Task configuration variables:
 
-- | **php:clear_cache_http:phpcontent**
+- | **cache:clear_php_http:phpcontent**
   | *required:* no
   | *type:* string
   | *default value:*
@@ -352,7 +352,7 @@ Task configuration variables:
   | - file_get_contents
   |
 
-- | **php:clear_cache_http:timeout**
+- | **cache:clear_php_http:timeout**
   | *required:* no
   | *default value:* 15
   | *type:* integer

@@ -2,8 +2,8 @@
 
 namespace Deployer;
 
-// Read more on https://github.com/sourcebroker/deployer-extended#php-clear-cache-http
-task('php:clear_cache_http', function () {
+// Read more on https://github.com/sourcebroker/deployer-extended#cache-clear-php-http
+task('cache:clear_php_http', function () {
     if (empty(get('random'))) {
         throw new \Exception('The "random" var is empty.');
     }
@@ -18,7 +18,7 @@ task('php:clear_cache_http', function () {
     $previousClearCacheFiles = null;
     if (isset($releasesList[0]) && test('[ -e {{deploy_path}}/releases/' . $releasesList[0] . ' ]')) {
         $previousClearCacheFiles = preg_split('/\R/',
-            run("find {{deploy_path}}/releases/" . $releasesList[0] . "/{{web_path}} -name 'cache_clear_*'")->toString());
+            run("find {{deploy_path}}/releases/" . $releasesList[0] . "/{{web_path}} -name 'cache_clear_*'"));
     }
     if (!empty($previousClearCacheFiles) && !empty($previousClearCacheFiles[0])) {
         $fileName = pathinfo($previousClearCacheFiles[0], PATHINFO_BASENAME);
@@ -27,7 +27,7 @@ task('php:clear_cache_http', function () {
     }
     if (test('[ -L {{deploy_path}}/current ]')) {
         run('cd {{deploy_path}}/current/{{web_path}} && echo ' . escapeshellarg(
-                get('php:clear_cache_http:phpcontent', "<?php\n"
+                get('cache:clear_php_http:phpcontent', "<?php\n"
                     . "clearstatcache(true);\n"
                     . "if(function_exists('opcache_reset')) opcache_reset();\n"
                     . "if(function_exists('eaccelerator_clear')) eaccelerator_clear();"
@@ -35,7 +35,7 @@ task('php:clear_cache_http', function () {
     }
 
     if (empty(get('public_urls', []))) {
-        throw new \Exception('You need at least one "public_url" to call task php:clear_cache_http');
+        throw new \Exception('You need at least one "public_url" to call task cache:clear_php_http');
     }
     $clearCacheUrl = rtrim(get('public_urls')[0], '/') . '/' . $fileName;
 
@@ -43,14 +43,14 @@ task('php:clear_cache_http', function () {
         case 'curl':
             runLocally(
                 '{{local/bin/curl}} --insecure --silent --location ' . escapeshellarg($clearCacheUrl) . ' > /dev/null',
-                get('php:clear_cache_http:timeout', 15)
+                ['timeout', get('cache:clear_php_http:timeout', 15)]
             );
             break;
 
         case 'file_get_contents':
             runLocally(
                 '{{local/bin/php}} -r \'file_get_contents("' . escapeshellarg($clearCacheUrl) . '");\'',
-                get('php:clear_cache_http:timeout', 15)
+                ['timeout', get('cache:clear_php_http:timeout', 15)]
             );
             break;
 
@@ -58,7 +58,7 @@ task('php:clear_cache_http', function () {
         default:
             runLocally(
                 '{{local/bin/wget}} -q -O /dev/null ' . escapeshellarg($clearCacheUrl),
-                get('php:clear_cache_http:timeout', 15)
+                ['timeout', get('cache:clear_php_http:timeout', 15)]
             );
             break;
     }
