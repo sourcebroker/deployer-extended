@@ -12,7 +12,7 @@ task('deploy:extend_log', function () {
     try {
         $branch = runLocally('git rev-parse --abbrev-ref HEAD');
     } catch (\Throwable $exception) {
-        $branch = null;
+        $branch = '';
     }
     $branch = get('branch') ?: $branch;
     // If option `branch` is set.
@@ -22,7 +22,21 @@ task('deploy:extend_log', function () {
             $branch = $inputBranch;
         }
     }
+    // TODO: consider also following options later: --tag, --revision.
     $metainfo[2] = $branch;
     $metainfo[3] = runLocally('git config user.name');
-    run("echo '" . implode(',', $metainfo) . "' >> .dep/logs");
+    $repository = get('repository');
+    $branchHead = run(sprintf('%s ls-remote %s refs/heads/' . $branch, get('bin/git'), $repository));
+    $branchHead = explode("\t", $branchHead)[0];
+    $metainfo[4] = $branchHead;
+
+    // create a well formatted csv line
+    $handle = fopen('php://memory', 'r+');
+    if (fputcsv($handle, $metainfo) === false) {
+        throw new \Exception('Error formatting csv line.');
+    }
+    rewind($handle);
+    $csvLine = trim(stream_get_contents($handle));
+
+    run("echo " . escapeshellarg($csvLine) . " >> .dep/releases.extended");
 })->desc('Add custom information to the log file');

@@ -8,8 +8,8 @@ use Deployer\Exception\GracefulShutdownException;
 // Read more on https://github.com/sourcebroker/deployer-extended#deploy-check-branch
 task('deploy:check_branch', function () {
     cd('{{deploy_path}}');
-    if (test('[ -f .dep/logs ]')) {
-        $csv = run('tail -n 1 .dep/logs');
+    if (test('[ -f .dep/releases.extended ]')) {
+        $csv = run('tail -n 1 .dep/releases.extended');
         if ($csv) {
             try {
                 $branch = runLocally('git rev-parse --abbrev-ref HEAD');
@@ -17,7 +17,6 @@ task('deploy:check_branch', function () {
                 $branch = null;
             }
             $branch = get('branch') ?: $branch;
-            // If option `branch` is set.
             if (input()->hasOption('branch')) {
                 $inputBranch = input()->getOption('branch');
                 if (!empty($inputBranch)) {
