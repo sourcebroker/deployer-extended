@@ -2,11 +2,12 @@
 Changelog
 ---------
 
-master
+11.0.0
 ~~~~~~
 
 a) [TASK][BREAKING] Rename task php:clear_cache_cli.php to cache:clear_php_cli and php:clear_cache_http.php to cache:clear_php_http
 b) [TASK][BREAKING] Rename the logs filename to .dep/releases.extended. Add hash to log line. Format log line with csv formatter.
+c) [TASK][BREAKING] Deployer 6.4+ compatibility.
 
 10.0.2
 ~~~~~~

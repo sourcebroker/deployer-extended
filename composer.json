@@ -6,8 +6,8 @@
     "deployer"
   ],
   "require": {
-    "deployer/dist": "^6.4.6",
-    "sourcebroker/deployer-instance": "dev-compatibility_6.4"
+    "deployer/dist": "^6.4.0",
+    "sourcebroker/deployer-instance": "^2.0.0"
   },
   "authors": [
     {
