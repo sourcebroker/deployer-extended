@@ -2,6 +2,11 @@
 Changelog
 ---------
 
+11.0.1
+~~~~~~
+
+a) [BUGFIX] Fix wrong detection of previous clear http cache file.
+
 11.0.0
 ~~~~~~
 
