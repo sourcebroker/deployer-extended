@@ -7,34 +7,29 @@ use Deployer\Exception\GracefulShutdownException;
 
 // Read more on https://github.com/sourcebroker/deployer-extended#deploy-check-branch
 task('deploy:check_branch', function () {
-    cd('{{deploy_path}}');
     if (test('[ -f .dep/releases.extended ]')) {
+        cd('{{deploy_path}}');
+        $branchToBeDeployed = get('branch', null);
+        if (input()->hasOption('branch')) {
+            $inputBranch = input()->getOption('branch');
+            if (!empty($inputBranch)) {
+                $branchToBeDeployed = $inputBranch;
+            }
+        }
         $csv = run('tail -n 1 .dep/releases.extended');
         if ($csv) {
-            try {
-                $branch = runLocally('git rev-parse --abbrev-ref HEAD');
-            } catch (\Throwable $exception) {
-                $branch = null;
-            }
-            $branch = get('branch') ?: $branch;
-            if (input()->hasOption('branch')) {
-                $inputBranch = input()->getOption('branch');
-                if (!empty($inputBranch)) {
-                    $branch = $inputBranch;
-                }
-            }
             $metainfo = Csv::parse($csv)[0];
             if (isset($metainfo[2]) && isset($metainfo[3])) {
-                $currentBranch = $metainfo[2];
+                $currentRemoteBranch = $metainfo[2];
                 $userName = $metainfo[3];
-                if ($currentBranch != $branch) {
+                if ($currentRemoteBranch != $branchToBeDeployed) {
                     if (!askConfirmation(sprintf('On instance you deploy to there is currently branch "%s" deployed by "%s". ' .
                         'This branch is different than you trying to deploy "%s". Do you really want to continue?',
-                        $currentBranch, $userName, $branch), false)) {
+                        $currentRemoteBranch, $userName, $branchToBeDeployed), false)) {
                         throw new GracefulShutdownException('Process aborted.');
                     }
                 }
             }
         }
     }
-})->desc('Check if branch deployed to instance is the same as the one which is being deployed');
+})->desc('Check if the branch we want to deploy is equal to the branch that has been already deployed');
