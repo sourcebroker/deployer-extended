@@ -11,6 +11,7 @@ c) [BUGFIX] Fix test of existance for symlinked log files.
 d) [TASK] Refactor deploy:check_branch task.
 e) [TASK] Add deploy:check_branch_local task.
 f) [BUGFIX] Fix condition in deploy:check_branch_local task.
+g) [BUGFIX] Move cd() before condition in deploy_check_branch.php
 
 
 11.0.1

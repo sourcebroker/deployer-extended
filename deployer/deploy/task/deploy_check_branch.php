@@ -7,8 +7,8 @@ use Deployer\Exception\GracefulShutdownException;
 
 // Read more on https://github.com/sourcebroker/deployer-extended#deploy-check-branch
 task('deploy:check_branch', function () {
-    if (test('[ -f .dep/releases.extended ]')) {
-        cd('{{deploy_path}}');
+    cd('{{deploy_path}}');
+    if (test('[ -e .dep/releases.extended ]')) {
         $branchToBeDeployed = get('branch', null);
         if (input()->hasOption('branch')) {
             $inputBranch = input()->getOption('branch');
