@@ -10,6 +10,7 @@ b) [BUGFIX] Fix wrong calculation for vhost_local_logs_path.
 c) [BUGFIX] Fix test of existance for symlinked log files.
 d) [TASK] Refactor deploy:check_branch task.
 e) [TASK] Add deploy:check_branch_local task.
+f) [BUGFIX] Fix condition in deploy:check_branch_local task.
 
 
 11.0.1

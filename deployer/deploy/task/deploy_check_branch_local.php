@@ -20,10 +20,12 @@ task('deploy:check_branch_local', function () {
                 $branchToBeDeployed = $inputBranch;
             }
         }
-        if (!askConfirmation(sprintf('On the current instance you are checkout to branch "%s" but you want to deploy branch "%s". ' .
-            'The deploy.php files on both branches can be diffrent and that can influence the deploy process. Its not advisable. Do you really want to continue?',
-            $branchCheckoutLocally, $branchToBeDeployed), false)) {
-            throw new GracefulShutdownException('Process aborted.');
+        if ($branchCheckoutLocally != $branchToBeDeployed) {
+            if (!askConfirmation(sprintf('On the current instance you are checkout to branch "%s" but you want to deploy branch "%s". ' .
+                'The deploy.php files on both branches can be diffrent and that can influence the deploy process. Its not advisable. Do you really want to continue?',
+                $branchCheckoutLocally, $branchToBeDeployed), false)) {
+                throw new GracefulShutdownException('Process aborted.');
+            }
         }
     }
 })->desc('Check if locally checkout branch is equal to what branch is going to be deployed');
