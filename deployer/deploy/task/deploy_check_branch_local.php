@@ -2,7 +2,6 @@
 
 namespace Deployer;
 
-use Deployer\Type\Csv;
 use Deployer\Exception\GracefulShutdownException;
 
 // Read more on https://github.com/sourcebroker/deployer-extended#deploy-check-branch-local
