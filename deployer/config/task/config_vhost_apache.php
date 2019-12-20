@@ -62,11 +62,7 @@ task('config:vhost_apache', function () {
                 set('vhost_logs_path', getenv('VHOST_LOGS_PATH'));
             }
             if (get('vhost_local_logs_path', false) === false) {
-                if (get('vhost_nocurrent', false) === false) {
-                    set('vhost_local_logs_path', get('deploy_path') . '/.dep/logs');
-                } else {
-                    set('vhost_local_logs_path', get('vhost_document_root') . '/.dep/logs');
-                }
+                set('vhost_local_logs_path', get('deploy_path') . '/.dep/logs');
             }
             if (!testLocally('[ -e ' . get('vhost_local_logs_path') . ' ]')) {
                 runLocally('mkdir -p ' . get('vhost_local_logs_path'));
@@ -81,16 +77,16 @@ task('config:vhost_apache', function () {
                 foreach (['access', 'error'] as $logType) {
                     $logPathFile = rtrim(get('vhost_logs_path'),
                             '/') . '/' . get('vhost_logs_' . $logType . '_log_filename');
-                    if (!testLocally('[ -e ' . escapeshellarg(get('vhost_local_logs_path') . '/' . $logType . '.log') . ' ]')) {
+                    if (!testLocally('[ -L ' . escapeshellarg(get('vhost_local_logs_path') . '/' . $logType . '.log') . ' ]')) {
                         runLocally('ln -s ' . escapeshellarg($logPathFile) . ' ' . escapeshellarg(get('vhost_local_logs_path') . '/' . $logType . '.log'));
                     }
                 }
             }
             // Determine the PHP version
             $phpVersionTwoDigit = null;
-            if (runLocally('[ -e ' . get('current_dir') . '/composer.json' . ' ]')) {
+            if (testLocally('[ -e "' . get('current_dir') . '/composer.json" ]')) {
                 $composerJson = \json_decode(runLocally(
-                    'cat ' . escapeshellarg(get('current_dir') . '/composer.json'))->toString(), true);
+                    'cat ' . escapeshellarg(get('current_dir') . '/composer.json')), true);
                 if (!empty($composerJson['config']['platform']['php'])) {
                     $phpVersionParts = explode('.', $composerJson['config']['platform']['php']);
                     if (count($phpVersionParts)) {

@@ -2,6 +2,13 @@
 Changelog
 ---------
 
+master
+~~~~~~
+
+a) [BUGFIX] Compatibility with 6+. Fix local test for composr.json in config_vhost_apache.php.
+b) [BUGFIX] Fix wrong calculation for vhost_local_logs_path.
+c) [BUGFIX] Fix test of existance for symlinked log files.
+
 11.0.1
 ~~~~~~
 
