@@ -12,7 +12,7 @@ d) [TASK] Refactor deploy:check_branch task.
 e) [TASK] Add deploy:check_branch_local task.
 f) [BUGFIX] Fix condition in deploy:check_branch_local task.
 g) [BUGFIX] Move cd() before condition in deploy_check_branch.php
-
+h) [TASK]Add ability to turn of branch guess which is by default added to deployer. By setting "branch_detect_to_deploy" you can disable deploying currently checkout branch.
 
 11.0.1
 ~~~~~~

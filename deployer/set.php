@@ -72,3 +72,20 @@ set('current_dir', function () {
         throw new \Exception('Can not set "current_dir" var. Are you in folder with deploy.php file?');
     }
 });
+
+set('branch', function () {
+    $branch = null;
+    if (get('branch_detect_to_deploy', true)) {
+        try {
+            $branch = runLocally('git rev-parse --abbrev-ref HEAD');
+        } catch (\Throwable $exception) {
+        }
+    }
+    if ($branch === 'HEAD') {
+        $branch = null; // Travis-CI fix
+    }
+    if (input()->hasOption('branch') && !empty(input()->getOption('branch'))) {
+        $branch = input()->getOption('branch');
+    }
+    return $branch;
+});
