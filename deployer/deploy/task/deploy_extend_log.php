@@ -6,8 +6,10 @@ use Deployer\Type\Csv;
 
 // Read more on https://github.com/sourcebroker/deployer-extended#deploy-extend-log
 task('deploy:extend_log', function () {
+    $branchToBeDeployed = get('branch');
     $type = 'branch';
-    $typeValue = '';
+    $typeValue = $branchToBeDeployed;
+    $hash = '';
     if (input()->hasOption('tag')) {
         $tag = input()->getOption('tag');
         if (!empty($tag)) {
@@ -20,25 +22,25 @@ task('deploy:extend_log', function () {
         if (!empty($revision)) {
             $type = 'revision';
             $typeValue = $revision;
+            $hash = $revision;
         }
     }
     cd('{{deploy_path}}');
     $csv = run('tail -n 1 .dep/releases');
     $metainfo = Csv::parse($csv)[0];
-    $branchToBeDeployed = get('branch');
-    $metainfo[2] = $branchToBeDeployed;
+    $metainfo[2] = $typeValue;
     try {
         $userName = runLocally('git config user.name');
     } catch (\Throwable $exception) {
         $userName = 'Unknown';
     }
     $metainfo[3] = $userName;
-    $repository = get('repository');
-    $branchHead = run(sprintf('%s ls-remote %s refs/heads/' . $branchToBeDeployed, get('bin/git'), $repository));
-    $branchHead = explode("\t", $branchHead)[0];
-    $metainfo[4] = $branchHead;
+    if ($type !== 'revision') {
+        $hash = run(sprintf('%s ls-remote %s ' . $typeValue, get('bin/git'), get('repository')));
+        $hash = explode("\t", $hash)[0];
+    }
+    $metainfo[4] = $hash;
     $metainfo[5] = $type;
-    $metainfo[6] = $typeValue;
 
     // create a well formatted csv line
     $handle = fopen('php://memory', 'r+');
