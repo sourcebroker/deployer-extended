@@ -79,6 +79,7 @@ set('branch', function () {
         try {
             $branch = runLocally('git rev-parse --abbrev-ref HEAD');
         } catch (\Throwable $exception) {
+            // We do not care why it fails as branch can be set other way.
         }
     }
     if ($branch === 'HEAD') {
