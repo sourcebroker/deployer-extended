@@ -31,10 +31,11 @@ task('deploy:check_branch', function () {
             $csv = run('tail -n 1 .dep/releases.extended');
             if ($csv) {
                 $metainfo = Csv::parse($csv)[0];
-                if (isset($metainfo[2]) && isset($metainfo[3])) {
+                if (isset($metainfo[2]) && isset($metainfo[3]) && isset($metainfo[5])) {
                     $currentRemoteBranch = $metainfo[2];
                     $userName = $metainfo[3];
-                    if (!empty($currentRemoteBranch) && $currentRemoteBranch != $branchToBeDeployed) {
+                    $type = $metainfo[5];
+                    if ($type == 'branch' && !empty($currentRemoteBranch) && $currentRemoteBranch != $branchToBeDeployed) {
                         if (!askConfirmation(sprintf('On instance you deploy to there is currently branch "%s" deployed by "%s". ' .
                             'This branch is different than you trying to deploy "%s". Do you really want to continue?',
                             $currentRemoteBranch, $userName, $branchToBeDeployed), false)) {
