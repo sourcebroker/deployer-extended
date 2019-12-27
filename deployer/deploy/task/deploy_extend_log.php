@@ -32,7 +32,7 @@ task('deploy:extend_log', function () {
     try {
         $userName = runLocally('git config user.name');
     } catch (\Throwable $exception) {
-        $userName = 'Unknown';
+        $userName = 'unknown';
     }
     $metainfo[3] = $userName;
     if ($type !== 'revision') {
