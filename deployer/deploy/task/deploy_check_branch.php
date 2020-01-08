@@ -32,13 +32,14 @@ task('deploy:check_branch', function () {
             if ($csv) {
                 $metainfo = Csv::parse($csv)[0];
                 if (isset($metainfo[2]) && isset($metainfo[3]) && isset($metainfo[5])) {
+                    $date = \DateTime::createFromFormat('YmdHis', $metainfo[0])->format('Y-m-d H:i:s');
                     $currentRemoteBranch = $metainfo[2];
                     $userName = $metainfo[3];
                     $type = $metainfo[5];
                     if ($type == 'branch' && !empty($currentRemoteBranch) && $currentRemoteBranch != $branchToBeDeployed) {
-                        if (!askConfirmation(sprintf('On instance you deploy to there is currently branch "%s" deployed by "%s". ' .
-                            'This branch is different than you trying to deploy "%s". Do you really want to continue?',
-                            $currentRemoteBranch, $userName, $branchToBeDeployed), false)) {
+                        if (!askConfirmation(sprintf('On host "%s" there is currently branch "%s" deployed by "%s" on %s. ' .
+                            'You are trying to deploy now branch "%s". Do you really want to continue?',
+                            get('target_stage'), $currentRemoteBranch, $userName, $date, $branchToBeDeployed), false)) {
                             throw new GracefulShutdownException('Process aborted.');
                         }
                     }
