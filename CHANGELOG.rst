@@ -2,7 +2,7 @@
 Changelog
 ---------
 
-master
+12.0.0
 ~~~~~~
 
 a) [BUGFIX] Compatibility with 6+. Fix local test for composr.json in config_vhost_apache.php.
