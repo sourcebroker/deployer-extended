@@ -2,6 +2,12 @@
 Changelog
 ---------
 
+master
+~~~~~~
+
+a) [TASK] Change to new deployer-instance.
+b) [BUGFIX] Set naming according to new deployer-instance.
+
 12.0.0
 ~~~~~~
 
