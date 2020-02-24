@@ -172,6 +172,7 @@ deploy:check_branch
 
 Check if the branch you want to deploy is different from the branch currently deployed on host. If you have information that
 the branch on the host is different than the branch you want to deploy then you can take decission to overwrite it or not.
+For this task to work you need also to run task `deploy:extend_log`_, which will store info about last deployed branch.
 
 deploy:check_branch_local
 +++++++++++++++++++
