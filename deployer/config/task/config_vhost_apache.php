@@ -35,10 +35,11 @@ task('config:vhost_apache', function () {
                 }
             }
             if (get('vhost_document_root', false) === false) {
+                $webPathPart = empty(get('web_path', false)) ? '' : '/' . get('web_path');
                 if (get('vhost_nocurrent', false) === false) {
-                    set('vhost_document_root', get('deploy_path') . '/current');
+                    set('vhost_document_root', get('deploy_path') . '/current' . $webPathPart);
                 } else {
-                    set('vhost_document_root', get('deploy_path'));
+                    set('vhost_document_root', get('deploy_path') . $webPathPart);
                 }
             }
             set('vhost_projectname', basename(get('current_dir')));
