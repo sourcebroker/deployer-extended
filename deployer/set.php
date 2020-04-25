@@ -10,17 +10,17 @@ set('web_path', '');
 
 // Return path to php on current instance
 set('local/bin/php', function () {
-    return runLocally('which php');
+    return locateLocalBinaryPath('php');
 });
 
 // Return path to curl on current instance
 set('local/bin/curl', function () {
-    return runLocally('which curl');
+    return locateLocalBinaryPath('curl');
 });
 
 // Return path to wget on current instance
 set('local/bin/wget', function () {
-    return runLocally('which wget');
+    return locateLocalBinaryPath('wget');
 });
 
 // Return path to composer on current instance
@@ -32,7 +32,7 @@ set('local/bin/composer', function () {
     }
     //check for composer in global
     if (empty($composerBin)) {
-        $composerBin = '{{local/bin/php}} ' . runLocally('which composer');
+        $composerBin = '{{local/bin/php}} ' . locateLocalBinaryPath('which composer');
     }
     // no local and global then try to download composer
     // https://getcomposer.org/doc/faqs/how-to-install-composer-programmatically.md
@@ -90,3 +90,17 @@ set('branch', function () {
     }
     return $branch;
 });
+
+function locateLocalBinaryPath($name)
+{
+    $nameEscaped = escapeshellarg($name);
+    // Try `command`, should cover all Bourne-like shells
+    // Try `which`, should cover most other cases
+    // Fallback to `type` command, if the rest fails
+    $path = runLocally("command -v $nameEscaped || which $nameEscaped || type -p $nameEscaped");
+    if ($path) {
+        // Deal with issue when `type -p` outputs something like `type -ap` in some implementations
+        return trim(str_replace("$name is", "", $path));
+    }
+    throw new \RuntimeException("Can't locate [$nameEscaped] on instance '" . get('default_stage') . "' - neither of [command|which|type] commands are available");
+}

@@ -7,6 +7,7 @@ maaster
 
 a) [TASK][BREAKING] Change default php-fpm directive from ProxyPass to SetHandler in task `config vhost_apache`.
 b) [BUGFIX] Add support for `web_path` added to `vhost_document_root` in task `config vhost_apache`.
+c) [TASK] Refactor way the binnary is detected. Possible braeking change.
 
 13.0.0
 ~~~~~~
