@@ -131,7 +131,10 @@ task('config:vhost_apache', function () {
             if (get('vhost_proxy', true)) {
                 if (get('vhost_proxy_directive', false) === false) {
                     set('vhost_proxy_directive',
-                        parse('ProxyPassMatch ^/(.*\.php(/.*)?)$ fcgi://127.0.0.1:{{vhost_proxy_port}}{{vhost_document_root}}/$1'));
+                        parse('<FilesMatch ".+\.ph(p[345]?|t|tml)$">' . "\n".
+                            '        SetHandler "proxy:fcgi://127.0.0.1:90{{phpVersionTwoDigit}}"' . "\n".
+                            '    </FilesMatch>')
+                    );
                 }
             } else {
                 set('vhost_proxy_directive', '');

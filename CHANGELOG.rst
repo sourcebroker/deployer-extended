@@ -2,6 +2,11 @@
 Changelog
 ---------
 
+maaster
+~~~~~~~
+
+a) [TASK][BREAKING] Change default php-fpm directive from ProxyPass to SetHandler.
+
 13.0.0
 ~~~~~~
 
