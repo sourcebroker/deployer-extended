@@ -32,7 +32,7 @@ set('local/bin/composer', function () {
     }
     //check for composer in global
     if (empty($composerBin)) {
-        $composerBin = '{{local/bin/php}} ' . locateLocalBinaryPath('which composer');
+        $composerBin = '{{local/bin/php}} ' . locateLocalBinaryPath('composer');
     }
     // no local and global then try to download composer
     // https://getcomposer.org/doc/faqs/how-to-install-composer-programmatically.md

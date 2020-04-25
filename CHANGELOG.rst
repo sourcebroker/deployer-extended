@@ -2,6 +2,11 @@
 Changelog
 ---------
 
+14.0.1
+~~~~~~~
+
+a) [BUGFIX] Fix refactor of composer binnary detection.
+
 14.0.0
 ~~~~~~~
 
