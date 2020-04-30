@@ -8,6 +8,9 @@ master
 a) [FEATURE] Add task "file:copy_dirs_ignore_existing" which copy directories from previous release except for those
     folders which already exists in that folder.
 
+b) [FEATURE] Add task "file:copy_files_ignore_existing" which copy files from previous release except for those
+    files which already exists in that folder.
+
 14.0.1
 ~~~~~~~
 
