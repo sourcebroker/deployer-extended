@@ -2,7 +2,7 @@
 Changelog
 ---------
 
-master
+14.1.0
 ~~~~~~
 
 a) [FEATURE] Add task "file:copy_dirs_ignore_existing" which copy directories from previous release except for those
