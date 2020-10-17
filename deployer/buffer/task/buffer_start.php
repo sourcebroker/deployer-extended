@@ -108,10 +108,13 @@ task('buffer:start', function () {
                     if (!empty($entrypointFileContent)) {
                         $pos = strpos($entrypointFileContent, $entrypointNeedle);
                         if ($pos !== false) {
-                            $content = substr_replace($entrypointFileContent,
+                            $content = substr_replace(
+                                $entrypointFileContent,
                                 $entrypointNeedle .
-                                $entrypointInjectStartComment . $entrypointInject . $entrypointInjectEndComment, $pos,
-                                strlen($entrypointNeedle));
+                                $entrypointInjectStartComment . $entrypointInject . $entrypointInjectEndComment,
+                                $pos,
+                                strlen($entrypointNeedle)
+                            );
                             $entrypointAbsolutePath = $overwriteReleasePath . $entrypointFilename;
                             run('cp -p ' . $entrypointAbsolutePath . ' ' . $tempPath . '/');
                             run('echo ' . escapeshellarg($content) . ' > ' . $tempPath . '/' . basename($entrypointAbsolutePath));

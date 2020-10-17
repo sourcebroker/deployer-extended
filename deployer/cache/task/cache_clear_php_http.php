@@ -15,8 +15,10 @@ task('cache:clear_php_http', function () {
     $releasesList = get('releases_list');
     $previousClearCacheFiles = null;
     if (isset($releasesList[1]) && test('[ -e {{deploy_path}}/releases/' . $releasesList[1] . ' ]')) {
-        $previousClearCacheFiles = preg_split('/\R/',
-            run("find {{deploy_path}}/releases/" . $releasesList[1] . "/{{web_path}} -name 'cache_clear_random_*'"));
+        $previousClearCacheFiles = preg_split(
+            '/\R/',
+            run("find {{deploy_path}}/releases/" . $releasesList[1] . "/{{web_path}} -name 'cache_clear_random_*'")
+        );
     }
     if (!empty($previousClearCacheFiles) && !empty($previousClearCacheFiles[0])) {
         $fileName = pathinfo($previousClearCacheFiles[0], PATHINFO_BASENAME);
@@ -25,11 +27,14 @@ task('cache:clear_php_http', function () {
     }
     if (test('[ -L {{deploy_path}}/current ]')) {
         run('cd {{deploy_path}}/current/{{web_path}} && echo ' . escapeshellarg(
-                get('cache:clear_php_http:phpcontent', "<?php\n"
+            get(
+                    'cache:clear_php_http:phpcontent',
+                    "<?php\n"
                     . "clearstatcache(true);\n"
                     . "if(function_exists('opcache_reset')) opcache_reset();\n"
                     . "if(function_exists('eaccelerator_clear')) eaccelerator_clear();"
-                )) . ' > ' . $fileName);
+                )
+        ) . ' > ' . $fileName);
     }
 
     if (empty(get('public_urls', []))) {

@@ -37,9 +37,15 @@ task('deploy:check_branch', function () {
                     $userName = $metainfo[3];
                     $type = $metainfo[5];
                     if ($type == 'branch' && !empty($currentRemoteBranch) && $currentRemoteBranch != $branchToBeDeployed) {
-                        if (!askConfirmation(sprintf('On host "%s" there is currently branch "%s" deployed by "%s" on %s. ' .
+                        if (!askConfirmation(sprintf(
+                            'On host "%s" there is currently branch "%s" deployed by "%s" on %s. ' .
                             'You are trying to deploy now branch "%s". Do you really want to continue?',
-                            get('argument_stage'), $currentRemoteBranch, $userName, $date, $branchToBeDeployed), false)) {
+                            get('argument_stage'),
+                            $currentRemoteBranch,
+                            $userName,
+                            $date,
+                            $branchToBeDeployed
+                        ), false)) {
                             throw new GracefulShutdownException('Process aborted.');
                         }
                     }

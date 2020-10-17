@@ -33,9 +33,12 @@ task('deploy:check_branch_local', function () {
                 $branchCheckoutLocally = null;
             }
             if (!empty($branchCheckoutLocally) && $branchCheckoutLocally != $branchToBeDeployed) {
-                if (!askConfirmation(sprintf('On the current instance you are checkout to branch "%s" but you want to deploy branch "%s". ' .
+                if (!askConfirmation(sprintf(
+                    'On the current instance you are checkout to branch "%s" but you want to deploy branch "%s". ' .
                     'The deploy.php files on both branches can be diffrent and that can influence the deploy process. Its not advisable. Do you really want to continue?',
-                    $branchCheckoutLocally, $branchToBeDeployed), false)) {
+                    $branchCheckoutLocally,
+                    $branchToBeDeployed
+                ), false)) {
                     throw new GracefulShutdownException('Process aborted.');
                 }
             }
