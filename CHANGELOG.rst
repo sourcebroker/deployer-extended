@@ -8,6 +8,9 @@ master
 a) [TASK][BREAKING] Remove config:vhost_apache task without replacement. Use https://ddev.readthedocs.io/en/stable/
    or similar solutions for local development.
 
+b) [TASK][BREAKING] Add dependency to breaking `sourcebroker/deployer-instance`.
+
+
 14.1.0
 ~~~~~~
 
