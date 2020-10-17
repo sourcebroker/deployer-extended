@@ -5,20 +5,20 @@ Changelog
 master
 ~~~~~~
 
-a) [TASK][BREAKING] Remove config:vhost_apache task without replacement. Use https://ddev.readthedocs.io/en/stable/
+a) [TASK][BREAKING] Remove config:vhost_apache task without replacement. Use ``https://ddev.readthedocs.io/en/stable/``
    or similar solutions for local development.
 
-b) [TASK][BREAKING] Add dependency to breaking `sourcebroker/deployer-instance`.
+b) [TASK][BREAKING] Add dependency to breaking ``sourcebroker/deployer-instance``.
 
 c) [TASK] Add ddev support.
 
 14.1.0
 ~~~~~~
 
-a) [FEATURE] Add task "file:copy_dirs_ignore_existing" which copy directories from previous release except for those
+a) [FEATURE] Add task ``file:copy_dirs_ignore_existing`` which copy directories from previous release except for those
     folders which already exists in that folder.
 
-b) [FEATURE] Add task "file:copy_files_ignore_existing" which copy files from previous release except for those
+b) [FEATURE] Add task ``file:copy_files_ignore_existing`` which copy files from previous release except for those
     files which already exists in that folder.
 
 14.0.1
@@ -29,8 +29,8 @@ a) [BUGFIX] Fix refactor of composer binnary detection.
 14.0.0
 ~~~~~~~
 
-a) [TASK][BREAKING] Change default php-fpm directive from ProxyPass to SetHandler in task `config vhost_apache`.
-b) [BUGFIX] Add support for `web_path` added to `vhost_document_root` in task `config vhost_apache`.
+a) [TASK][BREAKING] Change default php-fpm directive from ProxyPass to SetHandler in task ``config vhost_apache``.
+b) [BUGFIX] Add support for ``web_path`` added to ``vhost_document_root`` in task ``config vhost_apache``.
 c) [TASK] Refactor way the binnary is detected. Possible braeking change.
 
 13.0.0
@@ -285,17 +285,17 @@ All of the arrays in each database defined by key will be merged.
 
 Task renamed:
 
-a) Rename deploy:composer_check_install to `deploy:check_composer_install`_
-b) Rename cache:clearstatcache to `php:clear_cache_cli`_
-c) Rename cache:frontendreset to `php:clear_cache_http`_
-d) Rename deploy:vhosts to `config:vhost`_
+a) Rename deploy:composer_check_install to ``deploy:check_composer_install``_
+b) Rename cache:clearstatcache to ``php:clear_cache_cli``_
+c) Rename cache:frontendreset to ``php:clear_cache_http``_
+d) Rename deploy:vhosts to ``config:vhost``_
 
 Task splitted/renamed with no simple replacement:
 
-a) file:remove_recursive_atomic - replaced by `file:rm2steps:1`_, `file:rm2steps:2`_
-b) lock:create_lock_files - replaced by `buffer:start`_
-c) lock:delete_lock_files - replaced by `buffer:stop`_
-d) lock:overwrite_entry_point - replaced by `buffer:start`_
+a) file:remove_recursive_atomic - replaced by ``file:rm2steps:1``_, ``file:rm2steps:2``_
+b) lock:create_lock_files - replaced by ``buffer:start``_
+c) lock:delete_lock_files - replaced by ``buffer:stop``_
+d) lock:overwrite_entry_point - replaced by ``buffer:start``_
 
 Task removed with no replacement:
 
