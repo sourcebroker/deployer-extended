@@ -2,7 +2,7 @@
 Changelog
 ---------
 
-master
+15.0.0
 ~~~~~~
 
 a) [TASK][BREAKING] Remove config:vhost_apache task without replacement. Use ``https://ddev.readthedocs.io/en/stable/``
