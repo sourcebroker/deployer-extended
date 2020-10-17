@@ -10,6 +10,7 @@ a) [TASK][BREAKING] Remove config:vhost_apache task without replacement. Use htt
 
 b) [TASK][BREAKING] Add dependency to breaking `sourcebroker/deployer-instance`.
 
+c) [TASK] Add ddev support.
 
 14.1.0
 ~~~~~~
