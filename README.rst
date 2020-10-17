@@ -147,23 +147,6 @@ buffer:stop
 
 Stop buffering requests to application entrypoints. It deletes ".flag.requestbuffer" files.
 
-config
-~~~~~~
-
-config:vhost_apache
-++++++++++++
-
-Allows to create vhost for project. Domains for vhost are taken from config var "public_urls". Rest of params can be
-set by config vars. Lot of them have fallback in environment vars.
-
-By default:
-
-1) ProxyPassMatch and php-fpm is used. Port for php-fpm by default is 90xx where xx is php version read from
-   composer.json file from the node config/platform/php.
-2) By default access_log and error_log are symlinked to fiels in apache dir and acessible inside proejct folder ``.dep/logs``.
-3) If vhost config filename is taken from project folder and if file with such name already exist in vhost folder then
-   a copy of that file is created and current version overwritten.
-
 deploy
 ~~~~~~
 
@@ -399,12 +382,6 @@ Task configuration variables:
   | Path to php binary on current system.
   |
 
-
-
-To-Do list
-----------
-
-1. Refactor config:vhost to support nginx
 
 Changelog
 ---------

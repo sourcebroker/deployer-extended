@@ -2,6 +2,12 @@
 Changelog
 ---------
 
+master
+~~~~~~
+
+a) [TASK][BREAKING] Remove config:vhost_apache task without replacement. Use https://ddev.readthedocs.io/en/stable/
+   or similar solutions for local development.
+
 14.1.0
 ~~~~~~
 
