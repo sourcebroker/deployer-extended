@@ -28,12 +28,12 @@ task('cache:clear_php_http', function () {
     if (test('[ -L {{deploy_path}}/current ]')) {
         run('cd {{deploy_path}}/current/{{web_path}} && echo ' . escapeshellarg(
             get(
-                    'cache:clear_php_http:phpcontent',
-                    "<?php\n"
+                'cache:clear_php_http:phpcontent',
+                "<?php\n"
                     . "clearstatcache(true);\n"
                     . "if(function_exists('opcache_reset')) opcache_reset();\n"
                     . "if(function_exists('eaccelerator_clear')) eaccelerator_clear();"
-                )
+            )
         ) . ' > ' . $fileName);
     }
 

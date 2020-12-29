@@ -47,7 +47,7 @@ set('bin/composer', function () {
     }
 
     if ($composerBin) {
-        if( get('composer_channel_autoupdate') !== true) {
+        if (get('composer_channel_autoupdate') !== true) {
             return $composerBin;
         }
         // "composer --version" can return:
