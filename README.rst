@@ -20,6 +20,34 @@ What does it do?
 
 Library with some additional tasks for deployer (deployer.org).
 
+Setting's documentation
+------------------------
+
+composer_version
+~~~~~~~~~~~~~~~~
+
+Install specific composer version. Use tags. Valid tags are here https://github.com/composer/composer/tags
+Default value is ``null``.
+
+
+composer_channel
+~~~~~~~~~~~~~~~~
+
+Install latest version from channel. Set this variable to '1' or '2' (or 'stable', 'snapshot', 'preview'). Read more on composer docs.
+Default value is ``stable`` which will install latest version of composer. If you need stability set it better to "1" or "2".
+
+composer_channel_autoupdate
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+If set then on each deploy the composer is checked for latest version according to ``composer_channel`` settings.
+Default value is ``true``
+
+web_path
+~~~~~~~~
+
+Path to public when not in root of project. Must be like "pub/" so without starting slash and with ending slash.
+
+
 Task's documentation
 --------------------
 
@@ -192,37 +220,6 @@ Log info about deployed branch / tag / hash and the user who deployed. Log is st
 
 file
 ~~~~
-
-file\:rm2steps\:1
-+++++++++++++++++
-
-Allows to remove files and directories in two steps for "security" and "speed".
-
-**Security**
-
-Sometimes removing cache folders with lot of files takes few seconds. In meantime of that process a new frontend
-request can hit http server and new file cache will start to being generated because it will detect that some cache
-files are missing and cache needs to be regenerated. A process which is deleting the cache folder can then delete
-the newly generated cache files. The output of cache folder is not predictable in that case and can crash
-the application.
-
-**Speed**
-
-If you decide to remove the cache folder during the `buffer:start`_ then its crucial to do it as fast as possible in
-order to buffer as low requests as possible.
-
-
-The solution for both problems of "security" and "speed" is first rename the folder to some temporary and then delete it
-later in next step. Renaming is atomic operation so there is no possibility that new http hit will start to build cache
-in the same folder. We also gain speed because we can delete the folders/files at the end of deployment with task
-`file:rm2steps:2`_ if that's needed at all because deployer "cleanup" task will remove old releases anyway.
-
-
-file\:rm2steps\:2
-+++++++++++++++++
-
-The second step of file:rm2steps tandem. Read more on `file:rm2steps:1`_
-
 file\:backup
 ++++++++++++
 
@@ -283,6 +280,48 @@ Package *small_images*:
 This one will contain all small (smaller than 25kB) files from "media/uploads" and "media/theme".
 
 As you can see *file_backup_keep* is set to 10 which means only newest 10 backups per package will be stored.
+
+
+file:copy_dirs_ignore_existing
+++++++++++++++++++++++++++++++
+
+Copy directories from previous release except for those directories which already exists in new release.
+
+file:copy_files_ignore_existing
++++++++++++++++++++++++++++++++
+
+Copy files from previous release except for those files which already exists in new release.s
+
+
+file\:rm2steps\:1
++++++++++++++++++
+
+Allows to remove files and directories in two steps for "security" and "speed".
+
+**Security**
+
+Sometimes removing cache folders with lot of files takes few seconds. In meantime of that process a new frontend
+request can hit http server and new file cache will start to being generated because it will detect that some cache
+files are missing and cache needs to be regenerated. A process which is deleting the cache folder can then delete
+the newly generated cache files. The output of cache folder is not predictable in that case and can crash
+the application.
+
+**Speed**
+
+If you decide to remove the cache folder during the `buffer:start`_ then its crucial to do it as fast as possible in
+order to buffer as low requests as possible.
+
+
+The solution for both problems of "security" and "speed" is first rename the folder to some temporary and then delete it
+later in next step. Renaming is atomic operation so there is no possibility that new http hit will start to build cache
+in the same folder. We also gain speed because we can delete the folders/files at the end of deployment with task
+`file:rm2steps:2`_ if that's needed at all because deployer "cleanup" task will remove old releases anyway.
+
+
+file\:rm2steps\:2
++++++++++++++++++
+
+The second step of file:rm2steps tandem. Read more on `file:rm2steps:1`_
 
 cache
 ~~~~~
