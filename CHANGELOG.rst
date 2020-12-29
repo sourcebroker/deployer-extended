@@ -13,6 +13,8 @@ b) [TASK][BREAKING] For task ``deploy_check_composer_install`` local version of 
    downloaded in ``set('local/bin/composer')``. Since this change there will be no try to download it. Composer must be
    installed and accessible locally for user running commands.
 
+c) [BUGFIX] Fix check if composer install must be run because of composer.lock changes.
+
 15.0.0
 ~~~~~~
 
