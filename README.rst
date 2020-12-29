@@ -34,7 +34,7 @@ can handle HTTP requests or handle CLI calls. For most good frameworks there is 
 
 The request are buffered but at the same time if you set special http header (by default HTTP_X_DEPLOYER_DEPLOYMENT)
 with special value you will be able to make regular request. This can be very handy to check if the application
-is working at all after switch (symliking to current) and to warm up some caches.
+is working at all after switch (symlink to current) and to warm up some caches.
 
 When you run `buffer:stop`_ all the waiting requests will hit the http server (or cli entrypoint).
 
@@ -72,7 +72,7 @@ Options:
   ::
 
       isset($_SERVER['HTTP_X_DEPLOYER_DEPLOYMENT']) && $_SERVER['HTTP_X_DEPLOYER_DEPLOYMENT'] == 'af37fd227cb6429c211168666dd28391' ? $deployerExtendedEnableBufferLo
-      isset($_ENV['DEPLOYER_DEPLOYMENT']) && $_ENV['DEPLOYER_DEPLOYMENT'] == 'af37fd227cb6429c211168666dd28391' ? $deployerExtendedEnableBufferLock = false: $deploye
+      isset($_ENV['DEPLOYER_DEPLOYMENT']) && $_ENV['DEPLOYER_DEPLOYMENT'] == 'af37fd227cb6429c211168666dd28391' ? $deployerExtendedEnableBufferLock = false: $deployerExtendedEnableBufferLock = true;
       clearstatcache(true, __DIR__ . '/.flag.requestbuffer');
       while (file_exists(__DIR__ . '/.flag.requestbuffer') && $deployerExtendedEnableBufferLock) {
           usleep(200000);
@@ -85,7 +85,7 @@ Options:
   | *required:* no
   | *default value:* .flag.requestbuffer
   |
-  | When file with name ".flag.requestbuffer" exists the reqests are buffered. The task `buffer:stop`_ just removes
+  | When file with name ".flag.requestbuffer" exists the requests are buffered. The task `buffer:stop`_ just removes
     the ".flag.requestbuffer" files without removing the "entrypoint_inject" code.
   |
 
@@ -95,7 +95,7 @@ Options:
   |
   | The time in seconds after which the .flag.requestbuffer files will be removed automatically.
   |
-  | Usually its buffer:stop task that should remove ".flag.requestbuffer" file. Unfortunatly sometimes deploy can fail.
+  | Usually its buffer:stop task that should remove ".flag.requestbuffer" file. Unfortunately sometimes deploy can fail.
   | If deploy will fail after buffer:start task and before buffer:stop then the ".flag.requestbuffer" will be automatically removed
   | anyway after "locker_expire" time.
 
@@ -154,14 +154,14 @@ deploy:check_branch
 +++++++++++++++++++
 
 Check if the branch you want to deploy is different from the branch currently deployed on host. If you have information that
-the branch on the host is different than the branch you want to deploy then you can take decission to overwrite it or not.
+the branch on the host is different than the branch you want to deploy then you can take decision to overwrite it or not.
 For this task to work you need also to run task `deploy:extend_log`_, which will store info about last deployed branch.
 
 deploy:check_branch_local
 +++++++++++++++++++
 
 Check if the branch you are currently checked out on your local is the same branch you want to deploy.
-The ``deploy.php`` files on both branches can be diffrent and that can influence the deploy process.
+The ``deploy.php`` files on both branches can be different and that can influence the deploy process.
 
 deploy:check_composer_install
 +++++++++++++++++++++++++++++
@@ -175,7 +175,7 @@ make some test and make deployment then.
 deploy:check_lock
 +++++++++++++++++
 
-Checks for existance of file deploy.lock in root of current instance. If the file deploy.lock is there then
+Checks for existence of file deploy.lock in root of current instance. If the file deploy.lock is there then
 deployment is stopped.
 
 You can use it for whatever reason you have. Imagine that you develop css/js locally with "grunt watch".
@@ -202,20 +202,20 @@ Allows to remove files and directories in two steps for "security" and "speed".
 
 Sometimes removing cache folders with lot of files takes few seconds. In meantime of that process a new frontend
 request can hit http server and new file cache will start to being generated because it will detect that some cache
-files are missing and cache needs to be regnerated. A process which is deleting the cache folder can then delete
+files are missing and cache needs to be regenerated. A process which is deleting the cache folder can then delete
 the newly generated cache files. The output of cache folder is not predictable in that case and can crash
 the application.
 
 **Speed**
 
-If you decide to remove the cache folder during the `buffer:start`_ then its crucial to do it as fast as possbile in
+If you decide to remove the cache folder during the `buffer:start`_ then its crucial to do it as fast as possible in
 order to buffer as low requests as possible.
 
 
 The solution for both problems of "security" and "speed" is first rename the folder to some temporary and then delete it
 later in next step. Renaming is atomic operation so there is no possibility that new http hit will start to build cache
 in the same folder. We also gain speed because we can delete the folders/files at the end of deployment with task
-`file:rm2steps:2`_ if thats needed at all because deployer "clenup" task will remove old releases anyway.
+`file:rm2steps:2`_ if that's needed at all because deployer "cleanup" task will remove old releases anyway.
 
 
 file\:rm2steps\:2
@@ -227,7 +227,7 @@ file\:backup
 ++++++++++++
 
 Creates backup of files.
-Single task may perform multiple archivizations using defined filters.
+Single task may perform multiple archivization using defined filters.
 Old ones are deleted after executing this task. Default limit is 5.
 
 Configuration description
@@ -237,7 +237,7 @@ Configuration description
   | *default value:* none
   | *type:* array
   |
-  | Packages definiton
+  | Packages definition
 
 - | **file_backup_keep**
   | *required:* no
@@ -265,10 +265,10 @@ Sample configuration:
 
     set('file_backup_keep', 10);
 
-Config variable *file_backup_packages* stores information about backup packages and files filtring options.
+Config variable *file_backup_packages* stores information about backup packages and files filtering options.
 Each package defines filters which will be used in `find` command.
-First level element are groups which will be concanated using logical alternative operator operator OR.
-If group is array type then group elements will be concanated using logical conjunction operator.
+First level element are groups which will be concatenated using logical alternative operator operator OR.
+If group is array type then group elements will be concatenated using logical conjunction operator.
 
 Package *config*:
 It is simplest definition.
@@ -300,7 +300,7 @@ This task clears the file status cache, opcache and eaccelerator cache for HTTP 
 1) Creates file "cache_clear_[random].php" in "{{deploy_path}}/current" folder.
 2) Fetch this file with selected method - curl / wget / file_get_contents - by default its wget.
 3) The file is not removed after clearing cache for reason. It allows to prevent problems with realpath_cache. For
-   more infor read http://blog.jpauli.tech/2014/06/30/realpath-cache.html
+   more info read http://blog.jpauli.tech/2014-06-30-realpath-cache-html/
 
 You must set **public_urls** configuration variable so the script knows the domain it should fetch the php script.
 Here is example:
@@ -328,7 +328,7 @@ Task configuration variables:
       if(function_exists('eaccelerator_clear')) eaccelerator_clear();
 
   |
-  | Php content that will be put into dynamicaly created file that should clear the caches.
+  | Php content that will be put into dynamically created file that should clear the caches.
   |
 
 - | **public_urls**

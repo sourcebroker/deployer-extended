@@ -24,14 +24,14 @@ b) [FEATURE] Add task ``file:copy_files_ignore_existing`` which copy files from 
 14.0.1
 ~~~~~~~
 
-a) [BUGFIX] Fix refactor of composer binnary detection.
+a) [BUGFIX] Fix refactor of composer binary detection.
 
 14.0.0
 ~~~~~~~
 
 a) [TASK][BREAKING] Change default php-fpm directive from ProxyPass to SetHandler in task ``config vhost_apache``.
 b) [BUGFIX] Add support for ``web_path`` added to ``vhost_document_root`` in task ``config vhost_apache``.
-c) [TASK] Refactor way the binnary is detected. Possible braeking change.
+c) [TASK] Refactor way the binary is detected. Possible breaking change.
 
 13.0.0
 ~~~~~~
@@ -42,9 +42,9 @@ b) [TASK][BREAKING] Set naming according to new deployer-instance.
 12.0.0
 ~~~~~~
 
-a) [BUGFIX] Compatibility with 6+. Fix local test for composr.json in config_vhost_apache.php.
+a) [BUGFIX] Compatibility with 6+. Fix local test for composer.json in config_vhost_apache.php.
 b) [BUGFIX] Fix wrong calculation for vhost_local_logs_path.
-c) [BUGFIX] Fix test of existance for symlinked log files.
+c) [BUGFIX] Fix test of existence for symlinked log files.
 d) [TASK] Refactor deploy:check_branch task.
 e) [TASK] Add deploy:check_branch_local task.
 f) [BUGFIX] Fix condition in deploy:check_branch_local task.
@@ -80,22 +80,22 @@ a) [BUGFIX] Fix wrong formatting for info form deploy:check_branch task. Add Gra
 
 a) [BUGFIX] Replace colon in filenames with underscore for Windows compatibility.
 b) [FEATURE] Add task deploy:check_branch to check if branch deployed to instance is the same as the one which is being deployed.
-c) [FEATURE] Add task extedn:log to store additional info about deploy.
+c) [FEATURE] Add task extend:log to store additional info about deploy.
 d) [TASK] Increase version of sourcebroker/deployer-instance
 e) [TASK] Normalize use of dots at the end of task description.
 
 9.1.0
 ~~~~~
 
-a) [FEATURE] Add possiblity to set "vhost_document_root" outside.
+a) [FEATURE] Add possibility to set "vhost_document_root" outside.
 
 9.0.0
 ~~~~~
 
-a) [BUGFIX][BREAKING] Fix wrong flagname for old release and prevent creation of this flag if current folder does not exits.
-b) [BUGFIX][BREAKING] Create "old realease" flag just before removing "buffer request" flag.
+a) [BUGFIX][BREAKING] Fix wrong flag name for old release and prevent creation of this flag if current folder does not exits.
+b) [BUGFIX][BREAKING] Create "old release" flag just before removing "buffer request" flag.
 c) [TASK] Refactor buffer:stop
-d) [TASK][BREAKING] Remove compsoer dependencies to sourcebroker/deployer-loader. It must be declared in higher level package as
+d) [TASK][BREAKING] Remove composer dependencies to sourcebroker/deployer-loader. It must be declared in higher level package as
    someone can use task without autoloader.
 e) [TASK][BREAKING] Refactor config:vhost_apache with possible breaking changes.
 f) [TASK] Refactor config:vhost_apache.
@@ -116,7 +116,7 @@ d) [TASK][!!!BREAKING] Remove multiplexing on from deployer-extended default con
    level package.
 e) [TASK][!!!BREAKING] Remove FileUtility class to make tasks more independent. The method usage from this class
    usage was not really big in the end.
-f) [TASK][!!!BREAKING] Refactor confg:vhost_apache task. Start of docs for this task.
+f) [TASK][!!!BREAKING] Refactor config:vhost_apache task. Start of docs for this task.
 g) [TASK] Rewrite log file creation for config:vhost_apache.
 h) [TASK] Change composer.json description. Remove psr-4 as no classes.
 i) [TASK] Add support for edge cases in config:vhost_apache task.
@@ -124,7 +124,7 @@ j) [TASK] Task config:vhost_apache - add more descriptive user messages for diff
 k) [TASK] Task config:vhost_apache - convert all files operation to runLocally / testLocally.
 l) [TASK] Cleanup code on task ``config:vhost_apache``
 m) [FEATURE] Implement extended flags in buffer:start with flags that cleans php stat cache for specific amount of time,
-   and lock which is doing redirects if it detectes that it still pointing to old release.
+   and lock which is doing redirects if it detects that it still pointing to old release.
 
 7.1.3
 ~~~~~
@@ -151,7 +151,7 @@ b) [FEATURE] Add fallback when fetch_method is not set.
 c) [BUGFIX] Change wget command to not store file at all. Previous settings causes wget to return error
    when there was no access to write on current folder. Right now there is no need to have write
    access.
-d) [BUGFIX] Do fallback for get('public_urls', []) so right exeption is shown.
+d) [BUGFIX] Do fallback for get('public_urls', []) so right exception is shown.
 e) [FEATURE] Introduce {{bin/local/wget}}
 f) [FEATURE] Introduce {{bin/local/curl}}
 g) [DOC] Extend documentation about task properties.
@@ -162,7 +162,7 @@ g) [DOC] Extend documentation about task properties.
 a) [TASK] Add dependency to sourcebroker/deployer-loader
 b) [TASK][!!!BREAKING] Remove SourceBroker\DeployerExtended\Loader.php in favour of using sourcebroker/deployer-loader
 c) [TASK][!!!BREAKING] Remove SourceBroker\DeployerExtended\Utility\FileUtility->requireFilesFromDirectoryReqursively
-   becase it was used only in SourceBroker\DeployerExtended\Loader.php
+   because it was used only in SourceBroker\DeployerExtended\Loader.php
 
 6.1.3
 ~~~~~
@@ -190,7 +190,7 @@ b) Add option "entrypoint_refresh"
 6.0.0
 ~~~~~
 
-a) Start entrypoints in task "buffer:start" and "buffer:stop" from deploy_path and not form web_path
+a) Start entrypoint in task "buffer:start" and "buffer:stop" from deploy_path and not form web_path
 b) Remove not used var "tmp_dir".
 
 5.1.0
@@ -251,7 +251,7 @@ Structure was:
                   ],
            ],
            ['database_bar' => get('db_default')]
-           ['database_bar' => '/aboslute/path/to/file/with/config_array.php']
+           ['database_bar' => '/absolute/path/to/file/with/config_array.php']
        ]
    );
 
@@ -269,11 +269,11 @@ Should be now:
                    'password' => 'foopass',
                ],
                get('db_default'),
-               '/aboslute/path/to/file/with/config_array.php'
+               '/absolute/path/to/file/with/config_array.php'
            ],
            'database_bar' => [
                get('db_default'),
-               '/aboslute/path/to/file/with/config_array.php'
+               '/absolute/path/to/file/with/config_array.php'
            ],
        ]
    );
