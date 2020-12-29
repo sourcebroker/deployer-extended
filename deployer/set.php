@@ -46,7 +46,7 @@ set('bin/composer', function () {
         $composerBin = '{{bin/php}} {{deploy_path}}/.dep/composer.phar';
     }
 
-    if ($composerBin) {
+    if ($composerBin !== null) {
         if (get('composer_channel_autoupdate') !== true) {
             return $composerBin;
         }
@@ -57,7 +57,7 @@ set('bin/composer', function () {
         $currentComposerVersionRaw = run($composerBin . ' --version');
         if (preg_match('/(\\d+\\.\\d+)(\\.\\d+)?-?(RC|alpha|beta|dev)?\d*/', $currentComposerVersionRaw, $composerVersionMatches)) {
             $currentComposerVersion = $composerVersionMatches[0] ?? null;
-            if ($currentComposerVersion) {
+            if ($currentComposerVersion !== null) {
                 // if we have exact version of composer to install (composer_version) and currently installed version match it then return
                 if ($composerVersionToInstall && $currentComposerVersion === (string)$composerVersionToInstall) {
                     return $composerBin;
