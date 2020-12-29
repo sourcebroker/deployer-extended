@@ -26,21 +26,21 @@ Setting's documentation
 composer_version
 ~~~~~~~~~~~~~~~~
 
-Install specific composer version. Use tags. Valid tags are here https://github.com/composer/composer/tags
-Default value is ``null``.
+Install specific composer version. Use tags. Valid tags are here https://github.com/composer/composer/tags . Default
+value is ``null``.
 
 
 composer_channel
 ~~~~~~~~~~~~~~~~
 
 Install latest version from channel. Set this variable to '1' or '2' (or 'stable', 'snapshot', 'preview'). Read more on composer docs.
-Default value is ``stable`` which will install latest version of composer. If you need stability set it better to "1" or "2".
+Default value is ``stable`` which will install latest version of composer. If you need stability set it better to '1' or '2'.
 
 composer_channel_autoupdate
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 If set then on each deploy the composer is checked for latest version according to ``composer_channel`` settings.
-Default value is ``true``
+Default value is ``true``.
 
 web_path
 ~~~~~~~~
