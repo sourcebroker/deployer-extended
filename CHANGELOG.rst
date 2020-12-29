@@ -2,6 +2,17 @@
 Changelog
 ---------
 
+master
+~~~~~~
+
+a) [FEATURE][BREAKING] Overwrite "bin/composer" and allow to setup composer binary version with ``composer_version``
+   or ``composer_channel``.  The default setting are: ``composer_version=null`` and ``composer_channel="stable"``.
+   This will download most new stable version of composer (for now version 2).
+
+b) [TASK][BREAKING] For task ``deploy_check_composer_install`` local version of composer must be available. So far it was
+   downloaded in ``set('local/bin/composer')``. Since this change there will be no try to download it. Composer must be
+   installed and accessible locally for user running commands.
+
 15.0.0
 ~~~~~~
 

@@ -23,44 +23,75 @@ set('local/bin/wget', function () {
     return locateLocalBinaryPath('wget');
 });
 
-// Return path to composer on current instance
-set('local/bin/composer', function () {
+// Install specific composer version. Use tags. Valid tags are here https://github.com/composer/composer/tags
+set('composer_version', null);
+
+// Install latest version from channel. Set this variable to '1' or '2' (or 'stable', 'snapshot', 'preview'). Read more on composer docs.
+set('composer_channel', 'stable');
+
+// If set then on each deploy the composer is checked for latest version
+set('composer_channel_autoupdate', true);
+
+// Return path to composer on remote instance
+set('bin/composer', function () {
+    $composerVersionToInstall = get('composer_version');
+    $composerChannelToInstall = get('composer_channel');
+
     $composerBin = null;
-    //check for composer in local project
-    if (file_exists('./composer.phar')) {
-        $composerBin = '{{local/bin/php}} composer.phar';
+    if (commandExist('composer')) {
+        $composerBin = '{{bin/php}} ' . locateBinaryPath('composer');
     }
-    //check for composer in global
-    if (empty($composerBin)) {
-        $composerBin = '{{local/bin/php}} ' . locateLocalBinaryPath('composer');
+
+    if (test('[ -f {{deploy_path}}/.dep/composer.phar ]')) {
+        $composerBin = '{{bin/php}} {{deploy_path}}/.dep/composer.phar';
     }
-    // no local and global then try to download composer
-    // https://getcomposer.org/doc/faqs/how-to-install-composer-programmatically.md
-    if (empty($composerBin)) {
-        $composerDownloaded = runLocally('EXPECTED_SIGNATURE=$(wget -q -O - https://composer.github.io/installer.sig)
-                    php -r "copy(\'https://getcomposer.org/installer\', \'composer-setup.php\');"
-                    ACTUAL_SIGNATURE=$(php -r "echo hash_file(\'SHA384\', \'composer-setup.php\');")
-    
-                    if [ "$EXPECTED_SIGNATURE" != "$ACTUAL_SIGNATURE" ]
-                    then
-                        >&2 echo \'ERROR: Invalid installer signature\'
-                        rm composer-setup.php
-                        exit 1
-                    fi
-                    
-                    php composer-setup.php --quiet
-                    RESULT=$?
-                    rm composer-setup.php
-                    exit $RESULT
-                    ');
-        if ($composerDownloaded) {
-            $composerBin = '{{local/bin/php}} composer.phar';
+
+    if ($composerBin) {
+        if( get('composer_channel_autoupdate') !== true) {
+            return $composerBin;
+        }
+        // "composer --version" can return:
+        // - "Composer version 1.10.17 2020-10-30 22:31:58" - for stable channel
+        // - "Composer version 2.0.0-alpha3 2020-10-30 22:31:58" - alpha/beta/RC for preview channel
+        // - "Composer version 2.0-dev (2.0-dev+378a5b72b9f81e8e919e41ecd3add6893d14b90e) 2020-12-04 09:50:19" - for snapshot channel
+        $currentComposerVersionRaw = run($composerBin . ' --version');
+        if (preg_match('/(\\d+\\.\\d+)(\\.\\d+)?-?(RC|alpha|beta|dev)?\d*/', $currentComposerVersionRaw, $composerVersionMatches)) {
+            $currentComposerVersion = $composerVersionMatches[0] ?? null;
+            if ($currentComposerVersion) {
+                // if we have exact version of composer to install (composer_version) and currently installed version match it then return
+                if ($composerVersionToInstall && $currentComposerVersion === (string)$composerVersionToInstall) {
+                    return $composerBin;
+                }
+                if ($composerChannelToInstall && !$composerVersionToInstall) {
+                    // for snapshot channel the version is the git hash in "Composer version 2.0-dev (2.0-dev+378a5b72b9f81e8e919e41ecd3add6893d14b90e) 2020-12-04 09:50:19"
+                    if (preg_match('/\\+(.*)\\)/', $currentComposerVersionRaw, $snapshotVersion)) {
+                        $currentComposerVersion = $snapshotVersion[1] ?? null;
+                    }
+                    // Compare latest version of composer channel with and currently installed version. If match then return.
+                    $composerChannelData = json_decode(file_get_contents('https://getcomposer.org/versions'), true);
+                    $latestComposerVersionFromChannel = $composerChannelData[$composerChannelToInstall][0]['version'] ?? null;
+                    if ($latestComposerVersionFromChannel && $latestComposerVersionFromChannel === $currentComposerVersion) {
+                        return $composerBin;
+                    }
+                }
+            }
         }
     }
-    if (empty($composerBin)) {
-        throw new \Exception("No composer found or can be installed on current instance.");
+
+    $installCommand = "cd {{release_path}} && curl -sS https://getcomposer.org/installer | {{bin/php}}";
+    if ($composerVersionToInstall) {
+        $installCommand .= " -- --version=" . $composerVersionToInstall;
+    } elseif ($composerChannelToInstall) {
+        $installCommand .= " -- --" . $composerChannelToInstall;
     }
-    return $composerBin;
+
+    run($installCommand);
+    run('mv {{release_path}}/composer.phar {{deploy_path}}/.dep/composer.phar');
+    return '{{bin/php}} {{deploy_path}}/.dep/composer.phar';
+});
+
+set('local/bin/composer', function () {
+    return locateLocalBinaryPath('composer');
 });
 
 // We assume deploy.php is in project root.
