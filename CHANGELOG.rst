@@ -2,7 +2,7 @@
 Changelog
 ---------
 
-master
+16.0.0
 ~~~~~~
 
 a) [FEATURE][BREAKING] Overwrite "bin/composer" and allow to setup composer binary version with ``composer_version``
