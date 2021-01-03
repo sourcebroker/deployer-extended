@@ -290,7 +290,7 @@ Copy directories from previous release except for those directories which alread
 file:copy_files_ignore_existing
 +++++++++++++++++++++++++++++++
 
-Copy files from previous release except for those files which already exists in new release.s
+Copy files from previous release except for those files which already exists in new release.
 
 
 file\:rm2steps\:1
