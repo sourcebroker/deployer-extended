@@ -60,7 +60,7 @@ task('cache:clear_php_http', function () {
         case 'wget':
         default:
             runLocally(
-                '{{local/bin/wget}} -q -O /dev/null ' . escapeshellarg($clearCacheUrl),
+                '{{local/bin/wget}} --no-check-certificate -q -O /dev/null ' . escapeshellarg($clearCacheUrl),
                 ['timeout', get('cache:clear_php_http:timeout', 15)]
             );
             break;

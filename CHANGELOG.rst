@@ -2,6 +2,11 @@
 Changelog
 ---------
 
+master
+~~~~~~
+
+a) [BUGFIX] For task ``cache:clear_php_http`` add ``--no-check-certificate`` for wget (curl already have ``--insecure``)
+
 16.0.0
 ~~~~~~
 
