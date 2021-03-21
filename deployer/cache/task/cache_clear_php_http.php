@@ -45,7 +45,7 @@ task('cache:clear_php_http', function () {
     switch (get('fetch_method', 'wget')) {
         case 'curl':
             runLocally(
-                '{{local/bin/curl}} --insecure --silent --location ' . escapeshellarg($clearCacheUrl) . ' > /dev/null',
+                '{{local/bin/curl}} ' . get('fetch_method_curl_options', '--insecure --silent --location') . ' ' . escapeshellarg($clearCacheUrl) . ' > /dev/null',
                 ['timeout', get('cache:clear_php_http:timeout', 15)]
             );
             break;
@@ -60,7 +60,7 @@ task('cache:clear_php_http', function () {
         case 'wget':
         default:
             runLocally(
-                '{{local/bin/wget}} --no-check-certificate -q -O /dev/null ' . escapeshellarg($clearCacheUrl),
+                '{{local/bin/wget}} ' . get('fetch_method_wget_options', '--no-check-certificate -q -O /dev/null') . ' ' . escapeshellarg($clearCacheUrl),
                 ['timeout', get('cache:clear_php_http:timeout', 15)]
             );
             break;

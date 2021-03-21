@@ -7,6 +7,8 @@ master
 
 a) [BUGFIX] For task ``cache:clear_php_http`` add ``--no-check-certificate`` for wget (curl already have ``--insecure``)
 
+b) [FEATURE] For task ``cache:clear_php_http`` add ``fetch_method_wget_options`` and ``fetch_method_curl_options``.
+
 16.0.0
 ~~~~~~
 
