@@ -1,9 +1,6 @@
 deployer-extended
 =================
 
-    .. image:: https://styleci.io/repos/82486796/shield?branch=master
-        :target: https://styleci.io/repos/82486796
-
     .. image:: https://scrutinizer-ci.com/g/sourcebroker/deployer-extended/badges/quality-score.png?b=master
         :target: https://scrutinizer-ci.com/g/sourcebroker/deployer-extended/?branch=master
 
