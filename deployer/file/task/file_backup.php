@@ -21,7 +21,7 @@ task('file:backup', function () {
         return;
     }
 
-    $searchRootPath = !empty($_ENV['IS_DDEV_PROJECT']) ? '.' : get('deploy_path') . '/' . (test('[ -e {{deploy_path}}/current ]') ? 'current' : '');
+    $searchRootPath = !empty($_ENV['IS_DDEV_PROJECT']) ? '.' : get('deploy_path') . '/' . (testLocally('[ -e {{deploy_path}}/current ]') ? 'current' : '');
 
     foreach ($backupFiles as $package => $filtersGroups) {
         if (empty($filtersGroups)) {
