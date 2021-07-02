@@ -1,5 +1,5 @@
 {
-  "name": "sourcebroker/deployer-extended",
+  "name": "maikschneider/deployer-extended",
   "description": "Library with some additional tasks for deployer (deployer.org).",
   "license": "MIT",
   "keywords": [
@@ -23,5 +23,8 @@
     "psr-4": {
       "SourceBroker\\DeployerExtended\\": "src/"
     }
+  },
+  "replace": {
+    "sourcebroker/deployer-extended": "16.1.0"
   }
 }
