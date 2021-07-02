@@ -7,7 +7,7 @@ task('file:backup', function () {
 
     if (!empty(get('argument_stage'))) {
         $activePath = get('deploy_path') . '/' . (test('[ -L {{deploy_path}}/release ]') ? 'release' : 'current');
-        run('cd ' . $activePath . ' && {{bin/php}} {{bin/deployer}} file:backup ' . $verbosity);
+        run('cd ' . $activePath . ' && {{bin/php}} {{bin/deployer}} file:backup');
         return;
     }
 
