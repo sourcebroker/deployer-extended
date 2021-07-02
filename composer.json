@@ -1,5 +1,5 @@
 {
-  "name": "maikschneider/deployer-extended",
+  "name": "sourcebroker/deployer-extended",
   "description": "Library with some additional tasks for deployer (deployer.org).",
   "license": "MIT",
   "keywords": [
@@ -25,6 +25,6 @@
     }
   },
   "replace": {
-    "sourcebroker/deployer-extended": "16.1.0"
+    "sourcebroker/deployer-extended": "self.version"
   }
 }
