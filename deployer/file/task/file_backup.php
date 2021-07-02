@@ -4,6 +4,13 @@ namespace Deployer;
 
 // Read more on https://github.com/sourcebroker/deployer-extended#backup-files
 task('file:backup', function () {
+
+    if (!empty(get('argument_stage'))) {
+        $activePath = get('deploy_path') . '/' . (test('[ -L {{deploy_path}}/release ]') ? 'release' : 'current');
+        run('cd ' . $activePath . ' && {{bin/php}} {{bin/deployer}} file:backup');
+        return;
+    }
+
     $signCode = 'e1a803ffea27e6bf3f93bd601dc42077';
 
     $backupFiles = get('file_backup_packages');
@@ -14,7 +21,7 @@ task('file:backup', function () {
         return;
     }
 
-    $searchRootPath = get('deploy_path') .'/'. (test('[ -e {{deploy_path}}/current ]') ? 'current' : '');
+    $searchRootPath = !empty($_ENV['IS_DDEV_PROJECT']) ? '.' : get('deploy_path') . '/' . (testLocally('[ -e {{deploy_path}}/current ]') ? 'current' : '');
 
     foreach ($backupFiles as $package => $filtersGroups) {
         if (empty($filtersGroups)) {
@@ -43,7 +50,7 @@ fi
 BASH;
 
         writeln('Creating backup. Package: "' . $package .'" Backup signature: "'. $backupName .'"');
-        run($command);
+        runLocally($command);
 
         writeln('Clean old backups');
         $command = '
@@ -54,7 +61,7 @@ then
 fi
 ';
 
-        run($command);
+        runLocally($command);
     }
 })
 ->desc('Backup filtered files / directories');
