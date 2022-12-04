@@ -14,6 +14,7 @@ c) [TASK] Refactor code for Deployer 7.
 
 d) [TASK] Update dependencies for Deployer 7.
 
+e) [TASK] Extend dependency to internal packages to dev-master.
 
 16.1.0
 ~~~~~~

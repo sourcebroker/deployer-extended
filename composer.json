@@ -7,7 +7,7 @@
   ],
   "require": {
     "deployer/deployer": "^7.0.0",
-    "sourcebroker/deployer-instance": "^5.0.0"
+    "sourcebroker/deployer-instance": "^5.0.0 || dev-master"
   },
   "authors": [
     {
