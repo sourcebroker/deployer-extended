@@ -180,10 +180,9 @@ deploy:check_branch
 
 Check if the branch you want to deploy is different from the branch currently deployed on host. If you have information that
 the branch on the host is different than the branch you want to deploy then you can take decision to overwrite it or not.
-For this task to work you need also to run task `deploy:extend_log`_, which will store info about last deployed branch.
 
 deploy:check_branch_local
-+++++++++++++++++++
++++++++++++++++++++++++++
 
 Check if the branch you are currently checked out on your local is the same branch you want to deploy.
 The ``deploy.php`` files on both branches can be different and that can influence the deploy process.
@@ -209,11 +208,6 @@ css/js that will be not used on production which reads compiled css/js.
 
 To prevent this situation you can make "grunt watch" to generate file "deploy.lock" (with text "Run
 'grunt build'." inside) to inform you that you missed some step before deploying application.
-
-deploy:extend_log
-+++++++++++++++++
-
-Log info about deployed branch / tag / hash and the user who deployed. Log is stored in ``.dep/releases.extended`` file.
 
 file
 ~~~~

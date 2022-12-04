@@ -7,6 +7,8 @@ master
 
 a) [TASK] Code refactor. Change Exception to GracefulShutdownException. Casting optimisation. Code reformatting / cleanup.
 
+b) [BREAKING] Remove task `deploy_extend_log` as it is now part of deployer 7. Refactor task `deploy_check_branch`
+   to check extended data deployer meta data file.
 
 16.1.0
 ~~~~~~
