@@ -10,6 +10,9 @@ a) [TASK] Code refactor. Change Exception to GracefulShutdownException. Casting 
 b) [BREAKING] Remove task `deploy_extend_log` as it is now part of deployer 7. Refactor task `deploy_check_branch`
    to check extended data deployer meta data file.
 
+c) [TASK] Rename locateBinaryPath to which (Deployer 7 changes).
+
+
 16.1.0
 ~~~~~~
 
