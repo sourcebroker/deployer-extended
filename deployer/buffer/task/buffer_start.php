@@ -2,16 +2,18 @@
 
 namespace Deployer;
 
+use Deployer\Exception\GracefulShutdownException;
+
 // Read more on https://github.com/sourcebroker/deployer-extended#buffer-start
 task('buffer:start', function () {
     if (empty(get('deploy_path'))) {
-        throw new \Exception('The "deploy_path" var is empty but its used for file operations so its dangerous state.');
+        throw new GracefulShutdownException('The "deploy_path" var is empty but its used for file operations so its dangerous state.');
     }
     if (empty(get('random'))) {
-        throw new \Exception('The "random" config var is empty. Its needed for file operation.');
+        throw new GracefulShutdownException('The "random" config var is empty. Its needed for file operation.');
     }
     if (preg_match('/^[a-zA-Z0-9]$/', get('random'))) {
-        throw new \Exception('The "random" config var should be only /^[a-zA-Z0-9]$/ because its used in filenames.');
+        throw new GracefulShutdownException('The "random" config var should be only /^[a-zA-Z0-9]$/ because its used in filenames.');
     }
     foreach (['release', 'current'] as $overwriteRelease) {
         $overwriteReleasePath = get('deploy_path') . '/' . $overwriteRelease . '/';
@@ -20,9 +22,9 @@ task('buffer:start', function () {
             run('[ -e ' . $tempPath . ' ] || mkdir -p ' . $tempPath);
             $entrypointInjectStartComment = "\n\n// deployer extended buffering request code START\n";
             $entrypointInjectEndComment = "\n// deployer extended buffering request code END\n\n";
-            foreach ((array)get('buffer_config') as $key => $inject) {
+            foreach ((array)get('buffer_config') as $inject) {
                 if (empty($inject['entrypoint_filename'])) {
-                    throw new \Exception('entrypoint_filename not set for buffer_data');
+                    throw new GracefulShutdownException('entrypoint_filename not set for buffer_data');
                 }
                 // general inject settings
                 $entrypointFilename = $inject['entrypoint_filename'];
@@ -36,7 +38,7 @@ task('buffer:start', function () {
                 if (empty($inject['requestbuffer_sleep'])) {
                     $requestBufferSleep = 200000; // 200ms
                 } else {
-                    $requestBufferSleep = intval($inject['requestbuffer_sleep']);
+                    $requestBufferSleep = (int)$inject['requestbuffer_sleep'];
                 }
                 if (empty($inject['requestbuffer_flag_filename'])) {
                     $requestBufferFlagFilename = '.flag.requestbuffer';
@@ -46,10 +48,10 @@ task('buffer:start', function () {
                 if (empty($inject['requestbuffer_duration'])) {
                     $requestBufferDuration = 60;
                 } else {
-                    $requestBufferDuration = intval($inject['requestbuffer_duration']);
+                    $requestBufferDuration = (int)$inject['requestbuffer_duration'];
                 }
 
-                // Action if php choosed old release to serve request
+                // Action if php choose old release to serve request
                 if (empty($inject['oldrelease_flag__filename'])) {
                     $oldReleaseFlagFilename = '.flag.oldrelease';
                 } else {
@@ -58,7 +60,7 @@ task('buffer:start', function () {
                 if (empty($inject['oldrelease_redirect_sleep'])) {
                     $oldReleaseRedirectSleep = 1000000; // 1s
                 } else {
-                    $oldReleaseRedirectSleep = intval($inject['oldrelease_redirect_sleep']);
+                    $oldReleaseRedirectSleep = (int)$inject['oldrelease_redirect_sleep'];
                 }
                 // Clearstatcache for n seconds after deploy
                 if (empty($inject['clearstatcache_flag_filename'])) {
@@ -69,7 +71,7 @@ task('buffer:start', function () {
                 if (empty($inject['clearstatcache_duration'])) {
                     $clearStatCacheDuration = 150; // 120s is php default -> http://php.net/realpath-cache-ttl
                 } else {
-                    $clearStatCacheDuration = intval($inject['clearstatcache_duration']);
+                    $clearStatCacheDuration = (int)$inject['clearstatcache_duration'];
                 }
 
                 if (empty($inject['entrypoint_inject'])) {
@@ -89,7 +91,7 @@ task('buffer:start', function () {
                         "    clearstatcache(true);\n" .
                         "    if(time() - @filectime(__DIR__ . '/$clearStatCacheFlagFilename') > $clearStatCacheDuration) @unlink(__DIR__ . '/$clearStatCacheFlagFilename');\n" .
                         "}\n" .
-                        "// Action if php choosed old release to serve request" .
+                        "// Action if php choose old release to serve request" .
                         "clearstatcache(true, __DIR__ . '/$oldReleaseFlagFilename')\n" .
                         "if(file_exists(__DIR__ . '/$oldReleaseFlagFilename')) {\n" .
                         "    clearstatcache(true);\n" .
@@ -120,10 +122,10 @@ task('buffer:start', function () {
                             run('echo ' . escapeshellarg($content) . ' > ' . $tempPath . '/' . basename($entrypointAbsolutePath));
                             run('mv -fT ' . $tempPath . '/' . basename($entrypointAbsolutePath) . ' ' . $entrypointAbsolutePath);
                         } else {
-                            throw new \Exception('Can not find needle to inject with inclusion.');
+                            throw new GracefulShutdownException('Can not find needle to inject with inclusion.');
                         }
                     } else {
-                        throw new \Exception('Can not find file to overwrite or the file is empty. File that was read is: ' . $overwriteReleasePath . $entrypointFilename);
+                        throw new GracefulShutdownException('Can not find file to overwrite or the file is empty. File that was read is: ' . $overwriteReleasePath . $entrypointFilename);
                     }
                 }
                 if (test('[ -e ' . $overwriteReleasePath . dirname($entrypointFilename) . ' ]')) {
@@ -134,4 +136,4 @@ task('buffer:start', function () {
             run('rmdir ' . $tempPath);
         }
     }
-})->desc('Start buffering reqests to application entrypoints');
+})->desc('Start buffering requests to application entry points');

@@ -14,23 +14,23 @@ task('file:backup', function () {
         return;
     }
 
-    $searchRootPath = get('deploy_path') .'/'. (test('[ -e {{deploy_path}}/current ]') ? 'current' : '');
+    $searchRootPath = get('deploy_path') . '/' . (test('[ -e {{deploy_path}}/current ]') ? 'current' : '');
 
     foreach ($backupFiles as $package => $filtersGroups) {
         if (empty($filtersGroups)) {
-            writeln('Skiping package "' . $package .'" - empty filters.');
+            writeln('Skipping package "' . $package . '" - empty filters.');
             continue;
         }
 
-        $filtersGroups = array_map(function ($group) {
+        $filtersGroups = array_map(static function ($group) {
             return is_array($group)
-                ? '\( '.  implode(' -and ', $group). ' \)'
+                ? '\( ' . implode(' -and ', $group) . ' \)'
                 : $group;
         }, $filtersGroups);
 
         $filtersConcat = implode(' -or ', $filtersGroups);
 
-        $backupName = date('Ymd_His') .'_'. $signCode;
+        $backupName = date('Ymd_His') . '_' . $signCode;
 
         $command = <<<BASH
 if [ -d "{$searchRootPath}" ]
@@ -42,19 +42,19 @@ then
 fi
 BASH;
 
-        writeln('Creating backup. Package: "' . $package .'" Backup signature: "'. $backupName .'"');
+        writeln('Creating backup. Package: "' . $package . '" Backup signature: "' . $backupName . '"');
         run($command);
 
         writeln('Clean old backups');
         $command = '
-if [ -d '. escapeshellarg(get('file_backup_path') .'/'. $package) .' ]
+if [ -d ' . escapeshellarg(get('file_backup_path') . '/' . $package) . ' ]
 then
-    cd '. escapeshellarg(get('file_backup_path') .'/'. $package) .'
-    ls -1t | grep '. $signCode .' | tail -n +'. ($fileBackupKeep + 1) .' | xargs rm -f
+    cd ' . escapeshellarg(get('file_backup_path') . '/' . $package) . '
+    ls -1t | grep ' . $signCode . ' | tail -n +' . ($fileBackupKeep + 1) . ' | xargs rm -f
 fi
 ';
 
         run($command);
     }
 })
-->desc('Backup filtered files / directories');
+    ->desc('Backup filtered files / directories');

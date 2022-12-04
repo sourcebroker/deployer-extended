@@ -2,6 +2,8 @@
 
 namespace Deployer;
 
+use Deployer\Exception\GracefulShutdownException;
+
 // Read more on https://github.com/sourcebroker/deployer-extended#deploy-check-lock
 task('deploy:check_lock', function () {
     if (file_exists(get('current_dir') . '/deploy.lock')) {
@@ -11,6 +13,6 @@ task('deploy:check_lock', function () {
         } else {
             $message = 'Deployment stopped! There is deploy.lock file.';
         }
-        throw new \Exception($message);
+        throw new GracefulShutdownException($message);
     }
 })->desc('Check for deploy.lock file existence and stop deploy if there');

@@ -2,8 +2,11 @@
 
 namespace Deployer;
 
+use Deployer\Exception\GracefulShutdownException;
+use Throwable;
+
 // Common random that can be used between tasks. Must be in form that can be used directly in filename!
-set('random', md5(time() . rand()));
+set('random', md5(time() . mt_rand()));
 
 // Path to public when not in root of project. Must be like "pub/" so without starting slash and with ending slash.
 set('web_path', '');
@@ -26,7 +29,7 @@ set('local/bin/wget', function () {
 // Install specific composer version. Use tags. Valid tags are here https://github.com/composer/composer/tags
 set('composer_version', null);
 
-// Install latest version from channel. Set this variable to '1' or '2' (or 'stable', 'snapshot', 'preview'). Read more on composer docs.
+// Install the latest version from channel. Set this variable to '1' or '2' (or 'stable', 'snapshot', 'preview'). Read more on composer docs.
 set('composer_channel', 'stable');
 
 // If set then on each deploy the composer is checked for latest version
@@ -55,7 +58,8 @@ set('bin/composer', function () {
         // - "Composer version 2.0.0-alpha3 2020-10-30 22:31:58" - alpha/beta/RC for preview channel
         // - "Composer version 2.0-dev (2.0-dev+378a5b72b9f81e8e919e41ecd3add6893d14b90e) 2020-12-04 09:50:19" - for snapshot channel
         $currentComposerVersionRaw = run($composerBin . ' --version');
-        if (preg_match('/(\\d+\\.\\d+)(\\.\\d+)?-?(RC|alpha|beta|dev)?\d*/', $currentComposerVersionRaw, $composerVersionMatches)) {
+        if (preg_match('/(\\d+\\.\\d+)(\\.\\d+)?-?(RC|alpha|beta|dev)?\d*/', $currentComposerVersionRaw,
+            $composerVersionMatches)) {
             $currentComposerVersion = $composerVersionMatches[0] ?? null;
             if ($currentComposerVersion !== null) {
                 // if we have exact version of composer to install (composer_version) and currently installed version match it then return
@@ -67,8 +71,9 @@ set('bin/composer', function () {
                     if (preg_match('/\\+(.*)\\)/', $currentComposerVersionRaw, $snapshotVersion)) {
                         $currentComposerVersion = $snapshotVersion[1] ?? null;
                     }
-                    // Compare latest version of composer channel with and currently installed version. If match then return.
-                    $composerChannelData = json_decode(file_get_contents('https://getcomposer.org/versions'), true);
+                    // Compare the latest version of composer channel with and currently installed version. If match then return.
+                    $composerChannelData = json_decode(file_get_contents('https://getcomposer.org/versions'), true, 512,
+                        JSON_THROW_ON_ERROR);
                     $latestComposerVersionFromChannel = $composerChannelData[$composerChannelToInstall][0]['version'] ?? null;
                     if ($latestComposerVersionFromChannel && $latestComposerVersionFromChannel === $currentComposerVersion) {
                         return $composerBin;
@@ -99,9 +104,8 @@ set('current_dir', function () {
     $current = getcwd();
     if (is_dir($current) && file_exists($current . '/deploy.php')) {
         return $current;
-    } else {
-        throw new \Exception('Can not set "current_dir" var. Are you in folder with deploy.php file?');
     }
+    throw new GracefulShutdownException('Can not set "current_dir" var. Are you in folder with deploy.php file?');
 });
 
 set('branch', function () {
@@ -109,7 +113,7 @@ set('branch', function () {
     if (get('branch_detect_to_deploy', true)) {
         try {
             $branch = runLocally('git rev-parse --abbrev-ref HEAD');
-        } catch (\Throwable $exception) {
+        } catch (Throwable $exception) {
             // We do not care why it fails as branch can be set other way.
         }
     }
@@ -133,5 +137,5 @@ function locateLocalBinaryPath($name)
         // Deal with issue when `type -p` outputs something like `type -ap` in some implementations
         return trim(str_replace("$name is", "", $path));
     }
-    throw new \RuntimeException("Can't locate [$nameEscaped] on instance '" . get('default_stage') . "' - neither of [command|which|type] commands are available");
+    throw new GracefulShutdownException("Can't locate [$nameEscaped] on instance '" . get('local_host') . "' - neither of [command|which|type] commands are available");
 }

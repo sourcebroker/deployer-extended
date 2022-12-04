@@ -9,7 +9,7 @@ task('file:rm2steps:2', function () {
     $activePath = get('deploy_path') . '/' . (test('[ -L {{deploy_path}}/release ]') ? 'release' : 'current');
     foreach ($removeRecursiveAtomicItems as $removeRecursiveAtomicItem) {
         $removeRecursiveAtomicItem = rtrim(trim($removeRecursiveAtomicItem), '/');
-        if (strlen($removeRecursiveAtomicItem)) {
+        if ($removeRecursiveAtomicItem !== '') {
             $itemToRemove = escapeshellarg("$activePath/$removeRecursiveAtomicItem$random");
             run("if [ -e $itemToRemove ]; then rm -rf $itemToRemove; fi");
         }
