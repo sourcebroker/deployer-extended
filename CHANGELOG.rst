@@ -2,7 +2,7 @@
 Changelog
 ---------
 
-master
+17.0.0
 ~~~~~~
 
 a) [TASK] Code refactor. Change Exception to GracefulShutdownException. Casting optimisation. Code reformatting / cleanup.
