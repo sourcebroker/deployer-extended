@@ -7,6 +7,8 @@ Changelog
 
 a) [TASK][BREAKING] Bump dependency to ``sourcebroker/deployer-instance``.
 
+b) [TASK] Clean up code.
+
 17.0.0
 ~~~~~~
 

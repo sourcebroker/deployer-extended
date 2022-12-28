@@ -126,7 +126,7 @@ set('branch', function () {
     return $branch;
 });
 
-function locateLocalBinaryPath($name)
+function locateLocalBinaryPath($name): string
 {
     $nameEscaped = escapeshellarg($name);
     // Try `command`, should cover all Bourne-like shells
