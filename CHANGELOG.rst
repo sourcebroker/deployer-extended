@@ -2,6 +2,17 @@
 Changelog
 ---------
 
+19.0.0
+~~~~~~
+
+a) [TASK][BREAKING] Replace ``--ignore-platform-reqs`` with ``{{check_composer_install_options}}`` in ``deploy:check_composer_install``
+    This change allows for greater flexibility in managing the options for ``composer install --dry-run``.
+    Default Value:
+    ``--no-dev --no-interaction --no-progress --no-suggest --no-scripts --no-plugins``
+    Note:
+    The value for ``{{check_composer_install_options}}`` must differ from ``{{composer_options}}``, as the latter
+    has ``--no-dev`` by default. Using ``--no-dev`` in local development would remove require-dev packages.
+
 18.0.0
 ~~~~~~
 
@@ -14,7 +25,7 @@ b) [TASK] Clean up code.
 
 a) [TASK] Code refactor. Change Exception to GracefulShutdownException. Casting optimisation. Code reformatting / cleanup.
 
-b) [BREAKING] Remove task `deploy_extend_log` as it is now part of Deployer 7. Refactor task `deploy_check_branch`
+b) [BREAKING] Remove task ``deploy_extend_log`` as it is now part of Deployer 7. Refactor task `deploy_check_branch`
    to check extended data deployer meta data file.
 
 c) [TASK] Refactor code for Deployer 7.
