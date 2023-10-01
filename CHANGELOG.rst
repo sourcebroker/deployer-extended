@@ -13,6 +13,8 @@ a) [TASK][BREAKING] Replace ``--ignore-platform-reqs`` with ``{{check_composer_i
     The value for ``{{check_composer_install_options}}`` must differ from ``{{composer_options}}``, as the latter
     has ``--no-dev`` by default. Using ``--no-dev`` in local development would remove require-dev packages.
 
+b) [FEATURE] Add `deploy:check_composer_validate` task.
+
 18.0.0
 ~~~~~~
 

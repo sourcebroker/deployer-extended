@@ -196,6 +196,12 @@ or installed then it means that probably developer pulled composer.lock changes 
 to make "composer install". In that case deployment is stopped to allow developer to update packages,
 make some test and make deployment then.
 
+deploy:check_composer_validate
+++++++++++++++++++++++++++++++
+
+Check if ``composer.lock`` file is up to date with current state of ``composer.json``.
+In not then deployment is stopped.
+
 deploy:check_lock
 +++++++++++++++++
 
