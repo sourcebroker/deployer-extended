@@ -1,9 +1,6 @@
 deployer-extended
 =================
 
-    .. image:: https://scrutinizer-ci.com/g/sourcebroker/deployer-extended/badges/quality-score.png?b=master
-        :target: https://scrutinizer-ci.com/g/sourcebroker/deployer-extended/?branch=master
-
     .. image:: http://img.shields.io/packagist/v/sourcebroker/deployer-extended.svg?style=flat
         :target: https://packagist.org/packages/sourcebroker/deployer-extended
 
