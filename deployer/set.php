@@ -137,5 +137,5 @@ function locateLocalBinaryPath($name): string
         // Deal with issue when `type -p` outputs something like `type -ap` in some implementations
         return trim(str_replace("$name is", "", $path));
     }
-    throw new GracefulShutdownException("Can't locate [$nameEscaped] on instance '" . get('local_host') . "' - neither of [command|which|type] commands are available");
+    throw new GracefulShutdownException("Can't locate [$nameEscaped] - neither of [command|which|type] commands are available");
 }

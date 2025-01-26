@@ -2,6 +2,11 @@
 Changelog
 ---------
 
+dev-master
+~~~~~~~~~~
+
+a) [TASK][BREAKING] Remove dependency to ``sourcebroker/deployer-instance``. Not needed anymore.
+
 19.0.0
 ~~~~~~
 
