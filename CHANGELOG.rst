@@ -6,6 +6,7 @@ dev-master
 ~~~~~~~~~~
 
 a) [TASK][BREAKING] Remove dependency to ``sourcebroker/deployer-instance``. Not needed anymore.
+b) [TASK][BREAKING] Remove task buffer:start, buffer:stop as hard to test on so many hoster configs and different level of traffic.
 
 19.0.0
 ~~~~~~
