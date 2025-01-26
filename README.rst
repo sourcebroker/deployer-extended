@@ -168,30 +168,6 @@ file\:rm2steps\:1
 
 Allows to remove files and directories in two steps for "security" and "speed".
 
-**Security**
-
-Sometimes removing cache folders with lot of files takes few seconds. In meantime of that process a new frontend
-request can hit http server and new file cache will start to being generated because it will detect that some cache
-files are missing and cache needs to be regenerated. A process which is deleting the cache folder can then delete
-the newly generated cache files. The output of cache folder is not predictable in that case and can crash
-the application.
-
-**Speed**
-
-If you decide to remove the cache folder during the `buffer:start`_ then its crucial to do it as fast as possible in
-order to buffer as low requests as possible.
-
-
-The solution for both problems of "security" and "speed" is first rename the folder to some temporary and then delete it
-later in next step. Renaming is atomic operation so there is no possibility that new http hit will start to build cache
-in the same folder. We also gain speed because we can delete the folders/files at the end of deployment with task
-`file:rm2steps:2`_ if that's needed at all because deployer "cleanup" task will remove old releases anyway.
-
-
-file\:rm2steps\:2
-+++++++++++++++++
-
-The second step of file:rm2steps tandem. Read more on `file:rm2steps:1`_
 
 cache
 ~~~~~
