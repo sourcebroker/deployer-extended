@@ -133,7 +133,7 @@ Sample configuration:
     set('file_backup_keep', 10);
 
 Config variable *file_backup_packages* stores information about backup packages and files filtering options.
-Each package defines filters which will be used in `find` command.
+Each package defines filters which will be used in ``find`` command.
 First level element are groups which will be concatenated using logical alternative operator operator OR.
 If group is array type then group elements will be concatenated using logical conjunction operator.
 
@@ -162,11 +162,11 @@ file:copy_files_ignore_existing
 
 Copy files from previous release except for those files which already exists in new release.
 
+file:upload_build
++++++++++++++++++++++++++++++++
 
-file\:rm2steps\:1
-+++++++++++++++++
-
-Allows to remove files and directories in two steps for "security" and "speed".
+Upload files not defined in ``clear_paths``, ``shared_files``, ``shared_dirs``.
+Can be used as good default for uploading build from CI.
 
 
 cache
