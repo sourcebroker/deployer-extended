@@ -3,7 +3,6 @@
 namespace Deployer;
 
 use Deployer\Exception\GracefulShutdownException;
-use Throwable;
 
 // Common random that can be used between tasks. Must be in form that can be used directly in filename!
 set('random', md5(time() . mt_rand()));
@@ -106,24 +105,6 @@ set('current_dir', function () {
         return $current;
     }
     throw new GracefulShutdownException('Can not set "current_dir" var. Are you in folder with deploy.php file?');
-});
-
-set('branch', function () {
-    $branch = null;
-    if (get('branch_detect_to_deploy', true)) {
-        try {
-            $branch = runLocally('git rev-parse --abbrev-ref HEAD');
-        } catch (Throwable $exception) {
-            // We do not care why it fails as branch can be set other way.
-        }
-    }
-    if ($branch === 'HEAD') {
-        $branch = null; // Travis-CI fix
-    }
-    if (input()->hasOption('branch') && !empty(input()->getOption('branch'))) {
-        $branch = input()->getOption('branch');
-    }
-    return $branch;
 });
 
 function locateLocalBinaryPath($name): string

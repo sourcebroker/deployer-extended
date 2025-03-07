@@ -6,6 +6,8 @@ master
 ------
 
 a) [BUGFIX] Remove dependency to ``argument_host`` which was part of removed ``sourcebroker/deployer-instance``.
+b) [TASK][BREAKING] Remove overwriting of ``branch`` setting. This should be done at higher level. Base should follow Deployer
+   default.
 
 20.0.0
 ~~~~~~
