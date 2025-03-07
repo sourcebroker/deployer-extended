@@ -2,6 +2,11 @@
 Changelog
 ---------
 
+master
+------
+
+a) [BUGFIX] Remove dependency to ``argument_host`` which was part of removed ``sourcebroker/deployer-instance``.
+
 20.0.0
 ~~~~~~
 

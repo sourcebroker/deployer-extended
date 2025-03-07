@@ -35,7 +35,7 @@ task('deploy:check_branch', function () {
                     if (($currentRemoteBranch !== $branchToBeDeployed) && !askConfirmation(sprintf(
                             'On host "%s" there is currently branch "%s" deployed by "%s" on %s. ' .
                             'You are trying to deploy now branch "%s". Do you really want to continue?',
-                            get('argument_host'),
+                            input()->getOptions()['host'],
                             $currentRemoteBranch,
                             $metaInfo['user'],
                             $metaInfo['created_at'],
