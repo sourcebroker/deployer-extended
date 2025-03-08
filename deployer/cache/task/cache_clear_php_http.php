@@ -6,12 +6,7 @@ use Deployer\Exception\GracefulShutdownException;
 
 // Read more on https://github.com/sourcebroker/deployer-extended#cache-clear-php-http
 task('cache:clear_php_http', function () {
-    if (empty(get('random'))) {
-        throw new GracefulShutdownException('The "random" var is empty.');
-    }
-    if (preg_match('/^[a-zA-Z0-9]$/', get('random'))) {
-        throw new GracefulShutdownException('The "random" var should be only /^[a-zA-Z0-9]$/ because its used in filenames.');
-    }
+    $random = md5(time() . mt_rand());
     // Try to find fileName from previous release to prevent real_cache problems when "current" folder still points to
     // old release directory and Apache is giving 404 error because clear_cache_* file does not exist in old release dir.
     $releasesList = get('releases_list');
@@ -25,7 +20,7 @@ task('cache:clear_php_http', function () {
     if (!empty($previousClearCacheFiles) && !empty($previousClearCacheFiles[0])) {
         $fileName = pathinfo($previousClearCacheFiles[0], PATHINFO_BASENAME);
     } else {
-        $fileName = "cache_clear_random_" . get('random') . '.php';
+        $fileName = "cache_clear_random_" . $random . '.php';
     }
     if (test('[ -L {{deploy_path}}/current ]')) {
         run('cd {{deploy_path}}/current/{{web_path}} && echo ' . escapeshellarg(

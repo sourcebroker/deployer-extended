@@ -13,6 +13,8 @@ c) [TASK][BREAKING] Remove overwriting of ``bin/composer`` setting. Base should 
 d) [TASK][BREAKING] Make all task hidden as they should be usually part of deploy task. If you want to unhide task then
    ``task('taskname')->hidden(false);`` in your deploy.php file.
 e) [TASK][BREAKING] Rename ``current_dir`` setting to ``project_root`` to reflect real usage.
+f) [TASK][BREAKING] Remove ``random`` setting to not pollute global Deployer scope without a good reason. After recent
+   cleanup on tasks the ``random`` setting was used only at one task ``cache:clear_php_http``.
 
 20.0.0
 ~~~~~~

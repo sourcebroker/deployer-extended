@@ -4,23 +4,17 @@ namespace Deployer;
 
 use Deployer\Exception\GracefulShutdownException;
 
-// Common random that can be used between tasks. Must be in form that can be used directly in filename!
-set('random', md5(time() . mt_rand()));
-
 // Path to public when not in root of project. Must be like "pub/" so without starting slash and with ending slash.
 set('web_path', '');
 
-// Return path to php on current instance
 set('local/bin/php', function () {
     return locateLocalBinaryPath('php');
 });
 
-// Return path to curl on current instance
 set('local/bin/curl', function () {
     return locateLocalBinaryPath('curl');
 });
 
-// Return path to wget on current instance
 set('local/bin/wget', function () {
     return locateLocalBinaryPath('wget');
 });
