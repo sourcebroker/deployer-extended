@@ -19,14 +19,17 @@ Project Structure
 
 The project is organized into two main directories:
 
-- **deployer/** - Contains files (tasks/settings) that are safe to be loaded as until explicitly used they do not affect Deployer.
-                  So even if you use two tasks from ``deployer/`` folder you can load whole directory safely. Tasks are set to
-                  be hidden by default so they will not pollute Deployer task list.
+- ``deployer/``
 
-- **includes/** - Contains files that should be included selectively in your deployment process.
-                  Unlike the functionality in the ``deployer/`` directory, these components can override default
-                  Deployer functionality (for example override ``bin/composer`` setting in Deployer).
+  Contains files (tasks/settings) that are safe to be loaded as until explicitly used they do not affect Deployer.
+  So even if you use two tasks from ``deployer/`` folder you can load whole directory safely. Tasks are set to
+  be hidden by default so they will not pollute Deployer task list.
 
+- ``includes/``
+
+  Contains files that should be included selectively in your deployment process.
+  Unlike the functionality in the ``deployer/`` directory, these components can override default Deployer functionality
+  (for example override ``bin/composer`` setting in Deployer).
 
 Task's documentation
 --------------------
