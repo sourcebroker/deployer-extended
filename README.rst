@@ -14,32 +14,18 @@ What does it do?
 
 Library with some additional tasks for deployer (deployer.org).
 
-Setting's documentation
-------------------------
+Project Structure
+----------------
 
-composer_version
-~~~~~~~~~~~~~~~~
+The project is organized into two main directories:
 
-Install specific composer version. Use tags. Valid tags are here https://github.com/composer/composer/tags . Default
-value is ``null``.
+- **deployer/** - Contains files (tasks/settings) that are safe to be loaded as until explicitly used they do not affect Deployer.
+                  So even if you use two tasks from ``deployer/`` folder you can load whole directory safely. Tasks are set to
+                  be hidden by default so they will not pollute Deployer task list.
 
-
-composer_channel
-~~~~~~~~~~~~~~~~
-
-Install latest version from channel. Set this variable to '1' or '2' (or 'stable', 'snapshot', 'preview'). Read more on composer docs.
-Default value is ``stable`` which will install latest version of composer. If you need stability set it better to '1' or '2'.
-
-composer_channel_autoupdate
-~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-If set then on each deploy the composer is checked for latest version according to ``composer_channel`` settings.
-Default value is ``true``.
-
-web_path
-~~~~~~~~
-
-Path to public when not in root of project. Must be like "pub/" so without starting slash and with ending slash.
+- **includes/** - Contains files that should be included selectively in your deployment process.
+                  Unlike the functionality in the ``deployer/`` directory, these components can override default
+                  Deployer functionality (for example override ``bin/composer`` setting in Deployer).
 
 
 Task's documentation
@@ -64,9 +50,9 @@ deploy:check_composer_install
 +++++++++++++++++++++++++++++
 
 Check if there is composer.lock file on current instance and if its there then make dry run for
-"composer install". If "composer install" returns information that some packages needs to be updated
-or installed then it means that probably developer pulled composer.lock changes from repo but forget
-to make "composer install". In that case deployment is stopped to allow developer to update packages,
+``composer install``. If ``composer install`` returns information that some packages needs to be updated
+or installed then it means that probably developer pulled ``composer.lock`` changes from repo but forget
+to make ``composer install``. In that case deployment is stopped to allow developer to update packages,
 make some test and make deployment then.
 
 deploy:check_composer_validate
@@ -79,22 +65,16 @@ deploy:check_lock
 +++++++++++++++++
 
 Checks for existence of file deploy.lock in root of current instance. If the file deploy.lock is there then
-deployment is stopped.
+deployment is stopped. You can use it for whatever reason you have. Needed mainly if you do development from 
+local and not from CI.
 
-You can use it for whatever reason you have. Imagine that you develop css/js locally with "grunt watch".
-After you have working code you may forget to build final js/css with "grunt build" and you will deploy
-css/js that will be not used on production which reads compiled css/js.
-
-To prevent this situation you can make "grunt watch" to generate file "deploy.lock" (with text "Run
-'grunt build'." inside) to inform you that you missed some step before deploying application.
 
 file
 ~~~~
 file\:backup
 ++++++++++++
 
-Creates backup of files.
-Single task may perform multiple archivization using defined filters.
+Creates backup of files. Single task may perform multiple archivization using defined filters.
 Old ones are deleted after executing this task. Default limit is 5.
 
 Configuration description
@@ -113,7 +93,7 @@ Configuration description
   |
   | Limit of backups per package
 
-Sample configuration:
+Example configuration:
 ::
 
     set('file_backup_packages', [
@@ -139,12 +119,12 @@ If group is array type then group elements will be concatenated using logical co
 
 Package *config*:
 It is simplest definition.
-For this package all files from directory "./etc/" will be backuped.
+For this package all files from directory ``./etc/`` will be backuped.
 
 Package *translations*:
-For this one all files from directory "./l10n/" will be backuped.
-It will also include files from all "l10n/" from "modules" subdirectory.
-For example "modules/cookies/l10n"
+For this one all files from directory ``./l10n/`` will be backuped.
+It will also include files from all ``l10n/`` from "modules" subdirectory.
+For example ``modules/cookies/l10``
 
 Package *small_images*:
 This one will contain all small (smaller than 25kB) files from "media/uploads" and "media/theme".
@@ -182,21 +162,20 @@ cache:clear_php_http
 
 This task clears the file status cache, opcache and eaccelerator cache for HTTP context. It does following:
 
-1) Creates file "cache_clear_[random].php" in "{{deploy_path}}/current" folder.
+1) Creates file ``cache_clear_[random].php`` in ``{{deploy_path}}/current`` folder.
 2) Fetch this file with selected method - curl / wget / file_get_contents - by default its wget.
-3) The file is not removed after clearing cache for reason. It allows to prevent problems with realpath_cache. For
-   more info read http://blog.jpauli.tech/2014-06-30-realpath-cache-html/
+3) The file is not removed after clearing cache for reason. It allows to prevent problems with realpath_cache.
 
 You must set **public_urls** configuration variable so the script knows the domain it should fetch the php script.
 Here is example:
 
 ::
 
-  server('prelive', 'example.com', 22)
-    ->user('deploy')
-    ->stage('prelive')
-    ->set('deploy_path', '/home/web/html/www.example.com.prelive')
-    ->set('public_urls', ['https://prelive.example.com']);
+   host('staging')
+    ->setHostname('vm-dev.example.com')
+    ->setRemoteUser('project1')
+    ->set('public_urls', ['https://staging-t3base13.example.com'])
+    ->set('deploy_path', '~/t3base13.example.com/staging');
 
 
 Task configuration variables:
@@ -244,28 +223,34 @@ Task configuration variables:
   | Set the timeout in seconds for fetching php clear cache script.
   |
 
-- | **local/bin/curl**
-  | *required:* no
-  | *default value:* value of "which curl"
-  | *type:* string
-  |
-  | Path to curl binary on current system.
-  |
 
-- | **local/bin/wget**
-  | *required:* no
-  | *default value:* value of "which wget"
-  | *type:* string
-  |
-  | Path to wget binary on current system.
-  |
+Composer
+--------
 
-- | **local/bin/php**
-  | *required:* no
-  | *type:* string
-  |
-  | Path to php binary on current system.
-  |
+In ``includes/composer.php`` you can find ``bin/composer`` setting override. This implementation has more functionality
+compared to default Deployer version. It allows to install specific version of composer and later check if composer
+is up to date.
+
+Available settings
+~~~~~~~~~~~~~~~~
+
+composer_version
+++++++++++++++++
+
+Install specific composer version. Use tags. Valid tags are here https://github.com/composer/composer/tags .
+Default value is ``null``.
+
+composer_channel
+++++++++++++++++
+
+Install latest version from channel. Set this variable to '1' or '2' (or 'stable', 'snapshot', 'preview'). Read more on composer docs.
+Default value is ``stable`` which will install latest version of composer.
+
+composer_channel_autoupdate
++++++++++++++++++++++++++++
+
+If set then on each deploy the composer is checked for latest version according to ``composer_channel`` settings.
+Default value is ``true``.
 
 
 Changelog
