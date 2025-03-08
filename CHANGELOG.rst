@@ -12,6 +12,7 @@ c) [TASK][BREAKING] Remove overwriting of ``bin/composer`` setting. Base should 
    ``includes/composer.php`` file directly in your project.
 d) [TASK][BREAKING] Make all task hidden as they should be usually part of deploy task. If you want to unhide task then
    ``task('taskname')->hidden(false);`` in your deploy.php file.
+e) [TASK][BREAKING] Rename ``current_dir`` setting to ``project_root`` to reflect real usage.
 
 20.0.0
 ~~~~~~

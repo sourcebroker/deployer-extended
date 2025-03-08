@@ -29,13 +29,15 @@ set('local/bin/composer', function () {
     return locateLocalBinaryPath('composer');
 });
 
-// We assume deploy.php is in project root.
-set('current_dir', function () {
-    $current = getcwd();
-    if (is_dir($current) && file_exists($current . '/deploy.php')) {
-        return $current;
+set('project_root', function () {
+    $dir = __DIR__;
+    while ((!is_file($dir . '/composer.json') && !is_file($dir . '/deploy.php')) || basename($dir) === 'deployer-extended') {
+        if ($dir === \dirname($dir)) {
+            break;
+        }
+        $dir = \dirname($dir);
     }
-    throw new GracefulShutdownException('Can not set "current_dir" var. Are you in folder with deploy.php file?');
+    return $dir;
 });
 
 function locateLocalBinaryPath($name): string

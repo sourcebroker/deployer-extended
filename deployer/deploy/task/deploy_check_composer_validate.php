@@ -6,7 +6,7 @@ use Deployer\Exception\GracefulShutdownException;
 
 // Read more on https://github.com/sourcebroker/deployer-extended#deploy-check-composer-validate
 task('deploy:check_composer_validate', function () {
-    if (file_exists(get('current_dir') . '/composer.lock') && file_exists(get('current_dir') . '/composer.json')) {
+    if (file_exists(get('project_root') . '/composer.lock') && file_exists(get('project_root') . '/composer.json')) {
         $output = runLocally(
             get('local/bin/composer')
             . ' validate ' .
