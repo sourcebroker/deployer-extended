@@ -8,6 +8,8 @@ master
 a) [BUGFIX] Remove dependency to ``argument_host`` which was part of removed ``sourcebroker/deployer-instance``.
 b) [TASK][BREAKING] Remove overwriting of ``branch`` setting. This should be done at higher level. Base should follow Deployer
    default.
+c) [TASK][BREAKING] Remove overwriting of ``bin/composer`` setting. Base should be Deployer default. If you want then include
+   ``includes/composer.php`` file directly in your project.
 
 20.0.0
 ~~~~~~
