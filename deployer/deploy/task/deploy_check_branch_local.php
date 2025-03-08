@@ -43,4 +43,4 @@ task('deploy:check_branch_local', function () {
             }
         }
     }
-})->desc('Check if locally checkout branch is equal to what branch is going to be deployed');
+})->desc('Check if locally checkout branch is equal to what branch is going to be deployed')->hidden();

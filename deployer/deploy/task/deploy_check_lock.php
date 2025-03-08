@@ -15,4 +15,4 @@ task('deploy:check_lock', function () {
         }
         throw new GracefulShutdownException($message);
     }
-})->desc('Check for deploy.lock file existence and stop deploy if there');
+})->desc('Check for deploy.lock file existence and stop deploy if there')->hidden();

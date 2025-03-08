@@ -18,4 +18,4 @@ task('deploy:check_composer_validate', function () {
             );
         }
     }
-})->desc('Validate composer');
+})->desc('Validate composer')->hidden();

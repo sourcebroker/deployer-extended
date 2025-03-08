@@ -12,4 +12,4 @@ task('file:copy_files_ignore_existing', function () {
         }
     }
 })
-    ->desc('Copy files from previous release except for those files which already exists');
+    ->desc('Copy files from previous release except for those files which already exists')->hidden();

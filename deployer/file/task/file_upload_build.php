@@ -15,4 +15,4 @@ task('file:upload_build', function () {
         $excludeOptions[] = $exclusion;
     }
     upload('./', get('release_path'), ['options' => array_merge($excludeOptions, ['--quiet'])]);
-})->desc('Uploading build to server');
+})->desc('Uploading build to server')->hidden();

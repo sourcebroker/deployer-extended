@@ -10,6 +10,8 @@ b) [TASK][BREAKING] Remove overwriting of ``branch`` setting. This should be don
    default.
 c) [TASK][BREAKING] Remove overwriting of ``bin/composer`` setting. Base should be Deployer default. If you want then include
    ``includes/composer.php`` file directly in your project.
+d) [TASK][BREAKING] Make all task hidden as they should be usually part of deploy task. If you want to unhide task then
+   ``task('taskname')->hidden(false);`` in your deploy.php file.
 
 20.0.0
 ~~~~~~

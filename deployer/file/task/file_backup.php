@@ -57,4 +57,4 @@ fi
         run($command);
     }
 })
-    ->desc('Backup filtered files / directories');
+    ->desc('Backup filtered files / directories')->hidden();

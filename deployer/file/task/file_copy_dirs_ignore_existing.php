@@ -22,4 +22,4 @@ BASH;
         }
     }
 })
-    ->desc('Copy directories from previous release except for those folders which already exists.');
+    ->desc('Copy directories from previous release except for those folders which already exists.')->hidden();

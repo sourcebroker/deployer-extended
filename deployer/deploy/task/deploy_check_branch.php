@@ -48,4 +48,4 @@ task('deploy:check_branch', function () {
             }
         }
     }
-})->desc('Check if the branch we want to deploy is equal to the branch that has been already deployed');
+})->desc('Check if the branch we want to deploy is equal to the branch that has been already deployed')->hidden();
