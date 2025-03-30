@@ -227,14 +227,14 @@ Task configuration variables:
   |
 
 
-Composer
---------
+bin/composer
+------------
 
 In ``includes/composer.php`` you can find ``bin/composer`` setting override. This implementation has more functionality
 compared to default Deployer version. It allows to install specific version of composer and later check if composer
 is up to date.
 
-Available settings
+Settings
 ~~~~~~~~~~~~~~~~
 
 composer_version
