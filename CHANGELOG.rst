@@ -2,6 +2,13 @@
 Changelog
 ---------
 
+master
+------
+
+a) [FEATURE] Add ``bin/php`` that enhance standard behaviour of Deployer. It will check for
+   ``php_version`` in host settings and if not found then it will check for ``['config']['platform']['php']``
+   and ``['require']['php']`` in composer.json. If not found then it will fallback to standard ``php``.
+
 21.0.0
 ------
 

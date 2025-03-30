@@ -256,6 +256,24 @@ If set then on each deploy the composer is checked for latest version according 
 Default value is ``true``.
 
 
+bin/php
+-------
+
+In ``includes/bin_php.php`` you can find ``bin/php`` setting override. This implementation has more functionality
+compared to default Deployer version.
+
+It works like:
+
+1. It takes as first ``php_version`` if it is set explicitly for host.
+2. If ``php_version`` is not set for host then ``composer.json`` file is searched for ``['config']['platform']['php']``
+   and if not found then for ``['require']['php']``.
+3. Values set from point 1 or point 2 are then normalised to 'X.Y' and system is checked for specific PHP binaries
+   with ``which('phpX.Y')`` and ``which('phpXY')``.
+4. If none of ``php_version``,  ``['config']['platform']['php']``,  ``['require']['php']`` are set then there
+   is standard check for ``which('php')``.
+
+
+
 Changelog
 ---------
 
