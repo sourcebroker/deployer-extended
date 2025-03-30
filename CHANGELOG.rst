@@ -14,6 +14,9 @@ b) [TASK][BREAKING] Enhance existing ``local/bin/php`` to check for ``php_versio
    composer.json. If not found then it will fallback to standard ``php``. This can return different version of PHP so
    breaking change.
 
+c) [TASK][BREAKING] Move ``bin/composer`` override to ``includes/settings/bin_composer.php``. This is breaking change as path
+    has changed and this file is loaded manually.
+
 21.0.0
 ------
 
