@@ -9,6 +9,11 @@ a) [FEATURE] Add ``bin/php`` that enhance standard behaviour of Deployer. It wil
    ``php_version`` in host settings and if not found then it will check for ``['config']['platform']['php']``
    and ``['require']['php']`` in composer.json. If not found then it will fallback to standard ``php``.
 
+b) [TASK][BREAKING] Enhance existing ``local/bin/php`` to check for ``php_version`` in host settings and
+   if not found then it will check for ``['config']['platform']['php']`` and ``['require']['php']`` in
+   composer.json. If not found then it will fallback to standard ``php``. This can return different version of PHP so
+   breaking change.
+
 21.0.0
 ------
 
