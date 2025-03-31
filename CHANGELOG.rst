@@ -17,6 +17,10 @@ b) [TASK][BREAKING] Enhance existing ``local/bin/php`` to check for ``php_versio
 c) [TASK][BREAKING] Move ``bin/composer`` override to ``includes/settings/bin_composer.php``. This is breaking change as path
     has changed and this file is loaded manually.
 
+d) [TASK][FEATURE] Add fixed version of original "release" task (https://github.com/deployphp/deployer/pull/4034) which will
+   be available only to Deployer 8. Use if you still need it for Deployer 7.
+
+
 21.0.0
 ------
 
