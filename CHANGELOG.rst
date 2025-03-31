@@ -20,7 +20,7 @@ c) [TASK][BREAKING] Move ``bin/composer`` override to ``includes/settings/bin_co
 d) [FEATURE] Add fixed version of original "release" task (https://github.com/deployphp/deployer/pull/4034) which will
    be available only to Deployer 8. Use if you still need it for Deployer 7.
 
-e) [FEATURE] Add simple task for php-fpm reloading.
+e) [FEATURE] Add simple task for php-fpm reloading. Make it hidden by default.
 
 f) [TASK][BREAKING] Remove deprecated eaccelerator calls.
 

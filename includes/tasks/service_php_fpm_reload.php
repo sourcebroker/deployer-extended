@@ -33,5 +33,5 @@ task('service:php_fpm_reload', function () {
             writeln('Error reloading PHP-FPM: ' . $e->getMessage());
         }
     }
-})->desc('Reload PHP-FPM service.');
+})->desc('Reload PHP-FPM service')->hidden();
 
