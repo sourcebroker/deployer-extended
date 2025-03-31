@@ -2,7 +2,7 @@
 Changelog
 ---------
 
-master
+22.0.0
 ------
 
 a) [FEATURE] Add ``bin/php`` that enhance standard behaviour of Deployer. It will check for
@@ -22,6 +22,7 @@ d) [FEATURE] Add fixed version of original "release" task (https://github.com/de
 
 e) [FEATURE] Add simple task for php-fpm reloading.
 
+f) [TASK][BREAKING] Remove deprecated eaccelerator calls.
 
 21.0.0
 ------

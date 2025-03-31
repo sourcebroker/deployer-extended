@@ -29,7 +29,6 @@ task('cache:clear_php_http', function () {
                     "<?php\n"
                     . "clearstatcache(true);\n"
                     . "if(function_exists('opcache_reset')) {opcache_reset();}\n"
-                    . "if(function_exists('eaccelerator_clear')) {eaccelerator_clear();}"
                 )
             ) . ' > ' . $fileName);
     }
