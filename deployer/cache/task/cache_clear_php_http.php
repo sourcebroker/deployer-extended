@@ -10,11 +10,12 @@ task('cache:clear_php_http', function () {
     // Try to find fileName from previous release to prevent real_cache problems when "current" folder still points to
     // old release directory and Apache is giving 404 error because clear_cache_* file does not exist in old release dir.
     $releasesList = get('releases_list');
+    $webPath = get('web_path', '');
     $previousClearCacheFiles = null;
     if (isset($releasesList[1]) && test('[ -e {{deploy_path}}/releases/' . $releasesList[1] . ' ]')) {
         $previousClearCacheFiles = preg_split(
             '/\R/',
-            run("find {{deploy_path}}/releases/" . $releasesList[1] . "/{{web_path}} -name 'cache_clear_random_*'")
+            run("find {{deploy_path}}/releases/$releasesList[1]/$webPath -name 'cache_clear_random_*'")
         );
     }
     if (!empty($previousClearCacheFiles) && !empty($previousClearCacheFiles[0])) {
@@ -23,7 +24,7 @@ task('cache:clear_php_http', function () {
         $fileName = "cache_clear_random_" . $random . '.php';
     }
     if (test('[ -L {{deploy_path}}/current ]')) {
-        run('cd {{deploy_path}}/current/{{web_path}} && echo ' . escapeshellarg(
+        run('cd {{deploy_path}}/current/' . $webPath . ' && echo ' . escapeshellarg(
                 get(
                     'cache:clear_php_http:phpcontent',
                     "<?php\n"

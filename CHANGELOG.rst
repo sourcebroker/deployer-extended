@@ -2,6 +2,13 @@
 Changelog
 ---------
 
+master
+------
+
+a) [TASK][BREAKING] Remove declaration of ``set('web_path', '');`` as it creates problems with overriding if other
+   packages use the same name. Breaking change, because if this setting was used outside this package then now will be null,
+   but was empty string.
+
 22.0.0
 ------
 

@@ -4,9 +4,6 @@ namespace Deployer;
 
 use Deployer\Exception\GracefulShutdownException;
 
-// Path to public when not in root of project. Must be like "pub/" so without starting slash and with ending slash.
-set('web_path', '');
-
 set('local/bin/php', function () {
     if (currentHost()->hasOwn('php_version')) {
         $rawPhpVersion = get('php_version');
