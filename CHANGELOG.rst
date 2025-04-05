@@ -2,7 +2,7 @@
 Changelog
 ---------
 
-master
+23.0.0
 ------
 
 a) [TASK][BREAKING] Remove declaration of ``set('web_path', '');`` as it creates problems with overriding if other
