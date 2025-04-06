@@ -14,9 +14,6 @@ What does it do?
 
 Library with some additional tasks for deployer (deployer.org).
 
-Project Structure
-----------------
-
 The project is organized into two main directories:
 
 - ``deployer/``
@@ -29,10 +26,85 @@ The project is organized into two main directories:
 
   Contains files that should be included selectively in your deployment process.
   Unlike the functionality in the ``deployer/`` directory, these components can override default Deployer functionality
-  (for example override ``bin/composer`` setting in Deployer).
+  (for example override ``bin/composer`` or ``bin/php`` setting in Deployer).
 
-Task's documentation
---------------------
+New tasks (``deployer/`` folder)
+----------------------------
+
+cache
+~~~~~
+
+cache:clear_php_cli
++++++++++++++++++++
+
+This task clears the file status cache, opcache and eaccelerator cache for CLI context.
+
+cache:clear_php_http
+++++++++++++++++++++
+
+This task clears the file status cache, opcache and eaccelerator cache for HTTP context. It does following:
+
+1) Creates file ``cache_clear_[random].php`` in ``{{deploy_path}}/current`` folder.
+2) Fetch this file with selected method - curl / wget / file_get_contents - by default its wget.
+3) The file is not removed after clearing cache for reason. It allows to prevent problems with realpath_cache.
+
+You must set **public_urls** configuration variable so the script knows the domain it should fetch the php script.
+Here is example:
+
+::
+
+   host('staging')
+    ->setHostname('vm-dev.example.com')
+    ->setRemoteUser('project1')
+    ->set('public_urls', ['https://staging-t3base13.example.com'])
+    ->set('deploy_path', '~/t3base13.example.com/staging');
+
+
+Task configuration variables:
+
+- | **cache:clear_php_http:phpcontent**
+  | *required:* no
+  | *type:* string
+  | *default value:*
+  ::
+
+    <?php
+      clearstatcache(true);
+      if(function_exists('opcache_reset')) opcache_reset();
+      if(function_exists('eaccelerator_clear')) eaccelerator_clear();
+
+  |
+  | Php content that will be put into dynamically created file that should clear the caches.
+  |
+
+- | **public_urls**
+  | *required:* yes
+  | *default value:* none
+  | *type:* array
+  |
+  | Domain used to prepare url to fetch clear cache php file. Its expected to be array so you can put there more than one
+    domain and use it for different purposes but here for this task the first domain will be taken.
+  |
+
+- | **fetch_method**
+  | *required:* no
+  | *default value:* wget
+  | *type:* string
+  |
+  | Can be one of following value:
+  | - curl,
+  | - wget,
+  | - file_get_contents
+  |
+
+- | **cache:clear_php_http:timeout**
+  | *required:* no
+  | *default value:* 15
+  | *type:* integer
+  |
+  | Set the timeout in seconds for fetching php clear cache script.
+  |
+
 
 deploy
 ~~~~~~
@@ -68,7 +140,7 @@ deploy:check_lock
 +++++++++++++++++
 
 Checks for existence of file deploy.lock in root of current instance. If the file deploy.lock is there then
-deployment is stopped. You can use it for whatever reason you have. Needed mainly if you do development from 
+deployment is stopped. You can use it for whatever reason you have. Needed mainly if you do development from
 local and not from CI.
 
 
@@ -152,114 +224,70 @@ Upload files not defined in ``clear_paths``, ``shared_files``, ``shared_dirs``.
 Can be used as good default for uploading build from CI.
 
 
-cache
-~~~~~
+service
+~~~~~~~
 
-cache:clear_php_cli
-+++++++++++++++++++
+service:php_fpm_reload
+++++++++++++++++++++++
 
-This task clears the file status cache, opcache and eaccelerator cache for CLI context.
+Very simple task for php-fpm reloading. There is lot of different ways to reload php-fpm depending on hoster configuration.
+The command can look like ``nine-flush-fpm`` (nine.ch hoster), ``killall -9 php-cgi`` (hostpoint.ch hoster) or just more
+regular ``sudo service php84-fpm reload``.
 
-cache:clear_php_http
-++++++++++++++++++++
+All you need to do is to add to host configuration ``service_php_fpm_reload_command`` setting with command that should be executed.
 
-This task clears the file status cache, opcache and eaccelerator cache for HTTP context. It does following:
-
-1) Creates file ``cache_clear_[random].php`` in ``{{deploy_path}}/current`` folder.
-2) Fetch this file with selected method - curl / wget / file_get_contents - by default its wget.
-3) The file is not removed after clearing cache for reason. It allows to prevent problems with realpath_cache.
-
-You must set **public_urls** configuration variable so the script knows the domain it should fetch the php script.
-Here is example:
+Example:
 
 ::
 
-   host('staging')
-    ->setHostname('vm-dev.example.com')
-    ->setRemoteUser('project1')
-    ->set('public_urls', ['https://staging-t3base13.example.com'])
-    ->set('deploy_path', '~/t3base13.example.com/staging');
+ host('production')
+   ->setHostname('my.example.com')
+   ->setRemoteUser('deploy')
+   ->set('deploy')
+   ->set('service_php_fpm_reload_command', 'sudo service php84-fpm reload')
 
+Then add it also to you deploy flow like ``after('deploy:symlink', 'service:php_fpm_reload');``;
+This is not done here as the rule is that ``sourcebroker/deployer-extended`` should not override default Deployer tasks
+or settings.
 
-Task configuration variables:
-
-- | **cache:clear_php_http:phpcontent**
-  | *required:* no
-  | *type:* string
-  | *default value:*
-  ::
-
-    <?php
-      clearstatcache(true);
-      if(function_exists('opcache_reset')) opcache_reset();
-      if(function_exists('eaccelerator_clear')) eaccelerator_clear();
-
-  |
-  | Php content that will be put into dynamically created file that should clear the caches.
-  |
-
-- | **public_urls**
-  | *required:* yes
-  | *default value:* none
-  | *type:* array
-  |
-  | Domain used to prepare url to fetch clear cache php file. Its expected to be array so you can put there more than one
-    domain and use it for different purposes but here for this task the first domain will be taken.
-  |
-
-- | **fetch_method**
-  | *required:* no
-  | *default value:* wget
-  | *type:* string
-  |
-  | Can be one of following value:
-  | - curl,
-  | - wget,
-  | - file_get_contents
-  |
-
-- | **cache:clear_php_http:timeout**
-  | *required:* no
-  | *default value:* 15
-  | *type:* integer
-  |
-  | Set the timeout in seconds for fetching php clear cache script.
-  |
-
+Tasks and settings override (``includes/`` folder)
+--------------------------------------------------
 
 bin/composer
-------------
+~~~~~~~~~~~~
 
-In ``includes/composer.php`` you can find ``bin/composer`` setting override. This implementation has more functionality
+In ``includes/settings/bin_composer.php`` you can find ``bin/composer`` setting override. This implementation has more functionality
 compared to default Deployer version. It allows to install specific version of composer and later check if composer
 is up to date.
 
-Settings
-~~~~~~~~~~~~~~~~
+- | **composer_version**
+  | *required:* no
+  | *default value:* null
+  |
+  | Install specific composer version. Use tags. Valid tags are here https://github.com/composer/composer/tags .
+  |
 
-composer_version
-++++++++++++++++
+- | **composer_channel**
+  | *required:* no
+  | *default value:* stable
+  |
+  | Install latest version from channel. Set this variable to '1' or '2' (or 'stable', 'snapshot', 'preview'). Read more on composer docs.
+  | Default value is ``stable`` which will install latest version of composer.
+  |
 
-Install specific composer version. Use tags. Valid tags are here https://github.com/composer/composer/tags .
-Default value is ``null``.
-
-composer_channel
-++++++++++++++++
-
-Install latest version from channel. Set this variable to '1' or '2' (or 'stable', 'snapshot', 'preview'). Read more on composer docs.
-Default value is ``stable`` which will install latest version of composer.
-
-composer_channel_autoupdate
-+++++++++++++++++++++++++++
-
-If set then on each deploy the composer is checked for latest version according to ``composer_channel`` settings.
-Default value is ``true``.
+- | **composer_channel_autoupdate**
+  | *required:* no
+  | *default value:* true
+  |
+  | If set then on each deploy the composer is checked for latest version according to ``composer_channel`` settings.
+  | Default value is ``true``.
+  |
 
 
 bin/php
--------
+~~~~~~~
 
-In ``includes/bin_php.php`` you can find ``bin/php`` setting override. This implementation has more functionality
+In ``includes/settings/bin_php.php`` you can find ``bin/php`` setting override. This implementation has more functionality
 compared to default Deployer version.
 
 It works like:
@@ -272,6 +300,18 @@ It works like:
 4. If none of ``php_version``,  ``['config']['platform']['php']``,  ``['require']['php']`` are set then there
    is standard check for ``which('php')``.
 
+Generally after you include this you can completely forget about ``bin/php`` setting.
+
+
+releases
+~~~~~~~~
+
+In ``includes/tasks/releases.php`` you can find ``release`` task override.
+
+This task solves performance problems of original Deployer "releases" task.
+Read more at PR added https://github.com/deployphp/deployer/pull/4034
+
+Issue has been solved but will be available only in Deployer 8. If you still want it in Deployer 7 then here it is.
 
 
 Changelog

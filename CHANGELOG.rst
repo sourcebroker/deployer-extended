@@ -2,6 +2,11 @@
 Changelog
 ---------
 
+master
+------
+
+a) [TASK][BREAKING] Move ``service_php_fpm_reload.php`` to auto loaded ``deployer/service/service_php_fpm_reload.php``.
+
 23.0.0
 ------
 

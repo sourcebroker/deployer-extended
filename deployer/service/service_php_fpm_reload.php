@@ -4,18 +4,7 @@ namespace Deployer;
 
 use Deployer\Exception\GracefulShutdownException;
 
-/**
- * Very simple task for php-fpm reloading.
- *
- * Use like:
- *
- * host('production')
- *    ->setHostname('my.example.com')
- *    ->setRemoteUser('deploy')
- *    ->set('deploy')
- *    ->set('service_php_fpm_reload_command', 'sudo service php84-fpm reload')
- */
-
+// Read more on https://github.com/sourcebroker/deployer-extended#service_php_fpm_reload
 task('service:php_fpm_reload', function () {
     $command = get('service_php_fpm_reload_command');
     $shouldStopOnFailure = get('service_php_fpm_reload_stop_on_failure', false);
@@ -34,4 +23,3 @@ task('service:php_fpm_reload', function () {
         }
     }
 })->desc('Reload PHP-FPM service')->hidden();
-
