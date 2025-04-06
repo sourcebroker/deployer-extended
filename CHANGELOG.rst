@@ -2,10 +2,10 @@
 Changelog
 ---------
 
-master
+24.0.0
 ------
 
-a) [TASK][BREAKING] Move ``service_php_fpm_reload.php`` to auto loaded ``deployer/service/service_php_fpm_reload.php``.
+a) [TASK][BREAKING] Move ``service_php_fpm_reload.php`` from ``includes/`` to auto loaded ``deployer/service/service_php_fpm_reload.php``.
 
 23.0.0
 ------
