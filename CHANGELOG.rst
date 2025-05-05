@@ -2,6 +2,11 @@
 Changelog
 ---------
 
+24.1.0
+------
+
+a) [TASK][FEATURE] Print http status code for curl in cache:clear_php_http (credits to `martipoe <https://github.com/martipoe>`_ )
+
 24.0.0
 ------
 
