@@ -43,7 +43,7 @@ task('cache:clear_php_http', function () {
         case 'curl':
             runLocally(
                 '{{local/bin/curl}} ' . get('fetch_method_curl_options',
-                    '--insecure --silent --location') . ' ' . escapeshellarg($clearCacheUrl) . ' > /dev/null',
+                    '--insecure --silent --location --output /dev/null --write "%{http_code}"') . ' ' . escapeshellarg($clearCacheUrl) . ' 2>/dev/null',
                 ['timeout', get('cache:clear_php_http:timeout', 15)]
             );
             break;
