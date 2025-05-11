@@ -2,7 +2,7 @@
 Changelog
 ---------
 
-master
+24.1.1
 ------
 
 1) [BUGFIX] Fix the logic for resolving PHP binary. If the binary specified by ``php_version`` or ``composer.json``
