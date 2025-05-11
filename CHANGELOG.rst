@@ -2,6 +2,12 @@
 Changelog
 ---------
 
+master
+------
+
+1) [BUGFIX] Fix the logic for resolving PHP binary. If the binary specified by ``php_version`` or ``composer.json``
+   is not found, it now gracefully falls back to search for ``php`` binary and finally defaults to plain ``php``.
+
 24.1.0
 ------
 
