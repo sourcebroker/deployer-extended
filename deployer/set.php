@@ -132,7 +132,7 @@ function locateLocalBinaryPath($name): string
     $path = runLocally("command -v $nameEscaped || which $nameEscaped || type -p $nameEscaped");
     if ($path) {
         // Deal with issue when `type -p` outputs something like `type -ap` in some implementations
-        return trim(str_replace("$name is", "", $path));
+        return escapeshellarg(trim(str_replace("$name is", "", $path)));
     }
     throw new GracefulShutdownException("Can't locate [$nameEscaped] - neither of [command|which|type] commands are available");
 }
