@@ -2,6 +2,17 @@
 Changelog
 ---------
 
+24.2.0
+------
+
+1) [FEATURE] Support for Deployer 8 (`deployer/deployer ^8.0.0`) with backward compatibility for Deployer 7.
+
+24.1.2
+------
+
+1) [BUGFIX] The --write flag doesn't exist in curl. Changed to --write-out to properly output HTTP status code.
+   (credits to `maikschneider <https://github.com/maikschneider>`_ )
+
 24.1.1
 ------
 
