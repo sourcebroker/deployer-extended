@@ -38,20 +38,21 @@ task('cache:clear_php_http', function () {
         throw new GracefulShutdownException('You need at least one "public_url" to call task cache:clear_php_http');
     }
     $clearCacheUrl = rtrim(get('public_urls')[0], '/') . '/' . $fileName;
+    $timeout = (int)get('cache:clear_php_http:timeout', 15);
 
     switch (get('fetch_method', 'wget')) {
         case 'curl':
             runLocally(
                 '{{local/bin/curl}} ' . get('fetch_method_curl_options',
                     '--insecure --silent --location --output /dev/null --write-out "%{http_code}"') . ' ' . escapeshellarg($clearCacheUrl) . ' 2>/dev/null',
-                ['timeout', get('cache:clear_php_http:timeout', 15)]
+                timeout: $timeout
             );
             break;
 
         case 'file_get_contents':
             runLocally(
                 '{{local/bin/php}} -r \'file_get_contents("' . escapeshellarg($clearCacheUrl) . '");\'',
-                ['timeout', get('cache:clear_php_http:timeout', 15)]
+                timeout: $timeout
             );
             break;
 
@@ -60,7 +61,7 @@ task('cache:clear_php_http', function () {
             runLocally(
                 '{{local/bin/wget}} ' . get('fetch_method_wget_options',
                     '--no-check-certificate -q -O /dev/null') . ' ' . escapeshellarg($clearCacheUrl),
-                ['timeout', get('cache:clear_php_http:timeout', 15)]
+                timeout: $timeout
             );
             break;
     }

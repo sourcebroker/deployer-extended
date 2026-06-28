@@ -7,6 +7,12 @@ Changelog
 
 1) [FEATURE] Support for Deployer 8 (`deployer/deployer ^8.0.0`) with backward compatibility for Deployer 7.
 
+2) [BUGFIX] Fix ``cache:clear_php_http`` task crashing on Deployer 8 due to changed ``runLocally()`` signature
+   (second argument changed from ``?array $options`` to ``?string $cwd``). Timeout is now passed as a named
+   argument (``timeout: $value``) which works correctly with both Deployer 7 and 8. Also fixes a pre-existing
+   bug where the timeout value was silently ignored due to a numeric-keyed array being passed instead of an
+   associative one.
+
 24.1.2
 ------
 
