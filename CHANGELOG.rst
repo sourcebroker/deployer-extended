@@ -2,6 +2,11 @@
 Changelog
 ---------
 
+24.2.1
+------
+
+1) [BUGFIX] Restore PHP 7.4 compatibility in cache:clear_php_http
+
 24.2.0
 ------
 
