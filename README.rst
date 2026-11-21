@@ -223,6 +223,11 @@ file:upload_build
 Upload files not defined in ``clear_paths``, ``shared_files``, ``shared_dirs``.
 Can be used as good default for uploading build from CI.
 
+Permissions of uploaded files can be set with rsync ``--chmod`` from setting ``file_upload_build_chmod``.
+By default it is empty and source permissions are kept. Example::
+
+   set('file_upload_build_chmod', 'go-w');
+
 
 service
 ~~~~~~~

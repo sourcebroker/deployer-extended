@@ -14,5 +14,7 @@ task('file:upload_build', function () {
         $excludeOptions[] = '--exclude';
         $excludeOptions[] = $exclusion;
     }
-    upload('./', get('release_path'), ['options' => array_merge($excludeOptions, ['--quiet'])]);
+    $chmod = (string)get('file_upload_build_chmod', '');
+    $chmodOptions = $chmod !== '' ? ['--chmod=' . $chmod] : [];
+    upload('./', get('release_path'), ['options' => array_merge($excludeOptions, $chmodOptions, ['--quiet'])]);
 })->desc('Uploading build to server')->hidden();

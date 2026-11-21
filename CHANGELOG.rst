@@ -2,6 +2,13 @@
 Changelog
 ---------
 
+24.3.0
+------
+
+1) [FEATURE] Add setting ``file_upload_build_chmod`` passed as rsync ``--chmod`` option in task ``file:upload_build``,
+   so permissions of uploaded files can be set independently of the build environment (e.g. ``go-w``). Empty
+   by default, so source permissions are kept as before.
+
 24.2.1
 ------
 
