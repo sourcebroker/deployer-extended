@@ -4,7 +4,7 @@ namespace Deployer;
 
 use Deployer\Exception\GracefulShutdownException;
 
-// Read more on https://github.com/sourcebroker/deployer-extended#service_php_fpm_reload
+// Read more on https://github.com/sourcebroker/deployer-extended#service-php-fpm-reload
 task('service:php_fpm_reload', function () {
     $command = get('service_php_fpm_reload_command');
     $shouldStopOnFailure = get('service_php_fpm_reload_stop_on_failure', false);

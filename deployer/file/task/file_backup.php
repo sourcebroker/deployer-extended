@@ -2,7 +2,7 @@
 
 namespace Deployer;
 
-// Read more on https://github.com/sourcebroker/deployer-extended#backup-files
+// Read more on https://github.com/sourcebroker/deployer-extended#file-backup
 task('file:backup', function () {
     $signCode = 'e1a803ffea27e6bf3f93bd601dc42077';
 
